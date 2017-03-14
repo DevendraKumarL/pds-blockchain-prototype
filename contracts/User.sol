@@ -123,4 +123,6 @@ contract User {
       return false;
   }
 
+  // more functions yet to implement
+
 }
