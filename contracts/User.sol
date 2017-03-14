@@ -12,6 +12,7 @@ contract User {
     string username;
     string email;
     string usertype;
+    uint utype;
     string password; // use web3.sha3() later
     string place;
   }
@@ -39,6 +40,7 @@ contract User {
       newUser.password = _password;
       newUser.userAddress = _userAddress;
       newUser.usertype = userTypes[_type];
+      newUser.utype = _type;
       newUser.place = places[_place];
       users[_userAddress] = newUser;
 
@@ -51,7 +53,7 @@ contract User {
     return false;
   }
 
-  function authenticateUserWithEmail(string _email, string _password) constant public returns (bool exists){
+  function authenticateUserWithEmail(string _email, string _password) constant returns (bool exists){
     // search for user with _email, _password
     address userAddr = userEmailAddress[_email];
     userStruct user = users[userAddr];
@@ -69,7 +71,7 @@ contract User {
     return true;
   }
 
-  function authenticateUserWithAddress(address _userAddress, string _password) constant public returns(bool exists) {
+  function authenticateUserWithAddress(address _userAddress, string _password) constant returns(bool exists) {
     // search for user with _userAddress, _password
     userStruct user = users[_userAddress];
 
@@ -86,8 +88,7 @@ contract User {
     return true;
   }
 
-  function getUserInfo(address _userAddress, string _password) constant public returns (address, string, string, string, string) {
-
+  function getUserInfo(address _userAddress, string _password) constant returns (address, string, string, string, string) {
     address userAddr;
     string memory username;
     string memory email;
@@ -106,12 +107,20 @@ contract User {
     return (userAddr, username, email ,usertype , place);
   }
 
-  function getUserTypes() constant public returns (string, string, string) {
+  function getUserTypes() constant returns (string, string, string) {
     return (userTypes[0], userTypes[1], userTypes[2]);
   }
 
-  function getPlaces() constant public returns (string, string, string) {
+  function getPlaces() constant returns (string, string, string) {
     return (places[0], places[1], places[2]);
+  }
+
+  function checkUserExists(address _addr, uint _type) constant returns (bool) {
+    userStruct user = users[_addr];
+    if (user.userAddress == _addr && user.utype == _type)
+      return true;
+    else
+      return false;
   }
 
 }
