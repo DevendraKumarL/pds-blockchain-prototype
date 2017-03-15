@@ -91,16 +91,16 @@ contract Approval {
   function getUnapprovedUser(uint _index, uint _type) constant returns (address) {
     uint i;
     if (_type == 1) {
-      if (index >= numberOfNotApprovedFPS)
+      if (_index >= numberOfNotApprovedFPS)
         return address(0);
-      for (i = index; i < numberOfNotApprovedFPS; i++) {
+      for (i = _index; i < numberOfNotApprovedFPS; i++) {
         if (!approvals[i].approved && approvals[i].usertype == _type)
           return approvals[i].userAddress;
       }
     } else if (_type == 2) {
-      if (index >= numberOfNotApprovedCustomers)
+      if (_index >= numberOfNotApprovedCustomers)
         return address(0);
-      for (i = index; i < numberOfNotApprovedCustomers; i++) {
+      for (i = _index; i < numberOfNotApprovedCustomers; i++) {
         if (!approvals[i].approved && approvals[i].usertype == 2)
         return approvals[i].userAddress;
       }
