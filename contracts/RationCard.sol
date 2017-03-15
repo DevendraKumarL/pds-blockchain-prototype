@@ -26,9 +26,9 @@ contract RationCard {
     _;
   }
 
-  event CustomerExists(address _custAddr);
-  event FPSExists(address _fpsAddr);
-  event RationCardCreated(address _customerAddress);
+  /*event CustomerExists(address  indexed _custAddr);
+  event FPSExists(address indexed _fpsAddr);*/
+  event RationCardCreated(address indexed _customerAddress);
 
   function RationCard() {
     government = tx.origin;
@@ -45,12 +45,12 @@ contract RationCard {
       if (!exists) {
         return false;
       }
-      CustomerExists(_customerAddress);
+      /*CustomerExists(_customerAddress);*/
       exists = u.checkUserExists(_fpsAddress, 1);
       if (!exists) {
         return false;
       }
-      FPSExists(_fpsAddress);
+      /*FPSExists(_fpsAddress);*/
 
       card memory newCard;
       newCard.customerAddress = _customerAddress;
