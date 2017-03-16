@@ -19,10 +19,10 @@ contract Approval {
     _;
   }
 
-  event CustomerAddedToApprovalList(address _customerAddress);
-  event FPSAddedToApprovalList(address _fpsAddress);
-  event CustomerApproved(address _customerAddress);
-  event FPSApproved(address _fpsAddress);
+  event CustomerAddedToApprovalList(address indexed _customerAddress);
+  event FPSAddedToApprovalList(address indexed _fpsAddress);
+  event CustomerApproved(address indexed _customerAddress);
+  event FPSApproved(address indexed _fpsAddress);
 
   function Approval() {
     government = tx.origin;
