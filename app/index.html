@@ -6,6 +6,40 @@
   <script src="./app.js"></script>
 </head>
 <body>
-  
+  <h1>Registration</h1>
+  <p id="wait">Please wait ...</p>
+  <button type="button" id="government" onclick="App.showGovernment()">Government</button>
+  <button type="button" id="customer" onclick="App.showCustomer()">Customer</button>
+  <button type="button" id="fps" onclick="App.showFPS()">FPS</button>
+  <br><br>
+  <select id="place-list">
+    <option value="-1">Select Place</option>
+  </select>
+  <div id="government-register">
+    <h3>Government</h3>
+    <label>name: </label><input type="text" id="g-name" placeholder="username" /><br>
+    <label>e-email: </label><input type="email" id="g-email" placeholder="email" /><br>
+    <label>password: </label><input type="password" id="g-password" placeholder="password" /><br>
+    <button type="button" id="g-register" onclick="App.registerGovernment()">Register</button>
+  </div>
+  <div id="customer-register">
+    <h3>Customer</h3>
+    <label>name: </label><input type="text" id="c-name" placeholder="username" /><br>
+    <label>e-email: </label><input type="email" id="c-email" placeholder="email" /><br>
+    <label>password: </label><input type="password" id="c-password" placeholder="password" /><br>
+    <button type="button" id="c-register" onclick="App.registerCustomer()">Register</button>
+  </div>
+  <div id="fps-register">
+    <h3>FPS</h3>
+    <label>name: </label><input type="text" id="f-name" placeholder="username" /><br>
+    <label>e-email: </label><input type="email" id="f-email" placeholder="email" /><br>
+    <label>password: </label><input type="password" id="f-password" placeholder="password" /><br>
+    <button type="button" id="f-register" onclick="App.registerFPS()">Register</button>
+  </div>
+  <hr>
+  <h2>Unapproved Customers</h2>
+  <div id="unapproved-list-customer"></div>
+  <h2>Unapproved FPS</h2>
+  <div id="unapproved-list-fps"></div>
 </body>
 </html>

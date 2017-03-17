@@ -31,8 +31,9 @@ contract User {
     places.push("Hanumanthnagar");
   }
 
-  function addUser(address _userAddress, string _name, string _email, uint _type, string _password, uint _place)
-      returns (bool success) {
+  // remove return and use throw instead
+  function addUser(address _userAddress, string _name, string _email, uint _type, string _password, uint _place) returns (address) {
+    address uAddr;
     if ( userEmailAddress[_email] == address(0) ) {
       userStruct memory newUser;
       newUser.username = _name;
@@ -47,10 +48,9 @@ contract User {
       userEmailAddress[_email] = _userAddress;
       totalUsersInBlockchain += 1;
       UserAdded(_userAddress, _name);
-
-      return true;
+      uAddr = _userAddress;
     }
-    return false;
+    return uAddr;
   }
 
   function authenticateUserWithEmail(string _email, string _password) constant returns (bool exists){
@@ -121,6 +121,14 @@ contract User {
       return true;
     else
       return false;
+  }
+
+  function checkUserRegistered(address _userAddr) constant returns (bool) {
+    bool exists;
+    if (users[_userAddr].userAddress == _userAddr) {
+      exists = true;
+    }
+    return exists;
   }
 
   // more functions yet to implement

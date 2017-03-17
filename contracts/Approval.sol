@@ -67,7 +67,7 @@ contract Approval {
       numberOfNotApprovedCustomers -= 1;
       CustomerApproved(_customer);
 
-      // create rationCard for this customer
+      // create rationCard for this customer either using web3js or contracts(won't work) ??
     }
   }
 
@@ -90,17 +90,18 @@ contract Approval {
 
   function getUnapprovedUser(uint _index, uint _type) constant returns (address) {
     uint i;
+    uint total = numberOfNotApprovedCustomers + numberOfNotApprovedFPS;
     if (_type == 1) {
-      if (_index >= numberOfNotApprovedFPS)
+      if (_index >= total)
         return address(0);
-      for (i = _index; i < numberOfNotApprovedFPS; i++) {
+      for (i = _index; i < total; i++) {
         if (!approvals[i].approved && approvals[i].usertype == _type)
           return approvals[i].userAddress;
       }
     } else if (_type == 2) {
-      if (_index >= numberOfNotApprovedCustomers)
+      if (_index >= total)
         return address(0);
-      for (i = _index; i < numberOfNotApprovedCustomers; i++) {
+      for (i = _index; i < total; i++) {
         if (!approvals[i].approved && approvals[i].usertype == 2)
         return approvals[i].userAddress;
       }
