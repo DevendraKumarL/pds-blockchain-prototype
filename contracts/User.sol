@@ -1,6 +1,7 @@
 pragma solidity ^0.4.2;
 
 contract User {
+  address public government;
   uint public totalUsersInBlockchain;
   string[] userTypes;
   string[] places;
@@ -21,6 +22,7 @@ contract User {
 
   function User() {
     totalUsersInBlockchain = 0;
+    government = tx.origin;
 
     userTypes.push("Government");
     userTypes.push("FPS");

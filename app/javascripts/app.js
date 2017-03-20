@@ -14,23 +14,20 @@ var User = contract(user_artifacts);
 // Approval is our usable abstraction, which we'll use through the code below.
 var Approval = contract(approval_artifacts);
 
-// The following code is simple to show off interacting with your contracts.
-// As your needs grow you will likely need to change its form and structure.
-// For application bootstrapping, check out window.addEventListener below.
-var accounts;
-var governmentAddress;
-var userGlobal;
-var approvalGlobal;
-// get all accounts and store whoever is registered
 
+// For application bootstrapping, check out window.addEventListener below.
+var accounts, governmentAddress;
+var userGlobal, approvalGlobal;
+
+// get all accounts and store whoever is registered
 var userDb = {};
 
-// hide divs
-var g, c, f;
+var governDiv, custDiv, fpsDiv;
 var i, j, k;
-var loadUserInter;
-var selectPlaceEle, wait;
-var unapprovedCustEle, unapprovedFpsEle;
+var loadUserInterval, loadUnapproCustInterval, loadUnapproFpsInterval;
+var selectPlaceEle, loadAcctsEle;
+var unapprovedCustDiv, unapprovedFpsDiv;
+var fpsNum, customerNum;
 
 window.App = {
   start: function() {
@@ -57,23 +54,26 @@ window.App = {
       accounts = accs;
       governmentAddress = accounts[0];
       console.log("governmentAddress => " + governmentAddress);
+      self.getElements();
       self.loadUsers();
     });
 
-    g = document.getElementById("government-register");
-    c = document.getElementById("customer-register");
-    f = document.getElementById("fps-register");
-    g.style.display = "none";
-    c.style.display = "none";
-    f.style.display = "none";
-
-    wait = document.getElementById("wait");
-    unapprovedCustEle = document.getElementById("unapproved-list-customer")
-    unapprovedFpsEle = document.getElementById("unapproved-list-fps");
-
     self.loadPlaces();
-    self.loadUnApprovedListCustomer();
-    self.loadUnApprovedListFps();
+    self.loadUnApprovedCustomersList();
+    self.loadUnApprovedFpsList();
+  },
+
+  getElements: function() {
+    var self = this;
+
+    governDiv = document.getElementById("government-register");
+    custDiv = document.getElementById("customer-register");
+    fpsDiv = document.getElementById("fps-register");
+    self.hideDivs();
+
+    loadAcctsEle = document.getElementById("load-accts");
+    unapprovedCustDiv = document.getElementById("unapproved-list-customer")
+    unapprovedFpsDiv = document.getElementById("unapproved-list-fps");
   },
 
   loadPlaces: function() {
@@ -90,33 +90,37 @@ window.App = {
           selectPlaceEle.appendChild(opt);
         }
       });
+    }).catch(function(e){
+      console.log(e);
+      return;
     });
   },
 
   loadUsers: function() {
     var self = this;
 
-    wait.style.display = "block";
+    loadAcctsEle.style.display = "block";
     i = 0;
-    loadUserInter = setInterval(self.checkUserRegistered, 100);
-    // console.log(userDb);
+    loadUserInterval = setInterval(self.checkUserRegistered, 100);
   },
 
   checkUserRegistered: function() {
     var self = this;
-    console.log("i => " + i);
     userGlobal.checkUserRegistered.call(accounts[i]).then(function(res){
-      console.log(accounts[i] + " => " + res);
+      console.log("i => " + i + " || " + accounts[i] + " => " + res);
       userDb[accounts[i]] = res;
       i++;
       if (i == 10) {
         i = 0;
-        clearInterval(loadUserInter);
-        wait.style.display = "none";
+        clearInterval(loadUserInterval);
+        loadAcctsEle.style.display = "none";
         console.log("Finished loading/checking user registrations");
         userDb[governmentAddress] = true;
-        console.log(userDb);
+        // console.log(userDb);
       }
+    }).catch(function(e){
+      console.log(e);
+      return;
     });
   },
 
@@ -136,8 +140,14 @@ window.App = {
     userGlobal.addUser(governmentAddress, name.value, email.value, 0, pass.value, uplace, {from: governmentAddress, gas: 200000}).then(function(res){
       console.log(res);
       userDb[governmentAddress] = true;
+      name.value = "";
+      email.value = "";
+      pass.value = "";
+      alert("Government registered succesfully");
+      self.hideDivs();
     }).catch(function(e){
       console.log(e);
+      return;
     });
   },
 
@@ -166,6 +176,11 @@ window.App = {
     userGlobal.addUser(userAddr, name.value, email.value, 2, pass.value, uplace, {from: governmentAddress, gas: 250000}).then(function(res){
       console.log(res);
       userDb[userAddr] = true;
+      name.value = "";
+      email.value = "";
+      pass.value = "";
+      alert("Customer registered succesfully");
+      self.hideDivs();
       return Approval.deployed();
     }).then(function(instance){
       approvalGlobal = instance;
@@ -174,6 +189,7 @@ window.App = {
       console.log(res);
     }).catch(function(e){
       console.log(e);
+      return;
     });
   },
 
@@ -202,6 +218,11 @@ window.App = {
     userGlobal.addUser(userAddr, name.value, email.value, 1, pass.value, uplace, {from: governmentAddress, gas: 250000}).then(function(res){
       console.log(res);
       userDb[userAddr] = true;
+      name.value = "";
+      email.value = "";
+      pass.value = "";
+      alert("FPS registered succesfully");
+      self.hideDivs();
       return Approval.deployed();
     }).then(function(instance){
       approvalGlobal = instance;
@@ -210,36 +231,85 @@ window.App = {
       console.log(res);
     }).catch(function(e){
       console.log(e);
+      return;
     });
   },
 
-  loadUnApprovedListCustomer: function() {
+  // FIX IT
+  loadUnApprovedCustomersList: function() {
     var self = this;
 
     var customerNum;
     Approval.deployed().then(function(instance){
       approvalGlobal = instance;
-      return approvalGlobal.getUnApprovedCustomers({from: governmentAddress});
+      return approvalGlobal.getUnApprovedCustomers.call();
     }).then(function(num1){
       customerNum = num1;
       console.log("customerNum => " + customerNum);
       j = 0;
       // loop through 0 to customerNum
+      loadUnapproCustInterval = setInterval(self.loadUnapproCust, 1000);
     });
   },
 
-  loadUnApprovedListFps: function() {
+  // FIX IT
+  loadUnapproCust: function() {
+    var self = this;
+
+    Approval.deployed().then(function(instance){
+      approvalGlobal = instance;
+      return approvalGlobal.getUnapprovedUser.call(accounts[j], 2);
+    }).then(function(addr){
+      if (j < accounts.length-1) {
+        console.log("j => " + j + " || " + "cust => " + addr.valueOf());
+        j++;
+      } else {
+        j = 0;
+        clearInterval(loadUnapproCustInterval);
+        return;
+      }
+    }).catch(function(e){
+      console.log(e);
+      return;
+    });
+  },
+
+  // FIX IT
+  loadUnApprovedFpsList: function() {
     var self = this;
 
     var fpsNum;
     Approval.deployed().then(function(instance){
       approvalGlobal = instance;
-      return approvalGlobal.getUnApprovedFPS({from: governmentAddress});
+      return approvalGlobal.getUnApprovedFPS.call();
     }).then(function(num1){
       fpsNum = num1;
       console.log("fpsNum => " + fpsNum);
       k = 0;
       // loop through 0 to fpsNum
+      loadUnapproFpsInterval = setInterval(self.loadUnapproFps, 1000);
+    });
+  },
+
+  // FIX IT
+  loadUnapproFps: function() {
+    var self = this;
+
+    Approval.deployed().then(function(instance){
+      approvalGlobal = instance;
+      return approvalGlobal.getUnapprovedUser.call(accounts[k], 1);
+    }).then(function(addr){
+      if (k < accounts.length-1) {
+        console.log("k => " + k + " || " + "fps => " + addr.valueOf());
+        k++;
+      } else {
+        k = 0;
+        clearInterval(loadUnapproFpsInterval);
+        return;
+      }
+    }).catch(function(e){
+      console.log(e);
+      return;
     });
   },
 
@@ -255,23 +325,30 @@ window.App = {
 
   showGovernment: function() {
     var self = this;
-    g.style.display = "block";
-    c.style.display = "none";
-    f.style.display = "none";
+    governDiv.style.display = "block";
+    custDiv.style.display = "none";
+    fpsDiv.style.display = "none";
   },
 
   showCustomer: function() {
     var self = this;
-    c.style.display = "block";
-    f.style.display = "none";
-    g.style.display = "none";
+    custDiv.style.display = "block";
+    fpsDiv.style.display = "none";
+    governDiv.style.display = "none";
   },
 
   showFPS: function() {
     var self = this;
-    f.style.display = "block";
-    g.style.display = "none";
-    c.style.display = "none";
+    fpsDiv.style.display = "block";
+    governDiv.style.display = "none";
+    custDiv.style.display = "none";
+  },
+
+  hideDivs: function() {
+    var self = this;
+    governDiv.style.display = "none";
+    fpsDiv.style.display = "none";
+    custDiv.style.display = "none";
   },
 
 };

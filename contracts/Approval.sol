@@ -88,25 +88,25 @@ contract Approval {
     return numberOfNotApprovedFPS;
   }
 
-  function getUnapprovedUser(uint _index, uint _type) constant returns (address) {
+  /*function getUnapprovedUser(uint _index, uint _type) constant returns (address) {
     uint i;
     uint total = numberOfNotApprovedCustomers + numberOfNotApprovedFPS;
-    if (_type == 1) {
-      if (_index >= total)
-        return address(0);
-      for (i = _index; i < total; i++) {
-        if (!approvals[i].approved && approvals[i].usertype == _type)
-          return approvals[i].userAddress;
-      }
-    } else if (_type == 2) {
-      if (_index >= total)
-        return address(0);
-      for (i = _index; i < total; i++) {
-        if (!approvals[i].approved && approvals[i].usertype == 2)
+    if (_index >= total)
+      return address(0);
+    for (i = _index; i < total; i++) {
+      if (!approvals[i].approved && approvals[i].usertype == _type)
         return approvals[i].userAddress;
-      }
     }
     return address(0);
+  }*/
+
+  function getUnapprovedUser(address _addr, uint _type) constant returns (address) {
+    address userAddr;
+    userApproval usapp = userApprovals[_addr];
+    if (usapp.userAddress != address(0) && !usapp.approved && usapp.usertype == _type) {
+      userAddr = _addr;
+    }
+    return userAddr;
   }
 
 }

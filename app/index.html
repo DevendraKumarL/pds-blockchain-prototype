@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>MetaCoin - Truffle Webpack Demo w/ Frontend</title>
+  <title>PDS</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <script src="./app.js"></script>
 </head>
 <body>
   <h1>Registration</h1>
-  <p id="wait">Please wait ...</p>
+  <p id="load-accts">Loading accounts...</p>
   <button type="button" id="government" onclick="App.showGovernment()">Government</button>
   <button type="button" id="customer" onclick="App.showCustomer()">Customer</button>
   <button type="button" id="fps" onclick="App.showFPS()">FPS</button>
@@ -38,8 +38,8 @@
   </div>
   <hr>
   <h2>Unapproved Customers</h2>
-  <div id="unapproved-list-customer"></div>
+  <div id="unapproved-list-customer">Loading ...</div>
   <h2>Unapproved FPS</h2>
-  <div id="unapproved-list-fps"></div>
+  <div id="unapproved-list-fps">Loading ...</div>
 </body>
 </html>
