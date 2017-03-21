@@ -1,9 +1,5 @@
 pragma solidity ^0.4.2;
 
-contract User {
-  function checkUserExists(address _addr, uint) returns (bool){}
-}
-
 contract RationCard {
   card[] public rationCards;
   uint public totalNumberOfRationCards;
@@ -26,8 +22,6 @@ contract RationCard {
     _;
   }
 
-  /*event CustomerExists(address  indexed _custAddr);
-  event FPSExists(address indexed _fpsAddr);*/
   event RationCardCreated(address indexed _customerAddress, uint _rationCardNumber);
 
   function RationCard() {
@@ -38,20 +32,14 @@ contract RationCard {
 
   // Change, remove checkUserExists, we have to call the of other contracts externally
   function addRationCard(address _customerAddress, string _customerName,
-    string _residentialAddress, string _place, address _fpsAddress, address _userContractAddr) onlyGovernment returns (bool) {
+    string _residentialAddress, string _place, address _fpsAddress) onlyGovernment returns (uint) {
+    uint cardNum;
     bool exists = rationCardOf[_customerAddress].cardCreated;
+    if (_customerAddress == _fpsAddress) { throw; }
     if (!exists) {
-      User u = User(_userContractAddr);
-      exists = u.checkUserExists(_customerAddress, 2);
-      if (!exists) {
-        return false;
-      }
-      /*CustomerExists(_customerAddress);*/
-      exists = u.checkUserExists(_fpsAddress, 1);
-      if (!exists) {
-        return false;
-      }
-      /*FPSExists(_fpsAddress);*/
+      // Check for these addresses seperately
+      /*Check CustomerExists(_customerAddress);*/
+      /*Check FPSExists(_fpsAddress);*/
 
       card memory newCard;
       newCard.customerAddress = _customerAddress;
@@ -66,10 +54,10 @@ contract RationCard {
       rationCardOf[_customerAddress] = newCard;
       totalNumberOfRationCards += 1;
       RationCardCreated(_customerAddress, cardNumber);
+      cardNum = cardNumber;
       cardNumber += 1;
-      return true;
     }
-    return false;
+    return cardNum;
   }
 
   function getRationCardDetails(address _customerAddress) constant onlyGovernment returns (bool, uint, string, string, string, address) {

@@ -133,6 +133,7 @@ contract User {
     return exists;
   }
 
-  // more functions yet to implement
+  // More functions yet to be implemented
+  // Find other way to approve customers and fps
 
 }
