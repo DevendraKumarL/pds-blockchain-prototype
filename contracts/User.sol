@@ -55,7 +55,7 @@ contract User {
     return uAddr;
   }
 
-  function authenticateUserWithEmail(string _email, string _password) constant returns (bool exists){
+  function authenticateUserWithEmail(string _email, string _password) constant returns (bool exists) {
     // search for user with _email, _password
     address userAddr = userEmailAddress[_email];
     userStruct user = users[userAddr];

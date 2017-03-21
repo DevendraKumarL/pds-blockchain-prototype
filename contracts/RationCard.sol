@@ -28,7 +28,7 @@ contract RationCard {
 
   /*event CustomerExists(address  indexed _custAddr);
   event FPSExists(address indexed _fpsAddr);*/
-  event RationCardCreated(address indexed _customerAddress);
+  event RationCardCreated(address indexed _customerAddress, uint _rationCardNumber);
 
   function RationCard() {
     government = tx.origin;
@@ -36,6 +36,7 @@ contract RationCard {
     cardNumber = 1001;
   }
 
+  // Change, remove checkUserExists, we have to call the of other contracts externally
   function addRationCard(address _customerAddress, string _customerName,
     string _residentialAddress, string _place, address _fpsAddress, address _userContractAddr) onlyGovernment returns (bool) {
     bool exists = rationCardOf[_customerAddress].cardCreated;
@@ -64,8 +65,8 @@ contract RationCard {
       rationCards.push(newCard);
       rationCardOf[_customerAddress] = newCard;
       totalNumberOfRationCards += 1;
+      RationCardCreated(_customerAddress, cardNumber);
       cardNumber += 1;
-      RationCardCreated(_customerAddress);
       return true;
     }
     return false;

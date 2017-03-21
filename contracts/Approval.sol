@@ -80,6 +80,7 @@ contract Approval {
     }
   }
 
+  // Use getters like he below ones everywhere
   function getUnApprovedCustomers() constant onlyGovernment returns (uint)  {
     return numberOfNotApprovedCustomers;
   }
@@ -100,10 +101,21 @@ contract Approval {
     return address(0);
   }*/
 
+  // FIX IT
   function getUnapprovedUser(address _addr, uint _type) constant returns (address) {
     address userAddr;
     userApproval usapp = userApprovals[_addr];
     if (usapp.userAddress != address(0) && !usapp.approved && usapp.usertype == _type) {
+      userAddr = _addr;
+    }
+    return userAddr;
+  }
+
+  // FIX IT
+  function getApprovedUser(address _addr, uint _type) constant returns (address) {
+    address userAddr;
+    userApproval usapp = userApprovals[_addr];
+    if (usapp.userAddress != address(0) && usapp.approved && usapp.usertype == _type) {
       userAddr = _addr;
     }
     return userAddr;

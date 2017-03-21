@@ -8,25 +8,28 @@ import { default as contract } from 'truffle-contract'
 // Import our contract artifacts and turn them into usable abstractions.
 import user_artifacts from '../../build/contracts/User.json';
 import approval_artifacts from '../../build/contracts/Approval.json';
+import rationCard_artifacts from '../../build/contracts/RationCard.json';
 
 // User is our usable abstraction, which we'll use through the code below.
 var User = contract(user_artifacts);
 // Approval is our usable abstraction, which we'll use through the code below.
 var Approval = contract(approval_artifacts);
+// RationCard is our usable abstraction, which we'll use through the code below.
+var RationCard = contract(rationCard_artifacts);
 
 
 // For application bootstrapping, check out window.addEventListener below.
 var accounts, governmentAddress;
-var userGlobal, approvalGlobal;
+var userGlobal, approvalGlobal, rationCardGlobal;
 
 // get all accounts and store whoever is registered
 var userDb = {};
 
 var governDiv, custDiv, fpsDiv;
-var i, j, k;
-var loadUserInterval, loadUnapproCustInterval, loadUnapproFpsInterval;
+var i, j, k, l, m;
+var loadUserInterval, loadUnapproCustInterval, loadUnapproFpsInterval, loadApprovedCustInterval, loadApprovedFpsInterval;
 var selectPlaceEle, loadAcctsEle;
-var unapprovedCustDiv, unapprovedFpsDiv;
+var unapprovedCustDiv, unapprovedFpsDiv, approvedCustDiv, approvedFpsDiv;
 var fpsNum, customerNum;
 
 window.App = {
@@ -40,6 +43,11 @@ window.App = {
     Approval.setProvider(web3.currentProvider);
     Approval.deployed().then(function(instance){
       approvalGlobal = instance;
+    });
+
+    RationCard.setProvider(web3.currentProvider);
+    RationCard.deployed().then(function(instance){
+      rationCardGlobal = instance;
     });
 
     web3.eth.getAccounts(function(err, accs){
@@ -61,6 +69,8 @@ window.App = {
     self.loadPlaces();
     self.loadUnApprovedCustomersList();
     self.loadUnApprovedFpsList();
+    self.loadApprovedCustomersList();
+    self.loadApprovedFpsList();
   },
 
   getElements: function() {
@@ -74,6 +84,9 @@ window.App = {
     loadAcctsEle = document.getElementById("load-accts");
     unapprovedCustDiv = document.getElementById("unapproved-list-customer")
     unapprovedFpsDiv = document.getElementById("unapproved-list-fps");
+
+    approvedCustDiv = document.getElementById("approved-list-customer");
+    approvedFpsDiv = document.getElementById("approved-list-fps")
   },
 
   loadPlaces: function() {
@@ -248,6 +261,7 @@ window.App = {
       console.log("customerNum => " + customerNum);
       j = 0;
       // loop through 0 to customerNum
+      unapprovedCustDiv.innerHTML = "";
       loadUnapproCustInterval = setInterval(self.loadUnapproCust, 1000);
     });
   },
@@ -262,6 +276,22 @@ window.App = {
     }).then(function(addr){
       if (j < accounts.length-1) {
         console.log("j => " + j + " || " + "cust => " + addr.valueOf());
+        if (addr.valueOf() != "0x0000000000000000000000000000000000000000") {
+          var div = document.createElement("div");
+          var p = document.createElement("p");
+          p.innerHTML = addr.valueOf();
+          var b = document.createElement("button");
+          b.innerHTML = "Approve";
+          // Change this later
+          b.id = addr.valueOf();
+          b.onclick = function(e) {
+            // console.log(e.target.id);
+            window.App.approveCustomer(e.target.id);
+          }
+          div.appendChild(p);
+          div.appendChild(b);
+          unapprovedCustDiv.appendChild(div);
+        }
         j++;
       } else {
         j = 0;
@@ -271,6 +301,34 @@ window.App = {
     }).catch(function(e){
       console.log(e);
       return;
+    });
+  },
+
+  approveCustomer: function(addr) {
+    var self = this;
+
+    Approval.deployed().then(function(instance){
+      approvalGlobal =  instance;
+      return approvalGlobal.approveCustomer(addr, {from: governmentAddress, gas: 150000});
+    }).then(function(res){
+      console.log(res);
+
+    }).catch(function(e){
+      console.log(e);
+    });
+  },
+
+  approveFPS: function(addr) {
+    var self = this;
+
+    Approval.deployed().then(function(instance){
+      approvalGlobal =  instance;
+      return approvalGlobal.approveFPS(addr, {from: governmentAddress, gas: 150000});
+    }).then(function(res){
+      console.log(res);
+
+    }).catch(function(e){
+      console.log(e);
     });
   },
 
@@ -287,6 +345,7 @@ window.App = {
       console.log("fpsNum => " + fpsNum);
       k = 0;
       // loop through 0 to fpsNum
+      unapprovedFpsDiv.innerHTML = "";
       loadUnapproFpsInterval = setInterval(self.loadUnapproFps, 1000);
     });
   },
@@ -301,10 +360,105 @@ window.App = {
     }).then(function(addr){
       if (k < accounts.length-1) {
         console.log("k => " + k + " || " + "fps => " + addr.valueOf());
+        if (addr.valueOf() != "0x0000000000000000000000000000000000000000") {
+          var div = document.createElement("div");
+          var p = document.createElement("p");
+          p.innerHTML = addr.valueOf();
+          var b = document.createElement("button");
+          b.innerHTML = "Approve";
+          // Change this later
+          b.id = addr.valueOf();
+          b.onclick = function(e) {
+            // console.log(e.target.id);
+            window.App.approveFPS(e.target.id);
+          }
+          div.appendChild(p);
+          div.appendChild(b);
+          unapprovedFpsDiv.appendChild(div);
+        }
         k++;
       } else {
         k = 0;
         clearInterval(loadUnapproFpsInterval);
+        return;
+      }
+    }).catch(function(e){
+      console.log(e);
+      return;
+    });
+  },
+
+  loadApprovedCustomersList: function() {
+    var self = this;
+
+    l = 0;
+    // loop through 0 to customerNum
+    // approvedCustDiv.innerHTML = "";
+    loadApprovedCustInterval = setInterval(self.loadApprovedCust, 1000);
+  },
+
+  loadApprovedCust: function() {
+    var self = this;
+
+    Approval.deployed().then(function(instance){
+      approvalGlobal = instance;
+      return approvalGlobal.getApprovedUser.call(accounts[l], 2);
+    }).then(function(addr){
+      if (l < accounts.length-1) {
+        console.log("l => " + l + " || " + "cust => " + addr.valueOf());
+        if (addr.valueOf() != "0x0000000000000000000000000000000000000000") {
+          var div = document.createElement("div");
+          var p = document.createElement("p");
+          p.innerHTML = addr.valueOf();
+          var b = document.createElement("button");
+          b.innerHTML = "Create Ration card";
+          // Change this later
+          b.id = addr.valueOf();
+          b.onclick = function(e) {
+            console.log(e.target.id);
+            // window.App.createRationCard(e.target.id);
+          }
+          div.appendChild(p);
+          div.appendChild(b);
+          unapprovedCustDiv.appendChild(div);
+        }
+        l++;
+      } else {
+        j = 0;
+        clearInterval(loadApprovedCustInterval);
+        return;
+      }
+    }).catch(function(e){
+      console.log(e);
+      return;
+    });
+  },
+
+  loadApprovedFpsList: function() {
+    var self = this;
+
+    m = 0;
+    // loop through 0 to customerNum
+    // approvedFpsDiv.innerHTML = "";
+    loadApprovedFpsInterval = setInterval(self.loadApprovedFps, 1000);
+  },
+
+  loadApprovedFps: function() {
+    Approval.deployed().then(function(instance){
+      approvalGlobal = instance;
+      return approvalGlobal.getApprovedUser.call(accounts[m], 2);
+    }).then(function(addr){
+      if (m < accounts.length-1) {
+        console.log("m => " + m + " || " + "cust => " + addr.valueOf());
+        if (addr.valueOf() != "0x0000000000000000000000000000000000000000") {
+          var p = document.createElement("p");
+          p.innerHTML = addr.valueOf();
+          unapprovedCustDiv.appendChild(p);
+        }
+        m++;
+      } else {
+        j = 0;
+        clearInterval(loadApprovedFpsInterval);
         return;
       }
     }).catch(function(e){
