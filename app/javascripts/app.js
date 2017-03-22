@@ -79,12 +79,12 @@ window.App = {
     fpsDiv = document.getElementById("fps-register");
     self.hideDivs();
 
-    loadAcctsEle = document.getElementById("load-accts");
-    unapprovedCustDiv = document.getElementById("unapproved-list-customer")
-    unapprovedFpsDiv = document.getElementById("unapproved-list-fps");
+    // loadAcctsEle = document.getElementById("load-accts");
+    // unapprovedCustDiv = document.getElementById("unapproved-list-customer")
+    // unapprovedFpsDiv = document.getElementById("unapproved-list-fps");
 
-    approvedCustDiv = document.getElementById("approved-list-customer");
-    selectApprovedFpsEle = document.getElementById("approved-list-fps")
+    // approvedCustDiv = document.getElementById("approved-list-customer");
+    // selectApprovedFpsEle = document.getElementById("approved-list-fps")
   },
 
   loadPlaces: function() {
@@ -109,7 +109,7 @@ window.App = {
   loadUsers: function() {
     var self = this;
 
-    loadAcctsEle.style.display = "block";
+    // loadAcctsEle.style.display = "block";
     i = 0;
     loadUserInterval = setInterval(self.checkUserRegistered, 100);
   },
@@ -123,10 +123,10 @@ window.App = {
       if (i == 10) {
         i = 0;
         clearInterval(loadUserInterval);
-        loadAcctsEle.style.display = "none";
+        // loadAcctsEle.style.display = "none";
         console.log("Finished loading/checking user registrations");
         userDb[governmentAddress] = true;
-        window.App.loadUnApprovedCustomersList();
+        // window.App.loadUnApprovedCustomersList();
       }
     }).catch(function(e){
       console.log(e);

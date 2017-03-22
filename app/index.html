@@ -1,53 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>PDS</title>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <title>PDS - Registration</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
   <script src="./app.js"></script>
 </head>
 <body>
-  <h1>Registration</h1>
-  <p id="load-accts">Loading accounts...</p>
-  <button type="button" id="government" onclick="App.showGovernment()">Government</button>
-  <button type="button" id="customer" onclick="App.showCustomer()">Customer</button>
-  <button type="button" id="fps" onclick="App.showFPS()">FPS</button>
-  <br><br>
-  <select id="place-list">
-    <option value="-1">Select Place</option>
-  </select>
-  <div id="government-register">
-    <h3>Government</h3>
-    <label>name: </label><input type="text" id="g-name" placeholder="username" /><br>
-    <label>e-email: </label><input type="email" id="g-email" placeholder="email" /><br>
-    <label>password: </label><input type="password" id="g-password" placeholder="password" /><br>
-    <button type="button" id="g-register" onclick="App.registerGovernment()">Register</button>
+  <div class="container">
+    <h1>Registration</h1>
+    <p>This page is used to register Government/FPS/Customer on the blockchain</p>
   </div>
-  <div id="customer-register">
-    <h3>Customer</h3>
-    <label>name: </label><input type="text" id="c-name" placeholder="username" /><br>
-    <label>e-email: </label><input type="email" id="c-email" placeholder="email" /><br>
-    <label>password: </label><input type="password" id="c-password" placeholder="password" /><br>
-    <button type="button" id="c-register" onclick="App.registerCustomer()">Register</button>
-  </div>
-  <div id="fps-register">
-    <h3>FPS</h3>
-    <label>name: </label><input type="text" id="f-name" placeholder="username" /><br>
-    <label>e-email: </label><input type="email" id="f-email" placeholder="email" /><br>
-    <label>password: </label><input type="password" id="f-password" placeholder="password" /><br>
-    <button type="button" id="f-register" onclick="App.registerFPS()">Register</button>
-  </div>
-  <hr>
-  <h2>Unapproved Customers</h2>
-  <div id="unapproved-list-customer">Loading ...</div>
-  <h2>Unapproved FPS</h2>
-  <div id="unapproved-list-fps">Loading ...</div>
-  <hr>
-  <h2>Approved Customers</h2>
-  <div id="approved-list-customer">Loading ...</div>
-  <h2>Approved FPS</h2>
-  <select id="approved-list-fps">
-    <option value="-1">Select FPS</option>
-  </select>
 
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <a href="#"><div class="alert alert-info" role="alert" onclick="App.showGovernment()">Government</div></a>
+      </div>
+      <div class="col-md-4">
+        <a href="#"><div class="alert alert-info" role="alert" onclick="App.showFPS()">FPS</div></a>
+      </div>
+      <div class="col-md-4">
+        <a href="#"><div class="alert alert-info" role="alert" onclick="App.showCustomer()">Customer</div></a>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-4">
+        <select class="custom-select col-md-4" id="place-list">
+          <option value="-1">Select Area</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card card-1" id="government-register">
+        <h4>Government Registration</h4>
+        <div class="input-group center-block">
+          <input type="text" id="g-name" class="form-inline">
+          <span class="input-group-addon" id="basic-addon1">Government Name</span>
+        </div>
+        <br>
+        <div class="input-group center-block">
+          <input type="text" id="g-email" class="form-inline">
+          <span class="input-group-addon" id="basic-addon1">Email</span>
+        </div>
+        <br>
+        <div class="input-group center-block">
+          <input type="password" id="g-password" class="form-inline">
+          <span class="input-group-addon" id="basic-addon1">Password</span>
+        </div>
+        <br>
+        <div class="input-group center-block">
+          <button type="button" id="g-register" onclick="App.registerGovernment()" class="btn btn-info-outline">Register</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card card-1" id="fps-register">
+        <h4>FPS Registration</h4>
+        <div class="input-group center-block">
+          <input type="text" id="f-name" class="form-inline">
+          <span class="input-group-addon" id="basic-addon1">FPS Name</span>
+        </div>
+        <br>
+        <div class="input-group center-block">
+          <input type="text" id="f-email" class="form-inline">
+          <span class="input-group-addon" id="basic-addon1">Email</span>
+        </div>
+        <br>
+        <div class="input-group center-block">
+          <input type="password" id="f-password" class="form-inline">
+          <span class="input-group-addon" id="basic-addon1">Password</span>
+        </div>
+        <br>
+        <div class="input-group center-block">
+          <button type="button" id="f-register" onclick="App.registerFPS()" class="btn btn-info-outline">Register</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card card-1" id="customer-register">
+        <h4>Customer Registration</h4>
+        <div class="input-group center-block">
+          <input type="text" id="c-name" class="form-inline">
+          <span class="input-group-addon" id="basic-addon1">Customer Name</span>
+        </div>
+        <br>
+        <div class="input-group center-block">
+          <input type="text" id="c-email" class="form-inline">
+          <span class="input-group-addon" id="basic-addon1">Email</span>
+        </div>
+        <br>
+        <div class="input-group center-block">
+          <input type="password" id="c-password" class="form-inline">
+          <span class="input-group-addon" id="basic-addon1">Password</span>
+        </div>
+        <br>
+        <div class="input-group center-block">
+          <button type="button" id="c-register" onclick="App.registerCustomer()" class="btn btn-info-outline">Register</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
