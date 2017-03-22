@@ -126,8 +126,9 @@ window.ApprovalApp = {
             customerNum = num1;
             console.log("customerNum => " + customerNum);
             j = 0;
+            prevAddr = "";
             // loop through 0 to customerNum
-            loadUnapproCustInterval = setInterval(self.loadUnapproCust, 100);
+            loadUnapproCustInterval = setInterval(self.loadUnapproCust, 150);
         });
     },
 
@@ -139,9 +140,10 @@ window.ApprovalApp = {
             return approvalGlobal.getUnapprovedUser.call(accounts[j], 2);
         }).then(function(addr){
             if (j < accounts.length-1) {
-                document.getElementById("load-1").style.display = "none";
+                // document.getElementById("load-1").style.display = "none";
                 console.log("j => " + j + " || " + "cust => " + addr.valueOf());
-                if (addr.valueOf() != "0x0000000000000000000000000000000000000000") {
+                if (addr.valueOf() != "0x0000000000000000000000000000000000000000" && addr.valueOf() != prevAddr) {
+                    prevAddr = addr.valueOf();
                     var a = document.createElement("a");
                     a.href = "#";
                     a.setAttribute("class", "list-group-item list-group-item-action");
@@ -156,6 +158,7 @@ window.ApprovalApp = {
                     b.id = addr.valueOf();
                     b.onclick = function(e) {
                         console.log(e.target.id);
+                        e.target.style.display = "none";
                         window.ApprovalApp.approveCustomer(e.target.id);
                     }
                     div.appendChild(p);
@@ -167,6 +170,7 @@ window.ApprovalApp = {
             } else {
                 j = 0;
                 clearInterval(loadUnapproCustInterval);
+                document.getElementById("load-1").style.display = "none";
                 window.ApprovalApp.loadUnApprovedFpsList();
                 return;
             }
@@ -187,8 +191,9 @@ window.ApprovalApp = {
             fpsNum = num1;
             console.log("fpsNum => " + fpsNum);
             k = 0;
+            prevAddr = "";
             // loop through 0 to fpsNum
-            loadUnapproFpsInterval = setInterval(self.loadUnapproFps, 100);
+            loadUnapproFpsInterval = setInterval(self.loadUnapproFps, 150);
         });        
     },
 
@@ -200,9 +205,10 @@ window.ApprovalApp = {
             return approvalGlobal.getUnapprovedUser.call(accounts[k], 1);
         }).then(function(addr){
             if (k < accounts.length-1) {
-                document.getElementById("load-3").style.display = "none";                
+                // document.getElementById("load-3").style.display = "none";                
                 console.log("k => " + k + " || " + "fps => " + addr.valueOf());
-                if (addr.valueOf() != "0x0000000000000000000000000000000000000000") {
+                if (addr.valueOf() != "0x0000000000000000000000000000000000000000" && addr.valueOf() != prevAddr) {
+                    prevAddr = addr.valueOf();
                     var div = document.createElement("div");
                     div.setAttribute("class", "list-group-item list-group-item-action");
                     var p = document.createElement("p");
@@ -215,6 +221,7 @@ window.ApprovalApp = {
                     b.id = addr.valueOf();
                     b.onclick = function(e) {
                         console.log(e.target.id);
+                        e.target.style.display = "none";                        
                         window.ApprovalApp.approveFPS(e.target.id);
                     }
                     div.appendChild(p);
@@ -225,6 +232,7 @@ window.ApprovalApp = {
             } else {
                 k = 0;
                 clearInterval(loadUnapproFpsInterval);
+                document.getElementById("load-3").style.display = "none";                
                 window.ApprovalApp.loadApprovedCustomersList();
                 return;
             }
@@ -269,7 +277,7 @@ window.ApprovalApp = {
 
         l = 0;
         prevAddr = "";
-        loadApprovedCustInterval = setInterval(self.loadApprovedCust, 100);
+        loadApprovedCustInterval = setInterval(self.loadApprovedCust, 500);
     },
 
     loadApprovedCust: function() {
@@ -280,11 +288,12 @@ window.ApprovalApp = {
             return approvalGlobal.getApprovedUser.call(accounts[l], 2);
         }).then(function(addr){
             if (l < accounts.length-1) {
-                document.getElementById("load-2").style.display = "none";
+                // document.getElementById("load-2").style.display = "none";
                 // console.log("l => " + l + " || " + "cust => " + addr.valueOf());
                 if (addr.valueOf() != "0x0000000000000000000000000000000000000000" && addr.valueOf() != prevAddr) {
                     console.log("l => " + l + " || " + "cust => " + addr.valueOf());
                     prevAddr = addr.valueOf();
+                    // FIX IT
                     User.deployed().then(function(instance){
                         userGlobal = instance;
                         return userGlobal.getUserInfo(addr.valueOf(), "pass", {from: governmentAddress, gas: 150000});
@@ -305,14 +314,56 @@ window.ApprovalApp = {
                         b.innerHTML = "Create Ration card";
                         // Change this later
                         b.id = addr.valueOf();
+                        b.setAttribute("data-toggle", "modal");
+                        b.setAttribute("data-target", "#myModal");
+                        b.setAttribute("data-customeraddr", userinfo[0]);
+                        b.setAttribute("data-usertype", userinfo[3]);
+                        b.setAttribute("data-customername", userinfo[1]);
                         b.onclick = function(e) {
                             console.log(e.target.id);
-                            // window.ApprovalApp.createRationCard(userinfo);
+                            window.ApprovalApp.showApprovedFPSList();
+                            var cn = document.getElementById("ration-customer-name");
+                            var c = document.getElementById("ration-customer-addr");
+                            var f = document.getElementById("select-approved-list-fps");
+                            var addrs = document.getElementById("ration-customer-street-address");
+                            addrs.value = "";
+                            var usert = document.getElementById("ration-customer-user-type");
+                            var confirm = document.getElementById("ration-card-confirm-btn");
+                            confirm.onclick = function() {
+                                var useri = [c.value, cn.value, addrs.value, usert.value, f.options[f.selectedIndex].text];
+                                console.log("**********");
+                                // console.log(cn.value);
+                                // console.log(c.value);
+                                // console.log(f.options[f.selectedIndex].text);
+                                // console.log(addrs.value);
+                                // console.log(usert.value);
+                                console.log(useri);
+                                console.log("**********");
+                                window.ApprovalApp.createRationCard(useri);
+                            }
                         }
                         div.appendChild(p);
                         div.appendChild(p1);
-                        div.appendChild(b);
-                        approvedCustDiv.appendChild(div);
+                        RationCard.deployed().then(function(instance){
+                            rationCardGlobal = instance;
+                            return rationCardGlobal.checkRationCardExists.call(userinfo[0], {from: governmentAddress, gas: 50000});
+                        }).then(function(exists){
+                            console.log("RationCard " + userinfo[0] + " => " + exists.valueOf() + " : " + typeof exists);
+                            if (exists) {
+                                var b2 = document.createElement("button");
+                                b2.type = "button";
+                                b2.setAttribute("class", "btn btn-success btn-sm");
+                                b2.style.display = "block";
+                                b2.style.minWidth = "100%";
+                                b2.innerHTML = "Ration card Exists";
+                                div.appendChild(b2);
+                            } else {
+                                div.appendChild(b);
+                            }
+                            approvedCustDiv.appendChild(div);
+                        }).catch(function(e){
+                            console.log(e);
+                        });
                     }).catch(function(e){
                         console.log(e);
                     });
@@ -321,6 +372,7 @@ window.ApprovalApp = {
             } else {
                 l = 0;
                 clearInterval(loadApprovedCustInterval);
+                document.getElementById("load-2").style.display = "none";
                 window.ApprovalApp.loadApprovedFpsList();
                 return;
             }
@@ -335,7 +387,7 @@ window.ApprovalApp = {
 
         m = 0;
         prevAddr = "";
-        loadApprovedFpsInterval = setInterval(self.loadApprovedFps, 100);
+        loadApprovedFpsInterval = setInterval(self.loadApprovedFps, 500);
     },
 
     loadApprovedFps: function() {
@@ -343,11 +395,11 @@ window.ApprovalApp = {
             approvalGlobal = instance;
             return approvalGlobal.getApprovedUser.call(accounts[m], 1);
         }).then(function(addr){
-            document.getElementById("load-4").style.display = "none";
+            // document.getElementById("load-4").style.display = "none";
             if (m < accounts.length-1) {
                 // console.log("m => " + m + " || " + "cust => " + addr.valueOf());
                 if (addr.valueOf() != "0x0000000000000000000000000000000000000000" && addr.valueOf() != prevAddr) {
-                    console.log("m => " + m + " || " + "cust => " + addr.valueOf());
+                    console.log("m => " + m + " || " + "fps => " + addr.valueOf());
                     prevAddr = addr.valueOf();
                     approvedFPSList.push(addr.valueOf());
                     User.deployed().then(function(instance){
@@ -369,17 +421,14 @@ window.ApprovalApp = {
                         console.log(e);
                         return;
                     });
-                    // var opt = document.createElement("option");
-                    // opt.value = 1;
-                    // opt.innerHTML = addr.valueOf();
-                    // selectApprovedFpsEle.appendChild(opt);
                 }
                 m++;
             } else {
                 m = 0;
                 clearInterval(loadApprovedFpsInterval);
+                document.getElementById("load-4").style.display = "none";
                 console.log(approvedFPSList);
-                window.ApprovalApp.showApprovedFPSList();
+                // window.ApprovalApp.showApprovedFPSList();
                 return;
             }
         }).catch(function(e){
@@ -390,6 +439,9 @@ window.ApprovalApp = {
 
     showApprovedFPSList: function() {
         var self = this;
+        for (var i = selectApprovedFpsEle.options.length-1; i >= 0 ; i--) {
+            selectApprovedFpsEle.remove(i);
+        }
         for (var i = 0; i < approvedFPSList.length; i++) {
             var opt = document.createElement("option");
             opt.value = 1;
@@ -398,26 +450,25 @@ window.ApprovalApp = {
         }
     },
 
-    createRationCard: function() {
+    createRationCard: function(userinfo) {
         var self = this;
 
-        // this is not correct way to do,find someother to get this.
-        if (selectApprovedFpsEle.options[selectApprovedFpsEle.selectedIndex].value == -1) {
-            alert("Select valid fps to createRationCard");
-            return;
-        }
-        var fps = selectApprovedFpsEle.options[selectApprovedFpsEle.selectedIndex].text;
-        if (userDb[userinfo[0]] && userDb[fps]) {
+        console.log(userinfo[0] + " ? " + userinfo[4]);
+        if (userDb[userinfo[0]] && userDb[userinfo[4]]) {
             RationCard.deployed().then(function(instance){
                 rationCardGlobal = instance;
-                return rationCardGlobal.addRationCard(userinfo[0], userinfo[1], "this is street address", userinfo[3], fps, {from: governmentAddress, gas: 500000});
+                return rationCardGlobal.addRationCard(userinfo[0], userinfo[1], userinfo[2], userinfo[3], userinfo[4], {from: governmentAddress, gas: 500000});
             }).then(function(res){
+                console.log("Ration card created");
                 console.log(res);
+                location.reload();
             }).catch(function(e){
                 console.log(e);
             });
+            return;
+        } else {
+            console.log("==== Something went wrong while creating ration card ====");
         }
-        return;
     },
 };
 
@@ -435,4 +486,20 @@ window.addEventListener('load', function() {
   }
 
   ApprovalApp.start();
+
+  $(document).ready(function(){
+      $('#myModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var custAddr = button.data('customeraddr') // Extract info from data-* attributes
+            var usertype = button.data('usertype')
+            var customername = button.data('customername');
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            // modal.find('.modal-title').text('Ration card for : ' + custAddr)
+            modal.find('.modal-body input').val(custAddr)
+            $('#ration-customer-user-type').val(usertype)
+            $('#ration-customer-name').val(customername)
+        })
+  });
 });

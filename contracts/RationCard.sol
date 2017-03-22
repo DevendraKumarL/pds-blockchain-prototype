@@ -79,4 +79,9 @@ contract RationCard {
     return (exists, cardNum, cusName, cusAddress, place, fpsAddr);
   }
 
+  function checkRationCardExists(address _addr) constant onlyGovernment returns (bool) {
+    bool exists = rationCardOf[_addr].cardCreated;
+    return exists;
+  }
+
 }

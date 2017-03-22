@@ -15,13 +15,13 @@
       <p>This page shows the list of unapproved and approved users(Customers/FPS)</p>
     </div>
 
-    <div class="container">
+    <!-- <div class="container">
       <div class="col-md-6">
         <select id="select-approved-list-fps" class="custom-select col-md-12">
           <option value="-1">Select FPS</option>
         </select>
       </div>
-    </div>
+    </div> -->
 
     <div class="container">
       <div class="col-md-5 card card-1">
@@ -49,5 +49,50 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create Ration card</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="ration-card-div">
+            <div class="input-group center-block">
+              <input type="text" id="ration-customer-name" class="form-inline col-md-4" disabled="true">
+              <span class="input-group-addon">Customer Name</span>
+            </div>
+            <div class="clearfix"><br></div>
+            <div class="input-group center-block">
+              <input type="text" id="ration-customer-addr" class="form-inline col-md-8" disabled="true">
+              <span class="input-group-addon">Customer Address</span>
+            </div>
+            <div class="clearfix"><br></div>
+            <div class="input-group center-block">
+              <select id="select-approved-list-fps" class="custom-select col-md-8">
+                <option value="-1">Select FPS</option>
+              </select>
+              <span class="input-group-addon">FPS Address</span>
+            </div>
+            <div class="clearfix"><br></div>
+            <div class="input-group center-block">
+              <textarea id="ration-customer-street-address" rows="3" cols="80" placeholder="Street address"></textarea>
+            </div>
+            <div class="clearfix"><br></div>
+            <div class="input-group center-block">
+              <input type="text" id="ration-customer-user-type"class="form-inline" disabled="true">
+              <span class="input-group-addon">Usertype</span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+            <button type="button" class="btn btn-primary" id="ration-card-confirm-btn">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>

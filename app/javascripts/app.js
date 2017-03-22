@@ -26,11 +26,14 @@ var userGlobal, approvalGlobal, rationCardGlobal;
 var userDb = {};
 
 var governDiv, custDiv, fpsDiv;
-var i, j, k, l, m;
-var loadUserInterval, loadUnapproCustInterval, loadUnapproFpsInterval, loadApprovedCustInterval, loadApprovedFpsInterval;
-var selectPlaceEle, loadAcctsEle, selectApprovedFpsEle;
-var unapprovedCustDiv, unapprovedFpsDiv, approvedCustDiv;
-var fpsNum, customerNum;
+var loadAcctsEle, selectPlaceEle;
+var i;
+var loadUserInterval;
+// var j, k, l, m;
+// var loadUnapproCustInterval, loadUnapproFpsInterval, loadApprovedCustInterval, loadApprovedFpsInterval;
+// var selectApprovedFpsEle;
+// var unapprovedCustDiv, unapprovedFpsDiv, approvedCustDiv;
+// var fpsNum, customerNum;
 
 window.App = {
   start: function() {
@@ -80,11 +83,6 @@ window.App = {
     self.hideDivs();
 
     // loadAcctsEle = document.getElementById("load-accts");
-    // unapprovedCustDiv = document.getElementById("unapproved-list-customer")
-    // unapprovedFpsDiv = document.getElementById("unapproved-list-fps");
-
-    // approvedCustDiv = document.getElementById("approved-list-customer");
-    // selectApprovedFpsEle = document.getElementById("approved-list-fps")
   },
 
   loadPlaces: function() {
@@ -126,7 +124,6 @@ window.App = {
         // loadAcctsEle.style.display = "none";
         console.log("Finished loading/checking user registrations");
         userDb[governmentAddress] = true;
-        // window.App.loadUnApprovedCustomersList();
       }
     }).catch(function(e){
       console.log(e);
@@ -163,7 +160,6 @@ window.App = {
 
   registerCustomer: function() {
     var self = this;
-    // TODO:
     var name = document.getElementById("c-name");
     var email = document.getElementById("c-email");
     var pass = document.getElementById("c-password");
@@ -173,18 +169,12 @@ window.App = {
       alert("Select a valid place");
       return;
     }
-
     var userAddr = self.getNewAddress();
-
-    // userGlobal.addUser(userAddr, name.value, email.value, 2, pass.value, uplace, {from: governmentAddress, gas: 250000}).then(function(res){
-    //   console.log(res);
-    //   userDb[userAddr] = true;
-    // }).catch(function(e){
-    //   console.log(e);
-    // });
-
     userGlobal.addUser(userAddr, name.value, email.value, 2, pass.value, uplace, {from: governmentAddress, gas: 250000}).then(function(res){
       console.log(res);
+      if (res.logs.length == 0) {
+        throw "Email already taken";
+      }
       userDb[userAddr] = true;
       name.value = "";
       email.value = "";
@@ -206,7 +196,6 @@ window.App = {
   registerFPS: function() {
     var self = this;
     var userAddr = self.getNewAddress();
-    // TODO:
     var name = document.getElementById("f-name");
     var email = document.getElementById("f-email");
     var pass = document.getElementById("f-password");
@@ -216,17 +205,11 @@ window.App = {
       alert("Select a valid place");
       return;
     }
-
-
-    // userGlobal.addUser(userAddr, name.value, email.value, 1, pass.value, uplace, {from: governmentAddress, gas: 200000}).then(function(res){
-    //   console.log(res);
-    //   userDb[userAddr] = true;
-    // }).catch(function(e){
-    //   console.log(e);
-    // });
-
     userGlobal.addUser(userAddr, name.value, email.value, 1, pass.value, uplace, {from: governmentAddress, gas: 250000}).then(function(res){
       console.log(res);
+      if (res.logs.length == 0) {
+        throw "Email already taken";
+      }
       userDb[userAddr] = true;
       name.value = "";
       email.value = "";
@@ -239,238 +222,6 @@ window.App = {
       return approvalGlobal.addToNotApprovedList(userAddr, 1, {from: governmentAddress, gas: 250000});
     }).then(function(res){
       console.log(res);
-    }).catch(function(e){
-      console.log(e);
-      return;
-    });
-  },
-
-  // FIX IT
-  loadUnApprovedCustomersList: function() {
-    var self = this;
-
-    var customerNum;
-    Approval.deployed().then(function(instance){
-      approvalGlobal = instance;
-      return approvalGlobal.getUnApprovedCustomers.call();
-    }).then(function(num1){
-      customerNum = num1;
-      console.log("customerNum => " + customerNum);
-      j = 0;
-      // loop through 0 to customerNum
-      unapprovedCustDiv.innerHTML = "";
-      loadUnapproCustInterval = setInterval(self.loadUnapproCust, 100);
-    });
-  },
-
-  // FIX IT
-  loadUnapproCust: function() {
-    var self = this;
-
-    Approval.deployed().then(function(instance){
-      approvalGlobal = instance;
-      return approvalGlobal.getUnapprovedUser.call(accounts[j], 2);
-    }).then(function(addr){
-      if (j < accounts.length-1) {
-        console.log("j => " + j + " || " + "cust => " + addr.valueOf());
-        if (addr.valueOf() != "0x0000000000000000000000000000000000000000") {
-          var div = document.createElement("div");
-          var p = document.createElement("p");
-          p.innerHTML = addr.valueOf();
-          var b = document.createElement("button");
-          b.innerHTML = "Approve";
-          // Change this later
-          b.id = addr.valueOf();
-          b.onclick = function(e) {
-            // console.log(e.target.id);
-            window.App.approveCustomer(e.target.id);
-          }
-          div.appendChild(p);
-          div.appendChild(b);
-          unapprovedCustDiv.appendChild(div);
-        }
-        j++;
-      } else {
-        j = 0;
-        clearInterval(loadUnapproCustInterval);
-        window.App.loadUnApprovedFpsList();
-        return;
-      }
-    }).catch(function(e){
-      console.log(e);
-      return;
-    });
-  },
-
-  approveCustomer: function(addr) {
-    var self = this;
-
-    Approval.deployed().then(function(instance){
-      approvalGlobal =  instance;
-      return approvalGlobal.approveCustomer(addr, {from: governmentAddress, gas: 150000});
-    }).then(function(res){
-      console.log(res);
-
-    }).catch(function(e){
-      console.log(e);
-    });
-  },
-
-  approveFPS: function(addr) {
-    var self = this;
-
-    Approval.deployed().then(function(instance){
-      approvalGlobal =  instance;
-      return approvalGlobal.approveFPS(addr, {from: governmentAddress, gas: 150000});
-    }).then(function(res){
-      console.log(res);
-
-    }).catch(function(e){
-      console.log(e);
-    });
-  },
-
-  // FIX IT
-  loadUnApprovedFpsList: function() {
-    var self = this;
-
-    var fpsNum;
-    Approval.deployed().then(function(instance){
-      approvalGlobal = instance;
-      return approvalGlobal.getUnApprovedFPS.call();
-    }).then(function(num1){
-      fpsNum = num1;
-      console.log("fpsNum => " + fpsNum);
-      k = 0;
-      // loop through 0 to fpsNum
-      unapprovedFpsDiv.innerHTML = "";
-      loadUnapproFpsInterval = setInterval(self.loadUnapproFps, 100);
-    });
-  },
-
-  // FIX IT
-  loadUnapproFps: function() {
-    var self = this;
-
-    Approval.deployed().then(function(instance){
-      approvalGlobal = instance;
-      return approvalGlobal.getUnapprovedUser.call(accounts[k], 1);
-    }).then(function(addr){
-      if (k < accounts.length-1) {
-        console.log("k => " + k + " || " + "fps => " + addr.valueOf());
-        if (addr.valueOf() != "0x0000000000000000000000000000000000000000") {
-          var div = document.createElement("div");
-          var p = document.createElement("p");
-          p.innerHTML = addr.valueOf();
-          var b = document.createElement("button");
-          b.innerHTML = "Approve";
-          // Change this later
-          b.id = addr.valueOf();
-          b.onclick = function(e) {
-            // console.log(e.target.id);
-            window.App.approveFPS(e.target.id);
-          }
-          div.appendChild(p);
-          div.appendChild(b);
-          unapprovedFpsDiv.appendChild(div);
-        }
-        k++;
-      } else {
-        k = 0;
-        clearInterval(loadUnapproFpsInterval);
-        window.App.loadApprovedCustomersList();
-        return;
-      }
-    }).catch(function(e){
-      console.log(e);
-      return;
-    });
-  },
-
-  loadApprovedCustomersList: function() {
-    var self = this;
-
-    l = 0;
-    // approvedCustDiv.innerHTML = "";
-    loadApprovedCustInterval = setInterval(self.loadApprovedCust, 100);
-  },
-
-  loadApprovedCust: function() {
-    var self = this;
-
-    Approval.deployed().then(function(instance){
-      approvalGlobal = instance;
-      return approvalGlobal.getApprovedUser.call(accounts[l], 2);
-    }).then(function(addr){
-      if (l < accounts.length-1) {
-        console.log("l => " + l + " || " + "cust => " + addr.valueOf());
-        if (addr.valueOf() != "0x0000000000000000000000000000000000000000") {
-          User.deployed().then(function(instance){
-            userGlobal = instance;
-            return userGlobal.getUserInfo(addr.valueOf(), "pass", {from: governmentAddress, gas: 150000});
-          }).then(function(userinfo){
-            var div = document.createElement("div");
-            var p = document.createElement("p");
-            p.innerHTML = addr.valueOf();
-            var p1 = document.createElement("p");
-            console.log("userinfo || " + addr.valueOf() + " => " + userinfo);
-            p1.innerHTML = userinfo[1] + " - " + userinfo[2] + " - " + userinfo[3] + " - " + userinfo[4];
-            var b = document.createElement("button");
-            b.innerHTML = "Create Ration card";
-            // Change this later
-            b.id = addr.valueOf();
-            b.onclick = function(e) {
-              // console.log(e.target.id);
-              window.App.createRationCard(userinfo);
-            }
-            div.appendChild(p);
-            div.appendChild(p1);
-            div.appendChild(b);
-            approvedCustDiv.appendChild(div);
-          }).catch(function(e){
-            console.log(e);
-          });
-        }
-        l++;
-      } else {
-        l = 0;
-        clearInterval(loadApprovedCustInterval);
-        window.App.loadApprovedFpsList();
-        return;
-      }
-    }).catch(function(e){
-      console.log(e);
-      return;
-    });
-  },
-
-  loadApprovedFpsList: function() {
-    var self = this;
-
-    m = 0;
-    // approvedFpsDiv.innerHTML = "";
-    loadApprovedFpsInterval = setInterval(self.loadApprovedFps, 100);
-  },
-
-  loadApprovedFps: function() {
-    Approval.deployed().then(function(instance){
-      approvalGlobal = instance;
-      return approvalGlobal.getApprovedUser.call(accounts[m], 1);
-    }).then(function(addr){
-      if (m < accounts.length-1) {
-        console.log("m => " + m + " || " + "cust => " + addr.valueOf());
-        if (addr.valueOf() != "0x0000000000000000000000000000000000000000") {
-          var opt = document.createElement("option");
-          opt.value = 1;
-          opt.innerHTML = addr.valueOf();
-          selectApprovedFpsEle.appendChild(opt);
-        }
-        m++;
-      } else {
-        m = 0;
-        clearInterval(loadApprovedFpsInterval);
-        return;
-      }
     }).catch(function(e){
       console.log(e);
       return;
