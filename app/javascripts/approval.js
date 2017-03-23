@@ -37,6 +37,8 @@ var fpsNum, customerNum;
 var loadAcctsEle;
 var prevAddr;
 
+var notify3;
+
 window.ApprovalApp = {
     start: function() {
         var self = this;
@@ -85,6 +87,8 @@ window.ApprovalApp = {
         approvedCustDiv = document.getElementById("approved-list-customer");
         approvedFpsDiv = document.getElementById("approved-list-fps")
         selectApprovedFpsEle = document.getElementById("select-approved-list-fps");
+
+        notify3 = document.getElementById("notification3");
     },
 
     loadUsers: function() {
@@ -250,10 +254,16 @@ window.ApprovalApp = {
             return approvalGlobal.approveCustomer(addr, {from: governmentAddress, gas: 150000});
         }).then(function(res){
             console.log(res);
-            alert("Customer approved");
+            notify3.setAttribute("class", "alert alert-success col-md-12");
+            notify3.innerHTML = "Customer Approved. Address: " + addr;
+            notify3.style.display = "block";
+            // alert("Customer approved");
             // location.reload();
         }).catch(function(e){
             console.log(e);
+            notify3.setAttribute("class", "alert alert-danger col-md-12");
+            notify3.innerHTML = "Somthing went wrong while approving customer. Error:  " + e;
+            notify3.style.display = "block";
         });
     },
 
@@ -265,10 +275,16 @@ window.ApprovalApp = {
             return approvalGlobal.approveFPS(addr, {from: governmentAddress, gas: 150000});
         }).then(function(res){
             console.log(res);
-            alert("FPS approved");
+            notify3.setAttribute("class", "alert alert-success col-md-12");
+            notify3.innerHTML = "FPS Approved. Address: " + addr;
+            notify3.style.display = "block";
+            // alert("FPS approved");
             // location.reload();
         }).catch(function(e){
             console.log(e);
+            notify3.setAttribute("class", "alert alert-danger col-md-12");
+            notify3.innerHTML = "Somthing went wrong while approving fps. Error:  " + e;
+            notify3.style.display = "block";
         });
     },
 
@@ -459,15 +475,21 @@ window.ApprovalApp = {
                 rationCardGlobal = instance;
                 return rationCardGlobal.addRationCard(userinfo[0], userinfo[1], userinfo[2], userinfo[3], userinfo[4], {from: governmentAddress, gas: 500000});
             }).then(function(res){
-                console.log("Ration card created");
                 console.log(res);
+                alert("Ration card created for customer: " + userinfo[0]);
                 location.reload();
             }).catch(function(e){
                 console.log(e);
+                notify3.setAttribute("class", "alert alert-danger col-md-12");
+                notify3.innerHTML = "Something went wrong while creating ration card. Error:  " + e;
+                notify3.style.display = "block";
             });
             return;
         } else {
-            console.log("==== Something went wrong while creating ration card ====");
+            notify3.setAttribute("class", "alert alert-danger col-md-12");
+            notify3.innerHTML = "Either customer or fps hasn't registered.";
+            notify3.style.display = "block";
+            // console.log("==== Something went wrong while creating ration card ====");
         }
     },
 };

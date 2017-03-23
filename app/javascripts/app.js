@@ -27,8 +27,8 @@ var userDb = {};
 
 var governDiv, custDiv, fpsDiv;
 var loadAcctsEle, selectPlaceEle;
-var i;
-var loadUserInterval;
+var i, loadUserInterval;
+var notifiy1, notifiy2;
 // var j, k, l, m;
 // var loadUnapproCustInterval, loadUnapproFpsInterval, loadApprovedCustInterval, loadApprovedFpsInterval;
 // var selectApprovedFpsEle;
@@ -82,6 +82,8 @@ window.App = {
     fpsDiv = document.getElementById("fps-register");
     self.hideDivs();
 
+    notifiy1 = document.getElementById("notification1");
+    notifiy2 = document.getElementById("notification2");
     // loadAcctsEle = document.getElementById("load-accts");
   },
 
@@ -109,7 +111,7 @@ window.App = {
 
     // loadAcctsEle.style.display = "block";
     i = 0;
-    loadUserInterval = setInterval(self.checkUserRegistered, 100);
+    loadUserInterval = setInterval(self.checkUserRegistered, 130);
   },
 
   checkUserRegistered: function() {
@@ -150,16 +152,25 @@ window.App = {
       name.value = "";
       email.value = "";
       pass.value = "";
-      alert("Government registered succesfully");
+      // alert("Government registered succesfully");
+      notifiy1.setAttribute("class", "alert alert-success col-md-12");
+      notifiy1.innerHTML = "Government registered succesfully. Address: " + governmentAddress;
+      notifiy1.style.display = "block";
       self.hideDivs();
     }).catch(function(e){
       console.log(e);
+      notifiy1.setAttribute("class", "alert alert-danger col-md-12");
+      notifiy1.innerHTML = "Government registeration failed. <strong>" + e + "</strong>";
+      notifiy1.style.display = "block";
+      notifiy2.style.display = "none";
+      self.hideDivs();
       return;
     });
   },
 
   registerCustomer: function() {
     var self = this;
+    var userAddr = self.getNewAddress();
     var name = document.getElementById("c-name");
     var email = document.getElementById("c-email");
     var pass = document.getElementById("c-password");
@@ -169,7 +180,6 @@ window.App = {
       alert("Select a valid place");
       return;
     }
-    var userAddr = self.getNewAddress();
     userGlobal.addUser(userAddr, name.value, email.value, 2, pass.value, uplace, {from: governmentAddress, gas: 250000}).then(function(res){
       console.log(res);
       if (res.logs.length == 0) {
@@ -179,7 +189,11 @@ window.App = {
       name.value = "";
       email.value = "";
       pass.value = "";
-      alert("Customer registered succesfully");
+      // alert("Customer registered succesfully");
+      notifiy1.setAttribute("class", "alert alert-success col-md-12");
+      notifiy1.innerHTML = "Customer registered succesfully. Address: " + userAddr;
+      notifiy1.style.display = "block";
+      self.hideDivs();
       self.hideDivs();
       return Approval.deployed();
     }).then(function(instance){
@@ -187,8 +201,15 @@ window.App = {
       return approvalGlobal.addToNotApprovedList(userAddr, 2, {from: governmentAddress, gas: 250000});
     }).then(function(res){
       console.log(res);
+      notifiy2.setAttribute("class", "alert alert-info col-md-12");
+      notifiy2.innerHTML = "Customer added to Pending Approval List. Wait for Government to approve.";
+      notifiy2.style.display = "block";
     }).catch(function(e){
       console.log(e);
+      notifiy1.setAttribute("class", "alert alert-danger col-md-12");
+      notifiy1.innerHTML = "Customer registration failed. <strong>"+ e + "</strong>";
+      notifiy1.style.display = "block";
+      notifiy2.style.display = "none";
       return;
     });
   },
@@ -214,7 +235,10 @@ window.App = {
       name.value = "";
       email.value = "";
       pass.value = "";
-      alert("FPS registered succesfully");
+      // alert("FPS registered succesfully");
+      notifiy1.setAttribute("class", "alert alert-success col-md-12");
+      notifiy1.innerHTML = "FPS registered succesfully. Address: " + userAddr;
+      notifiy1.style.display = "block";
       self.hideDivs();
       return Approval.deployed();
     }).then(function(instance){
@@ -222,32 +246,17 @@ window.App = {
       return approvalGlobal.addToNotApprovedList(userAddr, 1, {from: governmentAddress, gas: 250000});
     }).then(function(res){
       console.log(res);
+      notifiy2.setAttribute("class", "alert alert-info col-md-12");
+      notifiy2.innerHTML = "FPS added to Pending Approval List. Wait for Government to approve.";
+      notifiy2.style.display = "block";
     }).catch(function(e){
       console.log(e);
+      notifiy1.setAttribute("class", "alert alert-danger col-md-12");
+      notifiy1.innerHTML = "FPS registration failed. <strong>"+ e + "</strong>";
+      notifiy1.style.display = "block";
+      notifiy2.style.display = "none";
       return;
     });
-  },
-
-  createRationCard: function(userinfo) {
-    var self = this;
-
-    // this is not correct way to do,find someother to get this.
-    if (selectApprovedFpsEle.options[selectApprovedFpsEle.selectedIndex].value == -1) {
-      alert("Select valid fps to createRationCard");
-      return;
-    }
-    var fps = selectApprovedFpsEle.options[selectApprovedFpsEle.selectedIndex].text;
-    if (userDb[userinfo[0]] && userDb[fps]) {
-      RationCard.deployed().then(function(instance){
-        rationCardGlobal = instance;
-        return rationCardGlobal.addRationCard(userinfo[0], userinfo[1], "this is street address", userinfo[3], fps, {from: governmentAddress, gas: 500000});
-      }).then(function(res){
-        console.log(res);
-      }).catch(function(e){
-        console.log(e);
-      });
-    }
-    return;
   },
 
   getNewAddress: function() {

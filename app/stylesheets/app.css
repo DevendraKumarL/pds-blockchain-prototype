@@ -37,3 +37,15 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+#notification1 {
+  display: none;
+}
+
+#notification2 {
+  display: none;
+}
+
+#notification3 {
+  display: none;
+}
