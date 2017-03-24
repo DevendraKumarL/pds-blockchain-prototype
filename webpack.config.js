@@ -4,7 +4,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   entry: {
     'app': './app/javascripts/app.js',
-    'approval': './app/javascripts/approval.js'
+    'approval': './app/javascripts/approval.js',
+    'ration': './app/javascripts/ration.js'
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -17,6 +18,9 @@ module.exports = {
     ]),
     new CopyWebpackPlugin([
       { from: './app/approval.html', to: "approval.html" }
+    ]),
+    new CopyWebpackPlugin([
+      { from: './app/ration.html', to: "ration.html" }
     ])
   ],
   module: {

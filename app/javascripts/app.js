@@ -154,7 +154,7 @@ window.App = {
       pass.value = "";
       // alert("Government registered succesfully");
       notifiy1.setAttribute("class", "alert alert-success col-md-12");
-      notifiy1.innerHTML = "Government registered succesfully. Address: " + governmentAddress;
+      notifiy1.innerHTML = "Government registered succesfully. Address: <strong>" + governmentAddress + "</strong>";
       notifiy1.style.display = "block";
       self.hideDivs();
     }).catch(function(e){
@@ -191,7 +191,7 @@ window.App = {
       pass.value = "";
       // alert("Customer registered succesfully");
       notifiy1.setAttribute("class", "alert alert-success col-md-12");
-      notifiy1.innerHTML = "Customer registered succesfully. Address: " + userAddr;
+      notifiy1.innerHTML = "Customer registered succesfully. Address: <strong>" + userAddr + "</strong>";
       notifiy1.style.display = "block";
       self.hideDivs();
       self.hideDivs();
@@ -237,7 +237,7 @@ window.App = {
       pass.value = "";
       // alert("FPS registered succesfully");
       notifiy1.setAttribute("class", "alert alert-success col-md-12");
-      notifiy1.innerHTML = "FPS registered succesfully. Address: " + userAddr;
+      notifiy1.innerHTML = "FPS registered succesfully. Address: <strong>" + userAddr + "</strong>";
       notifiy1.style.display = "block";
       self.hideDivs();
       return Approval.deployed();

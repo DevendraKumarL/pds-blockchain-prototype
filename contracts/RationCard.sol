@@ -84,4 +84,28 @@ contract RationCard {
     return exists;
   }
 
+  function getRationCardInfo(uint _cardNum) constant returns (bool, uint, string, string, string, address) {
+    uint cardNum;
+    string memory cusName;
+    string memory cusAddress;
+    string memory place;
+    address fpsAddr;
+    bool exists;
+
+    if (_cardNum >= 1001 && _cardNum <= cardNumber) {
+      for (uint i = 0; i < rationCards.length; i++) {
+        if (rationCards[i].rationCardNumber == _cardNum) {
+          exists = true;
+          cardNum = rationCards[i].rationCardNumber;
+          cusName = rationCards[i].customerName;
+          cusAddress = rationCards[i].residentialAddress;
+          place = rationCards[i].place;
+          fpsAddr = rationCards[i].fpsOwner;
+          break;
+        }
+      }
+    }
+    return (exists, cardNum, cusName, cusAddress, place, fpsAddr);
+  }
+
 }

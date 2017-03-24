@@ -49,3 +49,17 @@
 #notification3 {
   display: none;
 }
+
+#alert-message {
+  display: none;
+}
+
+#card-details-div {
+  display: none;
+}
+
+#number-of-ration-cards {
+  position: fixed;
+  top: 0.5%;
+  right: 1%;
+}

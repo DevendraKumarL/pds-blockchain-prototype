@@ -24,12 +24,13 @@ var userGlobal, approvalGlobal, rationCardGlobal;
 
 // get all accounts and store whoever is registered
 var userDb = {};
-
+var userNames = {};
+var usernameInterval;
 // TODO:
 // similar like userDb, have approvalsCustDb and approvalsFpsDb // SET
 var approvedFPSList = [];
 
-var i, j, k, l, m;
+var i, j, k, l, m, n;
 var loadUserInterval, loadUnapproCustInterval, loadUnapproFpsInterval, loadApprovedCustInterval, loadApprovedFpsInterval;
 var selectPlaceEle, selectApprovedFpsEle;
 var unapprovedCustDiv, unapprovedFpsDiv, approvedCustDiv, approvedFpsDiv;
@@ -111,11 +112,39 @@ window.ApprovalApp = {
                 // loadAcctsEle.style.display = "none";
                 console.log("Finished loading/checking user registrations");
                 userDb[governmentAddress] = true;
-                window.ApprovalApp.loadUnApprovedCustomersList();
+                window.ApprovalApp.loadUserNames();
+                // window.ApprovalApp.loadUnApprovedCustomersList();
             }
         }).catch(function(e){
             console.log(e);
             return;
+        });
+    },
+
+    loadUserNames: function() {
+        var self = this;
+
+        n = 1;
+        usernameInterval = setInterval(self.loadName, 800);
+    },
+
+    loadName: function() {
+        var self = this;
+        userGlobal.getUserInfo.call(accounts[n], "pass", {from: governmentAddress, gas: 150000}).then(function(res){
+            console.log("n => " + n);
+            console.log(res[0] + " : " + res[1]);
+            if (res[1].length > 0) {
+                userNames[res[0]] = res[1];
+            }
+            n++;
+            if (n == 10) {
+                n = 0;
+                clearInterval(usernameInterval);
+                console.log(userNames);
+                // loadAcctsEle.style.display = "none";
+                console.log("Finished userNames");
+                window.ApprovalApp.loadUnApprovedCustomersList();
+            }
         });
     },
 
@@ -149,11 +178,11 @@ window.ApprovalApp = {
                 if (addr.valueOf() != "0x0000000000000000000000000000000000000000" && addr.valueOf() != prevAddr) {
                     prevAddr = addr.valueOf();
                     var a = document.createElement("a");
-                    a.href = "#";
                     a.setAttribute("class", "list-group-item list-group-item-action");
                     var div = document.createElement("div");
                     var p = document.createElement("p");
-                    p.innerHTML = addr.valueOf();
+                    // p.innerHTML = addr.valueOf();
+                    p.innerHTML = userNames[addr.valueOf()];
                     var b = document.createElement("button");
                     b.type = "button";
                     b.setAttribute("class", "btn btn-primary-outline btn-sm");
@@ -213,10 +242,12 @@ window.ApprovalApp = {
                 console.log("k => " + k + " || " + "fps => " + addr.valueOf());
                 if (addr.valueOf() != "0x0000000000000000000000000000000000000000" && addr.valueOf() != prevAddr) {
                     prevAddr = addr.valueOf();
+                    var a = document.createElement("a");
+                    a.setAttribute("class", "list-group-item list-group-item-action");
                     var div = document.createElement("div");
-                    div.setAttribute("class", "list-group-item list-group-item-action");
                     var p = document.createElement("p");
-                    p.innerHTML = addr.valueOf();
+                    // p.innerHTML = addr.valueOf();
+                    p.innerHTML = userNames[addr.valueOf()]
                     var b = document.createElement("button");
                     b.innerHTML = "Approve";
                     b.type = "button";
@@ -230,7 +261,8 @@ window.ApprovalApp = {
                     }
                     div.appendChild(p);
                     div.appendChild(b);
-                    unapprovedFpsDiv.appendChild(div);
+                    a.appendChild(div);
+                    unapprovedFpsDiv.appendChild(a);
                 }
                 k++;
             } else {
@@ -255,7 +287,8 @@ window.ApprovalApp = {
         }).then(function(res){
             console.log(res);
             notify3.setAttribute("class", "alert alert-success col-md-12");
-            notify3.innerHTML = "Customer Approved. Address: " + addr;
+            // notify3.innerHTML = "Customer Approved. Address: " + addr;
+            notify3.innerHTML = "Customer - <strong>" + userNames[addr] + "</strong> Approved";
             notify3.style.display = "block";
             // alert("Customer approved");
             // location.reload();
@@ -276,7 +309,8 @@ window.ApprovalApp = {
         }).then(function(res){
             console.log(res);
             notify3.setAttribute("class", "alert alert-success col-md-12");
-            notify3.innerHTML = "FPS Approved. Address: " + addr;
+            // notify3.innerHTML = "FPS Approved. Address: " + addr;
+            notify3.innerHTML = "FPS - <strong>" + userNames[addr] + "</strong> Approved";
             notify3.style.display = "block";
             // alert("FPS approved");
             // location.reload();
@@ -346,7 +380,8 @@ window.ApprovalApp = {
                             var usert = document.getElementById("ration-customer-user-type");
                             var confirm = document.getElementById("ration-card-confirm-btn");
                             confirm.onclick = function() {
-                                var useri = [c.value, cn.value, addrs.value, usert.value, f.options[f.selectedIndex].text];
+                                // var useri = [c.value, cn.value, addrs.value, usert.value, f.options[f.selectedIndex].text];
+                                var useri = [c.value, cn.value, addrs.value, usert.value, f.options[f.selectedIndex].value];                                
                                 console.log("**********");
                                 // console.log(cn.value);
                                 // console.log(c.value);
@@ -460,8 +495,10 @@ window.ApprovalApp = {
         }
         for (var i = 0; i < approvedFPSList.length; i++) {
             var opt = document.createElement("option");
-            opt.value = 1;
-            opt.innerHTML = approvedFPSList[i];
+            // opt.value = 1;
+            // opt.innerHTML = approvedFPSList[i];
+            opt.value = approvedFPSList[i];
+            opt.innerHTML = userNames[approvedFPSList[i]];
             selectApprovedFpsEle.appendChild(opt);
         }
     },

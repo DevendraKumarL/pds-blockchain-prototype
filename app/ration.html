@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ration Card Details - PDS</title>
+  </head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+  <script src="./ration.js"></script>
+  <body>
+    <div class="container">
+      <h1>Ration Card Details</h1>
+      <p>This page is used to view ration card details of a customer</p>
+    </div>
+
+    <div class="container">
+      <div class="alert alert-danger col-md-10" id="alert-message">
+        Message here
+      </div>
+      <div class="clearfix"></div>
+      <div class="col-md-6 card card-1">
+        <h6>Enter Ration Card Number</h6>
+        <div class="input-group">
+          <input type="number" id="ration-card-number" class="form-inline">
+          <span class="input-group-addon">Ration Card Number</span>
+        </div>
+        <div class="clearfix"><br></div>
+        <div class="input-group">
+          <button type="button" id="ration-card-number-btn" onclick="RationApp.viewRatioCardDetais()" class="btn btn-primary-outline btn-sm">View</button>
+        </div>
+      </div>
+      <hr size="2">
+      <div class="clearfix"></div>
+        <div class="col-md-8 card card-1" id="card-details-div">
+          <p><label><b>Ration Card Number</b></label>&nbsp;: <span id="card-number">1001</span></p>
+          <p><label><b>Customer Name</b></label>&nbsp;: <span id="card-custname"> Devendra Kumar</span></p>
+          <p><label><b>Street Address</b></label>&nbsp;: <span id="card-street"> No.923, 7th main, raghavendra block, Avalahalli main road, Srinagar, Bangalore - 560050</span></p>
+          <p><label><b>FPS</b></label>&nbsp;: <span id="card-fps">FPS32</span></p>
+        </div>
+    </div>
+
+    <div class="card col-md-3" id="number-of-ration-cards">
+    </div>
+  </body>
+</html>
