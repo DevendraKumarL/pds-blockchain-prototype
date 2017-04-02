@@ -133,7 +133,10 @@ contract User {
     return exists;
   }
 
-  // More functions yet to be implemented
-  // Find other way to approve customers and fps
+  // To prevent accidental sending of ether to this contract
+  // so funds are not locked in the contract forever
+  function destroy() onlyGovernment {
+    suicide(government); // suicides the curret contract and sends the funds to the given address
+  }
 
 }

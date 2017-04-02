@@ -66,8 +66,6 @@ contract Approval {
       if (numberOfNotApprovedCustomers - 1 < 0) throw;
       numberOfNotApprovedCustomers -= 1;
       CustomerApproved(_customer);
-
-      // create rationCard for this customer either using web3js or contracts(won't work) ??
     }
   }
 
@@ -80,7 +78,7 @@ contract Approval {
     }
   }
 
-  // Use getters like he below ones everywhere
+  // Use getters like the below ones everywhere
   function getUnApprovedCustomers() constant onlyGovernment returns (uint)  {
     return numberOfNotApprovedCustomers;
   }
@@ -119,6 +117,24 @@ contract Approval {
       userAddr = _addr;
     }
     return userAddr;
+  }
+
+  // Have combined the above 2 methods into one method which returns (address, aprpoved)
+  function getUserApproval(address _addr, uint _type) constant returns (address, bool) {
+    address userAddr;
+    bool approved;
+    userApproval usapp = userApprovals[_addr];
+    if (usapp.userAddress != address(0) && usapp.usertype == _type) {
+      userAddr = _addr;
+      approved = usapp.approved;
+    }
+    return (userAddr, approved);
+  }
+
+  // To prevent accidental sending of ether to this contract
+  // so funds are not locked in the contract forever
+  function destroy() onlyGovernment {
+    suicide(government); // suicides the curret contract and sends the funds to the given address
   }
 
 }
