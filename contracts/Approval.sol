@@ -60,46 +60,50 @@ contract Approval {
     }
   }
 
-  function approveCustomer(address _customer) onlyGovernment {
-    if (userApprovals[_customer].userAddress == _customer && ! userApprovals[_customer].approved && userAlreadyInApprovalList[_customer]) {
-      userApprovals[_customer].approved = true;
+  function approveCustomer(address _customerAddr) onlyGovernment {
+    if (userApprovals[_customerAddr].userAddress == _customerAddr && !userApprovals[_customerAddr].approved && userAlreadyInApprovalList[_customerAddr]) {
       if (numberOfNotApprovedCustomers - 1 < 0) throw;
+      userApprovals[_customerAddr].approved = true;
+      for (uint i = 0; i < approvals.length; i++) {
+        if (approvals[i].usertype == 2 && approvals[i].userAddress == _customerAddr) {
+          approvals[i].approved = true;
+          break;
+        }
+      }
       numberOfNotApprovedCustomers -= 1;
-      CustomerApproved(_customer);
+      CustomerApproved(_customerAddr);
     }
   }
 
-  function approveFPS(address _fps) onlyGovernment {
-    if (userApprovals[_fps].userAddress == _fps && ! userApprovals[_fps].approved && userAlreadyInApprovalList[_fps]) {
-      userApprovals[_fps].approved = true;
+  function approveFPS(address _fpsAddr) onlyGovernment {
+    if (userApprovals[_fpsAddr].userAddress == _fpsAddr && !userApprovals[_fpsAddr].approved && userAlreadyInApprovalList[_fpsAddr]) {
       if (numberOfNotApprovedFPS - 1 < 0) throw;
+      userApprovals[_fpsAddr].approved = true;
+      for (uint i = 0; i < approvals.length; i++) {
+        if (approvals[i].usertype == 1 && approvals[i].userAddress == _fpsAddr) {
+          approvals[i].approved = true;
+          break;
+        }
+      }
       numberOfNotApprovedFPS -= 1;
-      FPSApproved(_fps);
+      FPSApproved(_fpsAddr);
     }
   }
 
-  // Use getters like the below ones everywhere
-  function getUnApprovedCustomers() constant onlyGovernment returns (uint)  {
-    return numberOfNotApprovedCustomers;
-  }
+  function getUnapprovedUser(uint _index) constant returns (address, uint, bool) {
+    address userAddr;
+    uint usertype;
+    bool approved;
 
-  function getUnApprovedFPS() constant onlyGovernment returns (uint) {
-    return numberOfNotApprovedFPS;
-  }
-
-  /*function getUnapprovedUser(uint _index, uint _type) constant returns (address) {
-    uint i;
-    uint total = numberOfNotApprovedCustomers + numberOfNotApprovedFPS;
-    if (_index >= total)
-      return address(0);
-    for (i = _index; i < total; i++) {
-      if (!approvals[i].approved && approvals[i].usertype == _type)
-        return approvals[i].userAddress;
+    if (_index < approvals.length) {
+      userAddr = approvals[_index].userAddress;
+      usertype = approvals[_index].usertype;
+      approved = approvals[_index].approved;
     }
-    return address(0);
-  }*/
+    return (userAddr, usertype, approved);
+  }
 
-  // FIX IT
+  /*// FIX IT
   function getUnapprovedUser(address _addr, uint _type) constant returns (address) {
     address userAddr;
     userApproval usapp = userApprovals[_addr];
@@ -117,7 +121,7 @@ contract Approval {
       userAddr = _addr;
     }
     return userAddr;
-  }
+  }*/
 
   // Have combined the above 2 methods into one method which returns (address, aprpoved)
   function getUserApproval(address _addr, uint _type) constant returns (address, bool) {

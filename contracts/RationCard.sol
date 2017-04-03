@@ -29,7 +29,7 @@ contract RationCard {
 
   struct flexiCard {
     address customerAddress;
-    uint rationCardNumber;
+    uint flexiCardNumber;
     string customerName;
     string residentialAddress;
     string place;
@@ -45,6 +45,8 @@ contract RationCard {
 
   event RationCardCreated(address indexed _customerAddress, uint _rationCardNumber);
   event FlexiRationCardCreated(address indexed _customerAddress, uint _rationCardNumber);
+  event RationCardPointsAdded(address indexed _customerAddress, uint _point1, uint _point2, uint _point3);
+  event FlexiRationCardPointsAdded(address indexed _customerAddress, uint _points);
 
   function RationCard() {
     government = tx.origin;
@@ -90,15 +92,15 @@ contract RationCard {
   }
 
   function getRationCardInfo(uint _cardNum, address _customerAddress) constant returns (bool, uint, string, string, string, address) {
+    bool exists;
     uint cardNum;
     string memory cusName;
     string memory cusAddress;
     string memory place;
     address fpsAddr;
-    bool exists;
 
     for (uint i = 0; i < rationCards.length; i++) {
-      if (rationCards[i].rationCardNumber == _cardNum || rationCardOf[_customerAddress] != address(0)) {
+      if (rationCards[i].rationCardNumber == _cardNum || rationCards[i].customerAddress == _customerAddress) {
         exists = true;
         cardNum = rationCards[i].rationCardNumber;
         cusName = rationCards[i].customerName;
@@ -121,19 +123,19 @@ contract RationCard {
       /*Check CustomerExists(_customerAddress);*/
       /*Check FPSExists(_fpsAddress);*/
 
-      flexiCard memory newCard;
-      newCard.customerAddress = _customerAddress;
-      newCard.rationCardNumber = cardNumber;
-      newCard.customerName = _customerName;
-      newCard.residentialAddress = _residentialAddress;
-      newCard.place = _place;
-      newCard.fpsOwner = _fpsAddress;
-      newCard.cardCreated = true;
+      flexiCard memory newFlexiCard;
+      newFlexiCard.customerAddress = _customerAddress;
+      newFlexiCard.flexiCardNumber = flexiCardNumber;
+      newFlexiCard.customerName = _customerName;
+      newFlexiCard.residentialAddress = _residentialAddress;
+      newFlexiCard.place = _place;
+      newFlexiCard.fpsOwner = _fpsAddress;
+      newFlexiCard.cardCreated = true;
 
-      flexiCards.push(newCard);
-      flexiCardOf[_customerAddress] = newCard;
+      flexiCards.push(newFlexiCard);
+      flexiCardOf[_customerAddress] = newFlexiCard;
       totalNumberOfFlexicards += 1;
-      FlexiRationCardCreated(_customerAddress, cardNumber);
+      FlexiRationCardCreated(_customerAddress, flexiCardNumber);
       cardNum = flexiCardNumber;
       flexiCardNumber += 1;
 
@@ -147,17 +149,17 @@ contract RationCard {
   }
 
   function getFlexiRationCardInfo(uint _cardNum, address _customerAddress) constant returns (bool, uint, string, string, string, address) {
+    bool exists;
     uint cardNum;
     string memory cusName;
     string memory cusAddress;
     string memory place;
     address fpsAddr;
-    bool exists;
 
-    for (uint i = 0; i < rationCards.length; i++) {
-      if (flexiCards[i].rationCardNumber == _cardNum || flexiCardOf[_customerAddress] != address(0)) {
+    for (uint i = 0; i < flexiCards.length; i++) {
+      if (flexiCards[i].flexiCardNumber == _cardNum || flexiCards[i].customerAddress == _customerAddress) {
         exists = true;
-        cardNum = flexiCards[i].rationCardNumber;
+        cardNum = flexiCards[i].flexiCardNumber;
         cusName = flexiCards[i].customerName;
         cusAddress = flexiCards[i].residentialAddress;
         place = flexiCards[i].place;
@@ -166,6 +168,96 @@ contract RationCard {
       }
     }
     return (exists, cardNum, cusName, cusAddress, place, fpsAddr);
+  }
+
+  function addRationCardPoints(address _customerAddress, uint _point1, uint _point2, uint _point3) returns (bool) {
+    bool success;
+    if (rationCardOf[_customerAddress].customerAddress != address(0)) {
+      if (_point1 >= 1 && _point2 >= 1 && _point3 >= 1) {
+        rationCardOf[_customerAddress].foodItem1Points += _point1;
+        rationCardOf[_customerAddress].foodItem2Points += _point2;
+        rationCardOf[_customerAddress].foodItem3Points += _point3;
+      }
+    }
+
+    if (rationCardOf[_customerAddress].foodItem1Points == _point1
+      && rationCardOf[_customerAddress].foodItem2Points == _point2
+      && rationCardOf[_customerAddress].foodItem3Points == _point3) {
+      uint tmp;
+      for (uint i = 0; i < rationCards.length; i++) {
+        if (rationCards[i].customerAddress == _customerAddress) {
+          rationCards[i].foodItem1Points += _point1;
+          rationCards[i].foodItem2Points += _point2;
+          rationCards[i].foodItem3Points += _point3;
+          tmp = i;
+          break;
+        }
+      }
+      if (rationCards[tmp].foodItem1Points == _point1
+        && rationCards[tmp].foodItem2Points == _point2
+        && rationCards[tmp].foodItem3Points == _point3) {
+        success = true;
+        RationCardPointsAdded(_customerAddress, _point1, _point2, _point3);
+      }
+    }
+    return success;
+  }
+
+  function getRationCardPoints(uint _cardNum, address _customerAddress) constant returns (bool, uint, uint, uint) {
+    bool exists;
+    uint point1;
+    uint point2;
+    uint point3;
+
+    for (uint i = 0; i < rationCards.length; i++) {
+      if (rationCards[i].rationCardNumber == _cardNum || rationCards[i].customerAddress == _customerAddress) {
+        exists = true;
+        point1 = rationCards[i].foodItem1Points;
+        point2 = rationCards[i].foodItem2Points;
+        point3 = rationCards[i].foodItem3Points;
+        break;
+      }
+    }
+    return (exists, point1, point2, point3);
+  }
+
+  function addFlexiRationCardPoints(address _customerAddress, uint _points) returns (bool) {
+    bool success;
+    if (flexiCardOf[_customerAddress].customerAddress != address(0)) {
+      if (_points >= 3) {
+        flexiCardOf[_customerAddress].creditPoints += _points;
+      }
+    }
+
+    if (flexiCardOf[_customerAddress].creditPoints == _points) {
+      uint tmp;
+      for (uint i = 0; i < flexiCards.length; i++) {
+        if (flexiCards[i].customerAddress == _customerAddress) {
+          flexiCards[i].creditPoints += _points;
+          tmp = i;
+          break;
+        }
+      }
+      if (flexiCards[tmp].creditPoints == _points) {
+        success = true;
+        FlexiRationCardPointsAdded(_customerAddress, _points);
+      }
+    }
+    return success;
+  }
+
+  function getFlexiRationCardPoints(uint _cardNum, address _customerAddress) constant returns (bool, uint) {
+    bool exists;
+    uint points;
+
+    for (uint i = 0; i < flexiCards.length; i++) {
+      if (flexiCards[i].flexiCardNumber == _cardNum || flexiCards[i].customerAddress == _customerAddress) {
+        exists = true;
+        points = flexiCards[i].creditPoints;
+        break;
+      }
+    }
+    return (exists, points);
   }
 
   // To prevent accidental sending of ether to this contract

@@ -9,13 +9,18 @@ contract User {
   mapping (string => address) userEmailAddress;
 
   struct userStruct {
-    address userAddress; // if Customer => rationCardNumber i.e., address
     string username;
     string email;
+    string password; // use web3.sha3() later
+    address userAddress; // if Customer => rationCardNumber i.e., address
     string usertype;
     uint utype;
-    string password; // use web3.sha3() later
     string place;
+  }
+
+  modifier onlyGovernment{
+    if (msg.sender != government) throw;
+    _;
   }
 
   event UserAdded(address indexed _userAddress, string _userName);
@@ -106,6 +111,22 @@ contract User {
       place = user.place;
     }
 
+    return (userAddr, username, email ,usertype , place);
+  }
+
+  function getUserDetails(address _userAddress) constant returns (address, string, string, string, string) {
+    address userAddr;
+    string memory username;
+    string memory email;
+    string memory usertype;
+    string memory place;
+
+    userStruct user = users[_userAddress];
+    userAddr = user.userAddress;
+    username = user.username;
+    email = user.email;
+    usertype = user.usertype;
+    place = user.place;
     return (userAddr, username, email ,usertype , place);
   }
 
