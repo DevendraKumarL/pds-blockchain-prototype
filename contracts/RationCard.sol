@@ -55,6 +55,7 @@ contract RationCard {
     flexiCardNumber = 5001;
   }
 
+  // Show a the complete transaction information after executing the below function
   // Change, remove checkUserExists, we have to call the of other contracts externally
   function addRationCard(address _customerAddress, string _customerName,
     string _residentialAddress, string _place, address _fpsAddress) onlyGovernment returns (uint) {
@@ -113,6 +114,7 @@ contract RationCard {
     return (exists, cardNum, cusName, cusAddress, place, fpsAddr);
   }
 
+  // Show a the complete transaction information after executing the below function
   function addFlexiRationCard(address _customerAddress, string _customerName,
     string _residentialAddress, string _place, address _fpsAddress) onlyGovernment returns (uint) {
     uint cardNum;
@@ -170,6 +172,7 @@ contract RationCard {
     return (exists, cardNum, cusName, cusAddress, place, fpsAddr);
   }
 
+  // Show a the complete transaction information after executing the below function
   function addRationCardPoints(address _customerAddress, uint _point1, uint _point2, uint _point3) returns (bool) {
     bool success;
     if (rationCardOf[_customerAddress].customerAddress != address(0)) {
@@ -221,6 +224,7 @@ contract RationCard {
     return (exists, point1, point2, point3);
   }
 
+  // Show a the complete transaction information after executing the below function
   function addFlexiRationCardPoints(address _customerAddress, uint _points) returns (bool) {
     bool success;
     if (flexiCardOf[_customerAddress].customerAddress != address(0)) {

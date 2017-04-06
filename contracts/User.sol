@@ -11,7 +11,8 @@ contract User {
   struct userStruct {
     string username;
     string email;
-    string password; // use web3.sha3() later
+    string password;
+    // bytes32 sha3Password;
     address userAddress; // if Customer => rationCardNumber i.e., address
     string usertype;
     uint utype;
@@ -46,6 +47,8 @@ contract User {
       newUser.username = _name;
       newUser.email = _email;
       newUser.password = _password;
+      // use web3.sha3()
+      /*newUser.sha2Password = sha3(_password);*/
       newUser.userAddress = _userAddress;
       newUser.usertype = userTypes[_type];
       newUser.utype = _type;
@@ -60,7 +63,8 @@ contract User {
     return uAddr;
   }
 
-  function authenticateUserWithEmail(string _email, string _password) constant returns (bool exists) {
+  // remove this function and refer Hash.sol
+  /*function authenticateUserWithEmail(string _email, string _password) constant returns (bool exists) {
     // search for user with _email, _password
     address userAddr = userEmailAddress[_email];
     userStruct user = users[userAddr];
@@ -76,9 +80,10 @@ contract User {
         return false;
     }
     return true;
-  }
+  }*/
 
-  function authenticateUserWithAddress(address _userAddress, string _password) constant returns(bool exists) {
+  // remove this function and refer Hash.sol
+  /*function authenticateUserWithAddress(address _userAddress, string _password) constant returns(bool exists) {
     // search for user with _userAddress, _password
     userStruct user = users[_userAddress];
 
@@ -93,7 +98,7 @@ contract User {
         return false;
     }
     return true;
-  }
+  }*/
 
   function getUserInfo(address _userAddress, string _password) constant returns (address, string, string, string, string) {
     address userAddr;
