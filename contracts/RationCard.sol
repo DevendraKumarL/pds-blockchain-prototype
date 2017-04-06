@@ -81,8 +81,7 @@ contract RationCard {
       RationCardCreated(_customerAddress, cardNumber);
       cardNum = cardNumber;
       cardNumber += 1;
-
-      // government should give points to customer for this card
+      // government should give points to customer for this card once per month
     }
     return cardNum;
   }
@@ -139,8 +138,7 @@ contract RationCard {
       FlexiRationCardCreated(_customerAddress, flexiCardNumber);
       cardNum = flexiCardNumber;
       flexiCardNumber += 1;
-
-      // government should give points to customer for this card
+      // government should give points to customer for this card once per month
     }
     return cardNum;
   }

@@ -11,9 +11,10 @@ contract User {
   struct userStruct {
     string username;
     string email;
-    string password; // remove this
+    /*string password; // remove this*/
     bytes32 sha3Password;
-    address userAddress; // if Customer => rationCardNumber i.e., address
+    // if Customer then this same as his rationCard's address which this same address
+    address userAddress;
     string usertype;
     uint utype;
     string place;
@@ -39,14 +40,13 @@ contract User {
     places.push("Hanumanthnagar");
   }
 
-  function addUser(address _userAddress, string _name, string _email, uint _type, string _password, uint _place) returns (address) {
+  function addUser(address _userAddress, string _name, string _email, uint _type, string _password, uint _place) onlyGovernment returns (address) {
     address uAddr;
     if ( userEmailAddress[_email] == address(0) ) {
       userStruct memory newUser;
       newUser.username = _name;
       newUser.email = _email;
-      newUser.password = _password;
-      // use web3.sha3()
+      /*newUser.password = _password;*/
       newUser.sha3Password = sha3(_password);
       newUser.userAddress = _userAddress;
       newUser.usertype = userTypes[_type];
@@ -92,7 +92,7 @@ contract User {
   }
 
   // Only government can see all users' details
-  function getUserDetails(address _userAddress) constant returns (address, string, string, string, string) {
+  function getUserDetails(address _userAddress) constant onlyGovernment returns (address, string, string, string, string) {
     address userAddr;
     string memory username;
     string memory email;
@@ -108,11 +108,11 @@ contract User {
     return (userAddr, username, email ,usertype , place);
   }
 
-  function getUserTypes() constant returns (string, string, string) {
+  function getUserTypes() constant onlyGovernment returns (string, string, string) {
     return (userTypes[0], userTypes[1], userTypes[2]);
   }
 
-  function getPlaces() constant returns (string, string, string) {
+  function getPlaces() constant onlyGovernment returns (string, string, string) {
     return (places[0], places[1], places[2]);
   }
 
