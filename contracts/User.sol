@@ -11,8 +11,8 @@ contract User {
   struct userStruct {
     string username;
     string email;
-    string password;
-    // bytes32 sha3Password;
+    string password; // remove this
+    bytes32 sha3Password;
     address userAddress; // if Customer => rationCardNumber i.e., address
     string usertype;
     uint utype;
@@ -39,7 +39,6 @@ contract User {
     places.push("Hanumanthnagar");
   }
 
-  // remove return and use throw instead
   function addUser(address _userAddress, string _name, string _email, uint _type, string _password, uint _place) returns (address) {
     address uAddr;
     if ( userEmailAddress[_email] == address(0) ) {
@@ -48,7 +47,7 @@ contract User {
       newUser.email = _email;
       newUser.password = _password;
       // use web3.sha3()
-      /*newUser.sha2Password = sha3(_password);*/
+      newUser.sha3Password = sha3(_password);
       newUser.userAddress = _userAddress;
       newUser.usertype = userTypes[_type];
       newUser.utype = _type;
@@ -63,44 +62,17 @@ contract User {
     return uAddr;
   }
 
-  // remove this function and refer Hash.sol
-  /*function authenticateUserWithEmail(string _email, string _password) constant returns (bool exists) {
-    // search for user with _email, _password
-    address userAddr = userEmailAddress[_email];
-    userStruct user = users[userAddr];
+  function authenticateUserWithAddress(address _userAddr, string _password) constant returns (bool) {
+    return users[_userAddr].sha3Password == sha3(_password);
+  }
 
-    bytes storage password = bytes(user.password);
-    bytes memory password2 = bytes(_password);
+  function authenticateUserWithEmail(string _email, string _password) constant returns (bool) {
+    return users[userEmailAddress[_email]].sha3Password == sha3(_password);
+  }
 
-    if (password.length != password2.length) {
-        return false;
-    }
-    for (uint i = 0; i < password.length; i++) {
-      if (password[i] != password2[i])
-        return false;
-    }
-    return true;
-  }*/
-
-  // remove this function and refer Hash.sol
-  /*function authenticateUserWithAddress(address _userAddress, string _password) constant returns(bool exists) {
-    // search for user with _userAddress, _password
-    userStruct user = users[_userAddress];
-
-    bytes storage password = bytes(user.password);
-    bytes memory password2 = bytes(_password);
-
-    if (password.length != password2.length) {
-      return false;
-    }
-    for (uint i = 0; i < password.length; i++) {
-      if (password[i] != password2[i])
-        return false;
-    }
-    return true;
-  }*/
-
-  function getUserInfo(address _userAddress, string _password) constant returns (address, string, string, string, string) {
+  // Remove this ??
+  // Only user can get his own profile info using the password used at registration time
+  function getUserProfile(address _userAddress, string _password) constant returns (address, string, string, string, string) {
     address userAddr;
     string memory username;
     string memory email;
@@ -119,6 +91,7 @@ contract User {
     return (userAddr, username, email ,usertype , place);
   }
 
+  // Only government can see all users' details
   function getUserDetails(address _userAddress) constant returns (address, string, string, string, string) {
     address userAddr;
     string memory username;

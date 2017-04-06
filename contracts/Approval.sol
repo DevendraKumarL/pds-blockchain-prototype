@@ -103,8 +103,7 @@ contract Approval {
     return (userAddr, usertype, approved);
   }
 
-  /*// FIX IT
-  function getUnapprovedUser(address _addr, uint _type) constant returns (address) {
+  /*function getUnapprovedUser(address _addr, uint _type) constant returns (address) {
     address userAddr;
     userApproval usapp = userApprovals[_addr];
     if (usapp.userAddress != address(0) && !usapp.approved && usapp.usertype == _type) {
@@ -113,7 +112,6 @@ contract Approval {
     return userAddr;
   }
 
-  // FIX IT
   function getApprovedUser(address _addr, uint _type) constant returns (address) {
     address userAddr;
     userApproval usapp = userApprovals[_addr];
