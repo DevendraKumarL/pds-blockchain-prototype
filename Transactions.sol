@@ -1,12 +1,7 @@
 pragma solidity ^0.4.0;
 
-////////////////////////////////////////////////////////////////////////////////
-// TODO: change code/ optimize/ fix/ validations
-////////////////////////////////////////////////////////////////////////////////
-
 contract Transactions{
 	address public government;
-	/*uint public noOfTransactions;*/ // remove this, unnecessary
   uint fixedWagerPaymentperhr;
   uint fixedPaymentToGPC;
 
@@ -32,45 +27,35 @@ contract Transactions{
     _;
 	}
 
-	//////////////////////////////////////////////////////////////////////////////
-	// fix these events asap
-	//////////////////////////////////////////////////////////////////////////////
-  event GovernmentInitialized(address indexed _governmentAddress, uint _balance);
-  event PaymentMadeToGPC(address indexed _governmentAddress , address indexed _gpc, uint _gpcBal);
-  event PaymentMadeToWager(address indexed _gpc, address indexed _wager, uint _hours1, uint _wagerBal);
+  event BudgetAddedToGovernment(address indexed _governmentAddress, uint _budget);
+  event PaymentMadeToGPC(address indexed _governmentAddress , address indexed _gpc, uint _amount);
+  event PaymentMadeToWager(address indexed _gpc, address indexed _wager, uint _hoursPaidFor, uint _amount);
+	event WagerWorkedHours(address indexed _wager, uint _hours); // check/verify
+
+	// Implement a functionality that uses hashes concept
+	// (private/public key concept as used in food contract) to verify the hours worked by a wager
+	// and also GPC has paid a wager for amount of time he/she has worked for
 
   function Transactions() {
-		// fix
     government = tx.origin;
-    /*noOfTransactions = 0;*/
     fixedWagerPaymentperhr = 100;
     fixedPaymentToGPC = 50000;
-    //balances[government].balance = 1000000;
-
   }
 
-	// Wrong way
-	// move this to constructor of the contract
-	////////////////////////////////////////////////////////////////////////////
-	// provide a way to add more budget rather than a hardcoded value ??
-	////////////////////////////////////////////////////////////////////////////
-  function initializeGov() returns (uint) {
-		uint bal;
-		paymentMade memory govbal;
-  	govbal.balance = 10000000;
-    govbal._type = 0;
-    govbal.receiver = government;
-    balances[government] = govbal;
-		/*noOfTransactions +=1;*/
-		bal = balances[government].balance;
-		GovernmentInitialized(government, bal);
-  	return bal;
+  function addBudget(uint _budget) onlyGovernment returns (bool) {
+		if (balances[government].receiver == address(0)) {
+			paymentMade memory newGovernmentPay;
+			newGovernmentPay.balance = _budget;
+			newGovernmentPay._type = 0;
+			newGovernmentPay.receiver = government;
+			balances[government] = newGovernmentPay;
+			BudgetAddedToGovernment(government, _budget);
+		} else {
+			balances[government] += _budget;
+			BudgetAddedToGovernment(government, _budget);
+		}
+		return true;
 	}
-
-	// remove this, unnecessary
-  /*function getNoOfTransactions() constant returns (uint) {
-  	return noOfTransactions;
-  }*/
 
   function supplyToGPC(address _gpc) onlyGovernment returns (bool) {
 		if (balances[government].balance < fixedPaymentToGPC) throw;
@@ -94,27 +79,35 @@ contract Transactions{
 
   function payToWager(address _wager, address _gpc) returns (bool) {
 		if(balances[_gpc].receiver == address(0)) throw;
-		if(balances[_gpc].balance < paymentToWager) throw;
-		uint paymentToWager = fixedWagerPaymentperhr * hourWorked[_wager].days1 * 8 + fixedWagerPaymentperhr * hourWorked[_wager].hours1;
-		if (paymentToWager == 0) throw;
+		uint totalPaymentToWager;
+		uint hoursPaidFor;
+		totalPaymentToWager = fixedWagerPaymentperhr * getTotalHoursWorked(_wager);
+		if (totalPaymentToWager == 0) throw;
 		if(balances[_wager].receiver == address(0)){
+			if(balances[_gpc].balance < totalPaymentToWager) throw;
 			paymentMade memory newUser;
 			newUser._type = 2;
-			newUser.balance = paymentToWager;
+			newUser.balance = totalPaymentToWager;
 			newUser.receiver = _wager;
 			balances[_wager] = newUser;
-			balances[_gpc].balance -= paymentToWager;
-			PaymentMadeToWager(_gpc, _wager, hourWorked[_wager].hours1, paymentToWager);
+			balances[_gpc].balance -= totalPaymentToWager;
+			hoursPaidFor = totalPaymentToWager / fixedWagerPaymentperhr;
+			PaymentMadeToWager(_gpc, _wager, hoursPaidFor, totalPaymentToWager);
 		}
 		else{
-			balances[_wager].balance += paymentToWager;
-			balances[_gpc].balance -= paymentToWager;
-			PaymentMadeToWager(_gpc, _wager, hourWorked[_wager].hours1, paymentToWager);
+			// get previous balance of wager
+			uint prevBal = balances[_wager].balance;
+			// and then subtract it from the totalPaymentToWager to get the current due amount to be paid
+			uint currentDueToPay = totalPaymentToWager - prevBal;
+			if(balances[_gpc].balance < currentDueToPay) throw;
+			balances[_wager].balance += currentDueToPay;
+			balances[_gpc].balance -= currentDueToPay;
+			hoursPaidFor = currentDueToPay / fixedWagerPaymentperhr;
+			PaymentMadeToWager(_gpc, _wager, hoursPaidFor, currentDueToPay);
 		}
 		return true;
   }
 
-	// create an event for this
   function hoursWorked(address _wager) returns (bool) {
     if(hourWorked[_wager].user == address(0)) {
 			wagers1 memory newUser;
@@ -123,35 +116,38 @@ contract Transactions{
       newUser.days1 = 0;
       newUser.user = _wager;
       hourWorked[_wager] = newUser;
+			// also create paymentMade struct for the new user
+			paymentMade memory newUserPayment;
+			newUserPayment._type = 2;
+			newUserPayment.balance = 0;
+			newUserPayment.receiver = _wager;
+			balances[_wager] = newUserPayment;
+			WagerWorkedHours(_wager, 1);
 			return true;
     }
 		if(hourWorked[_wager].flag == false) throw;
-  	if(hourWorked[_wager].hours1 < 8 && hourWorked[_wager].days1 < 120){
-  		hourWorked[_wager].hours1 += 1;
-			return true;
-  	}
-    if(hourWorked[_wager].hours1 == 8){
-    	hourWorked[_wager].hours1 = 0;
-    	hourWorked[_wager].days1 += 1;
-			return true;
-    }
-    if(hourWorked[_wager].days1 == 120){
-      hourWorked[_wager].flag = false;
-			return false;
-    }
-  }
-
-	// create an event for this
-  function timeWorked(address _wager, uint _days, uint _hours) returns (bool) {
-		// fix this asap, handle all cases here
-		if(_days > 120) throw;
-		if(hourWorked[_wager].days1 + _days >= 120) {
+		if(hourWorked[_wager].days1 == 120){
 			hourWorked[_wager].flag = false;
 			return false;
 		}
+  	if((hourWorked[_wager].hours1 < 7) && (hourWorked[_wager].days1 < 120)){
+  		hourWorked[_wager].hours1 += 1;
+			WagerWorkedHours(_wager, 1);
+			return true;
+  	}
+    if(((hourWorked[_wager].hours1 + 1) == 8) && (hourWorked[_wager].days1 < 120)){
+    	hourWorked[_wager].hours1 = 0;
+    	hourWorked[_wager].days1 += 1;
+			WagerWorkedHours(_wager, 1);
+			return true;
+    }
+  }
+
+  function timeWorked(address _wager, uint _days, uint _hours) returns (bool) {
+		if(_days > 120) throw;
   	if(_hours >= 8) {
-  		_days += (_hours/8);
-  		_hours = _hours%8;
+  		_days += (_hours / 8);
+  		_hours = _hours % 8;
   	}
   	if(hourWorked[_wager].user == address(0)) {
 			wagers1 memory newUser;
@@ -160,45 +156,84 @@ contract Transactions{
       newUser.days1 = _days;
       newUser.user = _wager;
       hourWorked[_wager] = newUser;
+			// also create paymentMade struct for the new user
+			paymentMade memory newUserPayment;
+			newUserPayment._type = 2;
+			newUserPayment.balance = 0;
+			newUserPayment.receiver = _wager;
+			balances[_wager] = newUserPayment;
+			WagerWorkedHours(_wager, _hours + (_days * 8));
 			return true;
   	}
+		if((hourWorked[_wager].days1 + _days) > 120) throw;
    	if((hourWorked[_wager].hours1 + _hours) < 8) {
   		hourWorked[_wager].hours1 += _hours;
   		hourWorked[_wager].days1 += _days;
+			WagerWorkedHours(_wager, _hours + (_days * 8));
 			return true;
   	}
     if((hourWorked[_wager].hours1 + _hours) == 8) {
     	hourWorked[_wager].hours1 = 0;
     	hourWorked[_wager].days1 += 1;
 			hourWorked[_wager].days1 += _days;
+			WagerWorkedHours(_wager, _hours + (_days * 8));
 			return true;
     }
 		if((hourWorked[_wager].hours1 + _hours) > 8) {
     	hourWorked[_wager].hours1 = hourWorked[_wager].hours1 + _hours - 8;
     	hourWorked[_wager].days1 += 1;
 			hourWorked[_wager].days1 += _days;
+			WagerWorkedHours(_wager, _hours + (_days * 8));
 			return true;
     }
   }
 
-  function validWager(address _wager) constant returns (bool){
-		return hourWorked[_wager].flag;
-  }
+	// Implemented more functions to get more info
+	// to get wager's :
+	//		-> pending amount to be paid by gpc for hours/days worked
+	//		-> pending hours for which to be paid
+	//		-> days and hours worked (not total hours but separately)
 
- 	function getHoursWorked(address _wager) constant returns (uint){
+	function getWagerWorkedTime(address _wager) constant returns (uint, uint) {
+		uint workedHours;
+		uint workedDays;
+		if (hourWorked[_wager].user != address(0)) {
+			workedHours = hourWorked[_wager].hours1;
+			workedDays = hourWorked[_wager].days1;
+		}
+		return (workedDays, workedHours);
+	}
+
+	function getDueAmountOfWager(address _wager) constant returns (uint) {
+		uint dueAmount;
+		if (balances[_wager].receiver != address(0)) {
+			dueAmount = fixedWagerPaymentperhr * getTotalHoursWorked(_wager) - balances[_wager].balance;
+		}
+		return dueAmount;
+	}
+
+	function getDueHoursNotPaid(address _wager) constant returns (uint) {
+		return getDueAmountOfWager(_wager) / fixedWagerPaymentperhr;
+	}
+
+	function validWager(address _wager) constant returns (bool){
+		return hourWorked[_wager].flag;
+	}
+
+	function getTotalHoursWorked(address _wager) constant returns (uint){
 		return hourWorked[_wager].days1 * 8 + hourWorked[_wager].hours1;
 	}
 
-	function getDaysWorked(address _cus) constant returns(uint){
+	function getTotalDaysWorked(address _cus) constant returns(uint){
 		return hourWorked[_cus].days1;
 	}
 
-  function getBalance(address _userAddr) constant returns(uint){
-    uint balance1;
-    if(balances[_userAddr].receiver != address(0)){
-    	balance1 = balances[_userAddr].balance;
-    }
-    return balance1;
-  }
+	function getBalance(address _userAddr) constant returns(uint){
+		uint balance;
+		if(balances[_userAddr].receiver != address(0)){
+			balance = balances[_userAddr].balance;
+		}
+		return balance;
+	}
 
 }
