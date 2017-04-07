@@ -1,0 +1,10 @@
+if possible =>
+  -> use some kind of messages/error codes for handling exceptions
+    ==> use either event or return with customer error codes
+  -> A page to generate hash of a secret key => "NodeJs"
+  -> // from: "./app/registration/customer.html", to: "registration/customer.html" ??
+  -> How to check if
+        *SellToCustomer_HashLog
+        *SupplyCentralToStateGovernment_HashLog
+      confirmed or not ??
+    -> Should it be added to the final transfer log analytics/graph/stats ??
