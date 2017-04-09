@@ -1,7 +1,10 @@
 pragma solidity ^0.4.2;
 
+////////////////////////////////////////////////////////////////////////////////
+// -> change email to Aadhaar number for customers ??
+////////////////////////////////////////////////////////////////////////////////
 contract User {
-    address public government;
+    address public centralGovernment;
     uint public totalUsersInBlockchain;
     string[] userTypes;
     string[] places;
@@ -21,7 +24,7 @@ contract User {
     }
 
     modifier onlyGovernment{
-        if (msg.sender != government) throw;
+        if (msg.sender != centralGovernment) throw;
         _;
     }
 
@@ -29,7 +32,7 @@ contract User {
 
     function User() {
         totalUsersInBlockchain = 0;
-        government = tx.origin;
+        centralGovernment = tx.origin;
 
         userTypes.push("Government");
         userTypes.push("FPS");
@@ -91,7 +94,7 @@ contract User {
         return (userAddr, username, email ,usertype , place);
     }
 
-    // Only government can see all users' details
+    // Only centralGovernment can see all users' details
     function getUserDetails(address _userAddress) constant onlyGovernment returns (address, string, string, string, string) {
         address userAddr;
         string memory username;
@@ -100,6 +103,23 @@ contract User {
         string memory place;
 
         userStruct user = users[_userAddress];
+        userAddr = user.userAddress;
+        username = user.username;
+        email = user.email;
+        usertype = user.usertype;
+        place = user.place;
+        return (userAddr, username, email ,usertype , place);
+    }
+
+    function getUserDetailsUsingEmail(string _email) constant onlyGovernment returns (address, string, string, string, string) {
+        address userAddr;
+        string memory username;
+        string memory email;
+        string memory usertype;
+        string memory place;
+
+        userAddr = userEmailAddress[_email];
+        userStruct user = users[userAddr];
         userAddr = user.userAddress;
         username = user.username;
         email = user.email;
@@ -135,7 +155,7 @@ contract User {
     // To prevent accidental sending of ether to this contract
     // so funds are not locked in the contract forever
     function destroy() onlyGovernment {
-        suicide(government); // suicides the curret contract and sends the funds to the given address
+        suicide(centralGovernment); // suicides the curret contract and sends the funds to the given address
     }
 
 }
