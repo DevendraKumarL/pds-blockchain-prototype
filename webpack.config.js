@@ -7,12 +7,12 @@ module.exports = {
     // 'approval': './app/javascripts/approval.js',
     // 'ration': './app/javascripts/ration.js',
 
-    'centralGovernment': './app/javascripts/registration/centralGovernment.js',
-    'stateGovernment': './app/javascripts/registration/stateGovernment.js',
-    'customer': './app/javascripts/registration/customer.js',
-    'fps': './app/javascripts/registration/fps.js',
+    'centralGovernment': './app/javascripts/users/centralGovernment.js',
+    'stateGovernment': './app/javascripts/users/stateGovernment.js',
+    'customer': './app/javascripts/users/customer.js',
+    'fps': './app/javascripts/users/fps.js',
 
-    'approvals': './app/javascripts/approvals.js'
+    'approvals': './app/javascripts/approvals/approvals.js'
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -47,7 +47,7 @@ module.exports = {
       { from: './app/fps.html', to: "fps.html" }
     ]),
     new CopyWebpackPlugin([
-      { from: './app/approvals.html', to: "approvals.html" }
+      { from: './app/approvals/approvals.html', to: "approvals.html" }
     ])
   ],
   module: {

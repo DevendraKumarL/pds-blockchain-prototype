@@ -78,7 +78,7 @@ contract Approval {
 
 	function approveFPS(address _fpsAddr) onlyGovernment {
 		if (userApprovals[_fpsAddr].userAddress == _fpsAddr && !userApprovals[_fpsAddr].approved
-			 && userAlreadyInApprovalList[_fpsAddr] && userApprovals[_customerAddr].usertype == 1) {
+			 && userAlreadyInApprovalList[_fpsAddr] && userApprovals[_fpsAddr].usertype == 1) {
 			if (numberOfNotApprovedFPS - 1 < 0) throw;
 			userApprovals[_fpsAddr].approved = true;
 			for (uint i = 0; i < approvals.length; i++) {

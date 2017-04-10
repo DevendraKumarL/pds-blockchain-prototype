@@ -1,14 +1,14 @@
-import "../stylesheets/app.css";
-import "../stylesheets/sidebar.css"
-import "../stylesheets/central-government.css";
+import "../../stylesheets/app.css";
+import "../../stylesheets/sidebar.css"
+import "../../stylesheets/central-government.css";
 
 // Import libraries we need.
 import { default as Web3} from 'web3';
 import { default as contract } from 'truffle-contract';
 
 // Import our contract artifacts and turn them into usable abstractions.
-import user_artifacts from '../../build/contracts/User.json';
-import approval_artifacts from '../../build/contracts/Approval.json';
+import user_artifacts from '../../../build/contracts/User.json';
+import approval_artifacts from '../../../build/contracts/Approval.json';
 
 // User is our usable abstraction, which we'll use through the code below.
 var User = contract(user_artifacts);

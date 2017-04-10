@@ -1,22 +1,25 @@
 if possible =>
-    -> ** FIX BUGS in Registration and Login **
-    -> getUserDetailsUsingEmail Fix BUG
-    -> how to reload other windows of fps or customer after registration
+    -> **** change {from: } of all the transactions to use the address of the actual sender ****
+    -> use MetaMask
+    -> instead of getting new avaiable addres from userDb, checking for address from accounts array
+        whether it is registered
     -> ** Optimize approvals.js
-    -> Fix usertype bug in registrations
     -> government buys a kg a rice for 26/- and sells it to customer at 1/-
         -> so the contract has to keep tract the foodflow and money from customers
         -> thus track the **BENEFIT FLOW**
         -> make analysis/graph depicting flow of food/benegfit versus amount spent
         -> i.e., is/visualization the amount spent benefitting the customers ??
     -> change email to Aadhaar number for customers ??
-    -> // from: "./app/registration/customer.html", to: "registration/customer.html" ??
+    -> customers and fps can register only if they have aadhaar number and government
+        will approve seeing the aadhaar details
     -> How to check if
         *SellToCustomer_HashLog
         *SupplyCentralToStateGovernment_HashLog
         confirmed or not ??
         -> Should it be added to the final transfer log analytics/graph/stats ??
+    -> how to reload other windows of fps or customer after registration **leave this**
     -> UI
+        -> ** Rename paths **
         -> **COLORS**
         -> registration:
             ->customer **Tick**
@@ -29,12 +32,12 @@ if possible =>
             ->centralGovernment **Tick**
             ->stateGovernment **Tick**
         -> approval:
-            ->customer and fps (by government)
+            ->customer and fps (by government) **Tick**
         -> ration card and flexi ration card:
             -> customer after approval
         -> give ration card points and flexi ration card points:
             -> customer (by government)
-        -> a modal to authenticate user for every transaction
+        -> a modal to authenticate user for making any transaction
         -> dashboard1:
             ->centralGovernment to see registrations, approvals, and
                  to see ration card points and flexi ration card points given (based on budget ??)
