@@ -1,9 +1,8 @@
 if possible =>
     -> **** change {from: } of all the transactions to use the address of the actual sender ****
-    -> use MetaMask
-    -> instead of getting new avaiable addres from userDb, checking for address from accounts array
-        whether it is registered
-    -> ** Optimize approvals.js
+    -> store a global user address for customer and fps when only logged in
+    -> ** Optimize approvals.js **Tick**
+    -> home div for approvals.html
     -> government buys a kg a rice for 26/- and sells it to customer at 1/-
         -> so the contract has to keep tract the foodflow and money from customers
         -> thus track the **BENEFIT FLOW**
@@ -52,4 +51,5 @@ if possible =>
             -> web3. ...
             -> web3.eth. ..
             ... ... ... ... ... ... ...
-        -> Everything into one page, Generic, not doing for now.
+        -> Everything into one page, Generic, leave for now.
+        -> use MetaMask, **No**, cannot get list accounts, leave for now

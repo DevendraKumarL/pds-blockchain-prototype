@@ -31,6 +31,8 @@ var unapprovedCustDiv, unapprovedFpsDiv, approvedCustDiv, approvedFpsDiv;
 var fpsNum, customerNum;
 var prevAddr;
 
+var loggedIn = false;
+
 window.ApprovalApp = {
     start: function() {
         var self = this;
@@ -45,27 +47,28 @@ window.ApprovalApp = {
             console.log(approvalGlobal);
         });
 
-        var login = self.checkLoginSessionCookie();
-        var flag = false;
-        if (login) {
-            // console.log(document.cookie);
-            var cookies = document.cookie.split("; ");
-            for (var a = 0; a < cookies.length; a++) {
-                if (cookies[a].split("=")[0] == "central") {
-                    $("#profile-link").show();
-                    flag = true;
-                    document.getElementById('profile-name').innerHTML = cookies[a].split("=")[1].split("*")[1];
-                    break;
-                }
-            }
-        }
-        if (!flag) {
-            $("#profile-link").hide();
-            $("#not-logged-div-card").show();
-            $("#loading-main").hide();
-            // document.getElementById('not-logged-div-card').style.display = "block";
-            // document.getElementById('loading-main').style.display = "none";
-        }
+        // var login = self.checkLoginSessionCookie();
+        // var flag = false;
+        // if (login) {
+        //     // console.log(document.cookie);
+        //     var cookies = document.cookie.split("; ");
+        //     for (var a = 0; a < cookies.length; a++) {
+        //         if (cookies[a].split("=")[0] == "central") {
+        //             $("#profile-link").show();
+        //             flag = true;
+        //             document.getElementById('profile-name').innerHTML = cookies[a].split("=")[1].split("*")[1];
+        //             break;
+        //         }
+        //     }
+        // }
+
+        // if (!flag) {
+        //     $("#profile-link").hide();
+        //     $("#not-logged-div-card").show();
+        //     $("#loading-main").hide();
+        //     // document.getElementById('not-logged-div-card').style.display = "block";
+        //     // document.getElementById('loading-main').style.display = "none";
+        // }
 
         web3.eth.getAccounts(function(err, accs) {
             if (err) {
@@ -79,10 +82,57 @@ window.ApprovalApp = {
             accounts = accs;
             centralGovernmentAddress = accounts[0];
             console.log("centralGovernmentAddress => " + centralGovernmentAddress);
-            if (flag) {
-                self.getListElements();
-            }
+            self.checkCookies();
         });
+    },
+
+    checkCookies: function() {
+        var self = this;
+        var login = self.checkLoginSessionCookie();
+        var flag = false;
+        if (login) {
+            // console.log(document.cookie);
+            var cookies = document.cookie.split("; ");
+            var cookieAddr;
+            for (var a = 0; a < cookies.length; a++) {
+                if (cookies[a].split("=")[0] == "central") {
+                    cookieAddr = cookies[a].split("=")[1].split("*")[0];
+                    flag = true;
+                    break;
+                }
+            }
+            if (cookieAddr && flag) {
+                User.deployed().then(function(instance) {
+                    userGlobal = instance;
+                    return userGlobal.getUserDetails.call(cookieAddr, {from: centralGovernmentAddress});
+                }).then(function(userinfo) {
+                    if (userinfo[0] == cookieAddr) {
+                        $("#register-link").remove();
+                        $("#login-link").remove();
+                        $("#profile-link").show();
+                        document.getElementById('profile-name').innerHTML = userinfo[1];
+                        self.getListElements();
+                        loggedIn = true;
+                        // return;
+                    } else {
+                        $("#profile-link").hide();
+                        $("#not-logged-div-card").show();
+                        $("#loading-main").hide();
+                    }
+                }).catch(function(e){
+                    console.log(e);
+                    // return;
+                });
+            }
+            // if (!flag) {
+            //     console.log("here");
+            //     $("#profile-link").hide();
+            //     $("#not-logged-div-card").show();
+            //     $("#loading-main").hide();
+            //     // document.getElementById('not-logged-div-card').style.display = "block";
+            //     // document.getElementById('loading-main').style.display = "none";
+            // }
+        }
     },
 
     getListElements: function() {
@@ -101,7 +151,7 @@ window.ApprovalApp = {
 
         // loadAcctsEle.style.display = "block";
         i = 0;
-        loadUserInterval = setInterval(self.checkUserRegistered, 120);
+        loadUserInterval = setInterval(self.checkUserRegistered, 150);
     },
 
     checkUserRegistered: function() {
@@ -139,7 +189,7 @@ window.ApprovalApp = {
             prevAddr = "";
             // loop through 0 to customerNum
             $("#loading-message").html("Loading unapproved and approved customers ...");
-            loadUnapproandApproCustInterval = setInterval(self.loadUnapproandApproCust, 150);
+            loadUnapproandApproCustInterval = setInterval(self.loadUnapproandApproCust, 200);
         });
     },
 
@@ -156,12 +206,12 @@ window.ApprovalApp = {
                     // document.getElementById("load-1").style.display = "none";
                     console.log("j => " + j + " || " + "cust => " + addr.valueOf());
                     if (addr[0] != "0x0000000000000000000000000000000000000000" && addr[0] != prevAddr) {
-                        if (!addr[1]) {
-                            prevAddr = addr.valueOf();
-                            User.deployed().then(function(instance) {
-                                userGlobal = instance;
-                                return userGlobal.getUserDetails(addr[0], {from: centralGovernmentAddress, gas: 150000});
-                            }).then(function(userinfo) {
+                        User.deployed().then(function(instance) {
+                            userGlobal = instance;
+                            return userGlobal.getUserDetails(addr[0], {from: centralGovernmentAddress, gas: 150000});
+                        }).then(function(userinfo){
+                            if (!addr[1]) {
+                                prevAddr = addr.valueOf();
                                 var tr = document.createElement("tr");
                                 var td1 = document.createElement("td");
                                 var td2 = document.createElement("td");
@@ -192,35 +242,7 @@ window.ApprovalApp = {
                                 tr.appendChild(td4);
                                 tr.appendChild(td5);
                                 unaaprovedCustTable.appendChild(tr);
-                            }).catch(function(e) {
-                                console.log(e);
-                            });
-                            // var a = document.createElement("a");
-                            // a.setAttribute("class", "list-group-item list-group-item-action");
-                            // var div = document.createElement("div");
-                            // var p = document.createElement("p");
-                            // // p.innerHTML = addr.valueOf();
-                            // p.innerHTML = addr[0].valueOf();
-                            // var b = document.createElement("button");
-                            // b.type = "button";
-                            // b.setAttribute("class", "btn btn-primary-outline btn-sm");
-                            // b.innerHTML = "Approve";
-                            // // Change this later
-                            // b.id = addr.valueOf();
-                            // b.onclick = function(e) {
-                            //     console.log(e.target.id);
-                            //     // e.target.style.display = "none";
-                            //     // window.ApprovalApp.approveCustomer(e.target.id);
-                            // }
-                            // div.appendChild(p);
-                            // div.appendChild(b);
-                            // a.appendChild(div);
-                            // unapprovedCustDiv.appendChild(a);
-                        } else {
-                            User.deployed().then(function(instance) {
-                                userGlobal = instance;
-                                return userGlobal.getUserDetails(addr[0], {from: centralGovernmentAddress, gas: 150000});
-                            }).then(function(userinfo) {
+                            } else {
                                 var tr = document.createElement("tr");
                                 var td1 = document.createElement("td");
                                 var td2 = document.createElement("td");
@@ -235,32 +257,10 @@ window.ApprovalApp = {
                                 tr.appendChild(td3);
                                 tr.appendChild(td4);
                                 approvedCustTable.appendChild(tr);
-                                // var div = document.createElement("div");
-                                // div.setAttribute("class", "list-group-item list-group-item-action");
-                                // var p1 = document.createElement("p");
-                                // p1.innerHTML = "Addres : " + userinfo[0] + "<br>";
-                                // var p2 = document.createElement("p");
-                                // p2.innerHTML = "Username : " + userinfo[1] + "<br>";
-                                // var p3 = document.createElement("p");
-                                // p3.innerHTML = "Email : " + userinfo[2] + "<br>";
-                                // var p4 = document.createElement("p");
-                                // p4.innerHTML = "Usertype : " + userinfo[3] + "<br>";
-                                // var p5 = document.createElement("p");
-                                // p5.innerHTML = "Area : " + userinfo[4] + "<br>";
-                                //
-                                // // var inf = "Username : " + userinfo[1] + "<br>" + "Email : " + userinfo[2] + "<br>" + "Usertype : " + userinfo[3] + "<br>" + "Area : " + userinfo[4];
-                                // console.log("userinfo || " + addr[0] + " => " + userinfo);
-                                // // p1.innerHTML = inf;
-                                // div.appendChild(p1);
-                                // div.appendChild(p2);
-                                // div.appendChild(p3);
-                                // div.appendChild(p4);
-                                // div.appendChild(p5);
-                                // approvedCustDiv.appendChild(div);
-                            }).catch(function(e) {
-                                console.log(e);
-                            });
-                        }
+                            }
+                        }).catch(function(e){
+                            console.log(e);
+                        });
                     }
                     j++;
             }).catch(function(e) {
@@ -308,12 +308,12 @@ window.ApprovalApp = {
                     // document.getElementById("load-3").style.display = "none";
                     console.log("k => " + k + " || " + "fps => " + addr.valueOf());
                     if (addr[0] != "0x0000000000000000000000000000000000000000" && addr[0] != prevAddr) {
-                        if (!addr[1]) {
-                            prevAddr = addr[0];
-                            User.deployed().then(function(instance) {
-                                userGlobal = instance;
-                                return userGlobal.getUserDetails(addr[0], {from: centralGovernmentAddress, gas: 150000});
-                            }).then(function(userinfo) {
+                        User.deployed().then(function(instance) {
+                            userGlobal = instance;
+                            return userGlobal.getUserDetails(addr[0], {from: centralGovernmentAddress, gas: 150000});
+                        }).then(function(userinfo){
+                            if (!addr[1]) {
+                                prevAddr = addr[0];
                                 var tr = document.createElement("tr");
                                 var td1 = document.createElement("td");
                                 var td2 = document.createElement("td");
@@ -346,36 +346,7 @@ window.ApprovalApp = {
                                 tr.appendChild(td4);
                                 tr.appendChild(td5);
                                 unaaprovedFpsTable.appendChild(tr);
-                            }).catch(function(e) {
-                                console.log(e);
-                            });
-                            // var a = document.createElement("a");
-                            // a.setAttribute("class", "list-group-item list-group-item-action");
-                            // var div = document.createElement("div");
-                            // var p = document.createElement("p");
-                            // // p.innerHTML = addr.valueOf();
-                            // p.innerHTML = addr[0];
-                            // var b = document.createElement("button");
-                            // b.innerHTML = "Approve";
-                            // b.type = "button";
-                            // b.setAttribute("class", "btn btn-primary-outline btn-sm");
-                            // // Change this later
-                            // b.id = addr.valueOf();
-                            // b.onclick = function(e) {
-                            //     console.log(e.target.id);
-                            //     // e.target.style.display = "none";
-                            //     // window.ApprovalApp.approveFPS(e.target.id);
-                            // }
-                            // div.appendChild(p);
-                            // div.appendChild(b);
-                            // a.appendChild(div);
-                            // unapprovedFpsDiv.appendChild(a);
-                        } else {
-                            approvedFPSList.push(addr.valueOf());
-                            User.deployed().then(function(instance) {
-                                userGlobal = instance;
-                                return userGlobal.getUserDetails.call(addr[0], {from: centralGovernmentAddress, gas: 150000});
-                            }).then(function(userinfo) {
+                            } else {
                                 var tr = document.createElement("tr");
                                 var td1 = document.createElement("td");
                                 var td2 = document.createElement("td");
@@ -390,22 +361,10 @@ window.ApprovalApp = {
                                 tr.appendChild(td3);
                                 tr.appendChild(td4);
                                 approvedFpsTable.appendChild(tr);
-                                // var div = document.createElement("div");
-                                // div.setAttribute("class", "list-group-item list-group-item-action");
-                                // var p = document.createElement("p");
-                                // p.innerHTML = addr.valueOf();
-                                // var p1 = document.createElement("p");
-                                // console.log("userinfo || " + addr.valueOf() + " => " + userinfo);
-                                // var inf = "Username : " + userinfo[1] + "<br>" + "Email : " + userinfo[2] + "<br>" + "Usertype : " + userinfo[3] + "<br>" + "Area : " + userinfo[4];
-                                // p1.innerHTML = inf;
-                                // div.appendChild(p);
-                                // div.appendChild(p1);
-                                // approvedFpsDiv.appendChild(div);
-                            }).catch(function(e) {
-                                console.log(e);
-                                return;
-                            });
-                        }
+                            }
+                        }).catch(function(e){
+                            console.log(e);
+                        })
                     }
                     k++;
             }).catch(function(e) {
@@ -419,7 +378,6 @@ window.ApprovalApp = {
            document.getElementById("load-3").style.display = "none";
            document.getElementById("load-4").style.display = "none";
            $("#loading-main").hide();
-        //    window.ApprovalApp.loadApprovedCustomersList();
            return;
        }
     },
@@ -489,39 +447,56 @@ window.ApprovalApp = {
     },
 
     showApprovedCustomersDiv: function () {
-        unapprovedCustDiv.style.display = "none";
-        unapprovedFpsDiv.style.display = "none";
+        if (loggedIn) {
+            unapprovedCustDiv.style.display = "none";
+            unapprovedFpsDiv.style.display = "none";
 
-        approvedCustDiv.style.display = "block";
-        approvedFpsDiv.style.display = "none";
+            approvedCustDiv.style.display = "block";
+            approvedFpsDiv.style.display = "none";
+        }
     },
 
     showApprovedFpsDiv: function() {
-        unapprovedCustDiv.style.display = "none";
-        unapprovedFpsDiv.style.display = "none";
+        if (loggedIn) {
+            unapprovedCustDiv.style.display = "none";
+            unapprovedFpsDiv.style.display = "none";
 
-        approvedCustDiv.style.display = "none";
-        approvedFpsDiv.style.display = "block";
+            approvedCustDiv.style.display = "none";
+            approvedFpsDiv.style.display = "block";
+        }
     },
 
     showUnapprovedCustomersDiv: function() {
-        unapprovedCustDiv.style.display = "block";
-        unapprovedFpsDiv.style.display = "none";
+        if (loggedIn) {
+            unapprovedCustDiv.style.display = "block";
+            unapprovedFpsDiv.style.display = "none";
 
-        approvedCustDiv.style.display = "none";
-        approvedFpsDiv.style.display = "none";
+            approvedCustDiv.style.display = "none";
+            approvedFpsDiv.style.display = "none";
+        }
     },
 
     showUnapprovedFpsDiv: function() {
-        unapprovedCustDiv.style.display = "none";
-        unapprovedFpsDiv.style.display = "block";
+        if (loggedIn) {
+            unapprovedCustDiv.style.display = "none";
+            unapprovedFpsDiv.style.display = "block";
 
-        approvedCustDiv.style.display = "none";
-        approvedFpsDiv.style.display = "none";
+            approvedCustDiv.style.display = "none";
+            approvedFpsDiv.style.display = "none";
+        }
     },
 };
 
 window.addEventListener('load', function() {
-    window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+    if (typeof web3 !== 'undefined') {
+      console.warn("Using web3 detected from external source. If you find that your accounts don't appear or you have 0 MetaCoin, ensure you've configured that source properly. If using MetaMask, see the following link. Feel free to delete this warning. :) http://truffleframework.com/tutorials/truffle-and-metamask")
+      // Use Mist/MetaMask's provider
+      window.web3 = new Web3(web3.currentProvider);
+    } else {
+      console.warn("No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
+      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+      window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    }
     ApprovalApp.start();
 });

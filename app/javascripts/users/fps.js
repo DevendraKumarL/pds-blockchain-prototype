@@ -48,20 +48,20 @@ window.fpsApp = {
             console.log(rationCardGlobal);
         });
 
-        var login = self.checkLoginSessionCookie();
-        if (login) {
-            console.log(document.cookie);
-            var cookies = document.cookie.split("; ");
-            for (var a = 0; a < cookies.length; a++) {
-                if (cookies[a].split("=")[0] == "fps") {
-                    $("#register-link").remove();
-                    $("#login-link").remove();
-                    $("#profile-link").show();
-                    document.getElementById('profile-name').innerHTML = cookies[a].split("=")[1].split("*")[1];
-                    return;
-                }
-            }
-        }
+        // var login = self.checkLoginSessionCookie();
+        // if (login) {
+        //     console.log(document.cookie);
+        //     var cookies = document.cookie.split("; ");
+        //     for (var a = 0; a < cookies.length; a++) {
+        //         if (cookies[a].split("=")[0] == "fps") {
+        //             $("#register-link").remove();
+        //             $("#login-link").remove();
+        //             $("#profile-link").show();
+        //             document.getElementById('profile-name').innerHTML = cookies[a].split("=")[1].split("*")[1];
+        //             return;
+        //         }
+        //     }
+        // }
 
         web3.eth.getAccounts(function(err, accs){
             if (err) {
@@ -79,7 +79,41 @@ window.fpsApp = {
             console.log("stateGovernmentAddress => " + stateGovernmentAddress);
             self.loadPlaces();
             self.loadUsers();
+            self.checkCookies();
         });
+    },
+
+    checkCookies: function() {
+        var self = this;
+        var login = self.checkLoginSessionCookie();
+        if (login) {
+            // console.log(document.cookie);
+            var cookies = document.cookie.split("; ");
+            var cookieAddr;
+            for (var a = 0; a < cookies.length; a++) {
+                if (cookies[a].split("=")[0] == "fps") {
+                    cookieAddr = cookies[a].split("=")[1].split("*")[0];
+                    break;
+                }
+            }
+            if (cookieAddr) {
+                User.deployed().then(function(instance) {
+                    userGlobal = instance;
+                    return userGlobal.getUserDetails.call(cookieAddr, {from: centralGovernmentAddress});
+                }).then(function(userinfo) {
+                    if (userinfo[0] == cookieAddr) {
+                        $("#register-link").remove();
+                        $("#login-link").remove();
+                        $("#profile-link").show();
+                        document.getElementById('profile-name').innerHTML = userinfo[1];
+                        return;
+                    }
+                }).catch(function(e){
+                    console.log(e);
+                    return;
+                });
+            }
+        }
     },
 
     loadPlaces: function() {
@@ -106,7 +140,7 @@ window.fpsApp = {
 
         // loadAcctsEle.style.display = "block";
         i = 0;
-        loadUserInterval = setInterval(self.checkUserRegistered, 130);
+        loadUserInterval = setInterval(self.checkUserRegistered, 150);
     },
 
     checkUserRegistered: function() {
@@ -314,6 +348,15 @@ window.fpsApp = {
 };
 
 window.addEventListener('load', function() {
-    window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+    if (typeof web3 !== 'undefined') {
+      console.warn("Using web3 detected from external source. If you find that your accounts don't appear or you have 0 MetaCoin, ensure you've configured that source properly. If using MetaMask, see the following link. Feel free to delete this warning. :) http://truffleframework.com/tutorials/truffle-and-metamask")
+      // Use Mist/MetaMask's provider
+      window.web3 = new Web3(web3.currentProvider);
+    } else {
+      console.warn("No web3 detected. Falling back to http://localhost:8545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
+      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+      window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    }
     fpsApp.start();
 });
