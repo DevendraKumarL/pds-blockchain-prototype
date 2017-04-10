@@ -4,3 +4,20 @@
 #central-goverment-login {
     display: none;
 }
+#not-logged-div-card {
+    display: none;
+    margin: auto;
+    top: 100px;
+}
+#unapproved-list-customer {
+    display: none;
+}
+#approved-list-customer {
+    display: none;
+}
+#unapproved-list-fps {
+    display: none;
+}
+#approved-list-fps {
+    display: none;
+}

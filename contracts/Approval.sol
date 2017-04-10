@@ -61,7 +61,8 @@ contract Approval {
 	}
 
 	function approveCustomer(address _customerAddr) onlyGovernment {
-		if (userApprovals[_customerAddr].userAddress == _customerAddr && !userApprovals[_customerAddr].approved && userAlreadyInApprovalList[_customerAddr]) {
+		if (userApprovals[_customerAddr].userAddress == _customerAddr && !userApprovals[_customerAddr].approved
+			 && userAlreadyInApprovalList[_customerAddr] && userApprovals[_customerAddr].usertype == 2) {
 			if (numberOfNotApprovedCustomers - 1 < 0) throw;
 			userApprovals[_customerAddr].approved = true;
 			for (uint i = 0; i < approvals.length; i++) {
@@ -76,7 +77,8 @@ contract Approval {
 	}
 
 	function approveFPS(address _fpsAddr) onlyGovernment {
-		if (userApprovals[_fpsAddr].userAddress == _fpsAddr && !userApprovals[_fpsAddr].approved && userAlreadyInApprovalList[_fpsAddr]) {
+		if (userApprovals[_fpsAddr].userAddress == _fpsAddr && !userApprovals[_fpsAddr].approved
+			 && userAlreadyInApprovalList[_fpsAddr] && userApprovals[_customerAddr].usertype == 1) {
 			if (numberOfNotApprovedFPS - 1 < 0) throw;
 			userApprovals[_fpsAddr].approved = true;
 			for (uint i = 0; i < approvals.length; i++) {

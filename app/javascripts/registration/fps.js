@@ -152,7 +152,7 @@ window.fpsApp = {
             return;
         }
         var userAddr = self.getNewAddress();
-        userGlobal.addUser(userAddr, name.value, email.value, 0, pass.value, uplace, {from: centralGovernmentAddress, gas: 200000}).then(function(res){
+        userGlobal.addUser(userAddr, name.value, email.value, 1, pass.value, uplace, {from: centralGovernmentAddress, gas: 200000}).then(function(res){
             console.log(res);
             userDb[userAddr] = true;
             name.value = "";
@@ -163,6 +163,17 @@ window.fpsApp = {
             // notifiy1.innerHTML = "Government registered succesfully. Address: <strong>" + centralGovernmentAddress + "</strong>";
             // notifiy1.style.display = "block";
             // self.hideDivs();
+            return Approval.deployed();
+        }).then(function(instance) {
+            approvalGlobal = instance;
+            return approvalGlobal.addToNotApprovedList(userAddr, 1, {from: centralGovernmentAddress, gas: 250000});
+        }).then(function(res){
+            console.log(res);
+            alert("FPS added to Pending Approval List. Wait for Government to approve.");
+            location.reload();
+            // notifiy2.setAttribute("class", "alert alert-info col-md-12");
+            // notifiy2.innerHTML = "Customer added to Pending Approval List. Wait for Government to approve.";
+            // notifiy2.style.display = "block";
         }).catch(function(e){
             console.log(e);
             // notifiy1.setAttribute("class", "alert alert-danger col-md-12");
@@ -240,7 +251,7 @@ window.fpsApp = {
                 if (res) {
                     // alert("centralGovernment Authenticated using email");
                     // store cookies
-                    self.getUserDetails(addr.value, 1, 5);
+                    self.getUserDetails(email.value, 1, 5);
                     return;
                 }
                 alert("FPS not Authenticated");
@@ -251,6 +262,7 @@ window.fpsApp = {
 
     getUserDetails: function(userId, type, expDays) {
         var self = this;
+        console.log("type : " + type + " userId : " + userId);
         if (type == 0) {
             userGlobal.getUserDetails.call(userId, {from: centralGovernmentAddress, gas: 150000})
             .then(function(userinfo){

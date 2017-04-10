@@ -1,4 +1,9 @@
 if possible =>
+    -> ** FIX BUGS in Registration and Login **
+    -> getUserDetailsUsingEmail Fix BUG
+    -> how to reload other windows of fps or customer after registration
+    -> ** Optimize approvals.js
+    -> Fix usertype bug in registrations
     -> government buys a kg a rice for 26/- and sells it to customer at 1/-
         -> so the contract has to keep tract the foodflow and money from customers
         -> thus track the **BENEFIT FLOW**
@@ -19,10 +24,10 @@ if possible =>
             ->centralGovernment **Tick**
             ->stateGovernment **Tick**
         -> login: **COOKIES**
-            ->customer
-            ->fps
+            ->customer **Tick**
+            ->fps **Tick**
             ->centralGovernment **Tick**
-            ->stateGovernment
+            ->stateGovernment **Tick**
         -> approval:
             ->customer and fps (by government)
         -> ration card and flexi ration card:

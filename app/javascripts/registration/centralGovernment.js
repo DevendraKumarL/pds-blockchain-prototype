@@ -61,10 +61,6 @@ window.centralApp = {
                     return;
                 }
             }
-            // if (document.cookie.split("=")[0] == "central") {
-                // document.getElementById('profile-name').innerHTML = document.cookie.split("=")[1].split("*")[1];
-            // }
-            // document.getElementById('profile-name').innerHTML = document.cookie.split(";")[1].split("=")[1];
         }
 
         web3.eth.getAccounts(function(err, accs){
@@ -124,8 +120,8 @@ window.centralApp = {
               clearInterval(loadUserInterval);
               // loadAcctsEle.style.display = "none";
               console.log("Finished loading/checking user registrations");
-              userDb[centralGovernmentAddress] = true;
-              userDb[stateGovernmentAddress] = true;
+            //   userDb[centralGovernmentAddress] = true;
+            //   userDb[stateGovernmentAddress] = true;
             }
         }).catch(function(e){
             console.log(e);
@@ -161,7 +157,8 @@ window.centralApp = {
             name.value = "";
             email.value = "";
             pass.value = "";
-            self.showHome();
+            location.reload();
+            // self.showHome();
             // alert("Government registered succesfully");
             // notifiy1.setAttribute("class", "alert alert-success col-md-12");
             // notifiy1.innerHTML = "Government registered succesfully. Address: <strong>" + centralGovernmentAddress + "</strong>";

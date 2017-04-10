@@ -11,6 +11,8 @@ module.exports = {
     'stateGovernment': './app/javascripts/registration/stateGovernment.js',
     'customer': './app/javascripts/registration/customer.js',
     'fps': './app/javascripts/registration/fps.js',
+
+    'approvals': './app/javascripts/approvals.js'
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -40,9 +42,12 @@ module.exports = {
     ]),
     new CopyWebpackPlugin([
       { from: './app/customer.html', to: "customer.html" }
-  ]),
+    ]),
     new CopyWebpackPlugin([
       { from: './app/fps.html', to: "fps.html" }
+    ]),
+    new CopyWebpackPlugin([
+      { from: './app/approvals.html', to: "approvals.html" }
     ])
   ],
   module: {

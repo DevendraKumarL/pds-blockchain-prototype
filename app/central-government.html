@@ -23,6 +23,16 @@
                 </li> -->
             </ul>
             <ul class="navbar-nav my-2 my-lg-0">
+                <li class="nav-item btn-group" id="profile-link">
+                    <a class="dropdown-toggle nav-link" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-user"></i> &nbsp;<span id="profile-name">Profile</span> <b class="caret"></b>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-gear"></i> Settings</a>
+                        <a class="dropdown-item" href="#" onclick="centralApp.logout()"><i class="fa fa-power-off"></i> Log Out</a>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fa fa-lemon-o"></i> Food Transfer</a>
                 </li>
@@ -34,24 +44,6 @@
                 </li>
                 <li class="nav-item" id="login-link">
                     <a class="nav-link" href="#" onclick="centralApp.showLogin()"><i class="fa fa-sign-in"></i> Login</a>
-                </li>
-                <li class="nav-item dropdown" id="profile-link">
-                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"><i class="fa fa-user"></i> &nbsp;<span id="profile-name">Profile</span> <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#" onclick="centralApp.logout()"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
-                        </li>
-                    </ul>
                 </li>
             </ul>
         </div>
@@ -71,7 +63,7 @@
                     <a href="#"><i class="fa fa-calendar-o"></i> Events</a>
                 </li>
                 <li>
-                    <a href="http://localhost:8080/approval.html"><i class="fa fa-check-circle-o"></i> Approvals</a>
+                    <a href="http://localhost:8080/approvals.html"><i class="fa fa-check-circle-o"></i> Approvals</a>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-address-card-o"></i> Ration Card</a>

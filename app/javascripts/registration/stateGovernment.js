@@ -157,6 +157,7 @@ window.stateApp = {
             name.value = "";
             email.value = "";
             pass.value = "";
+            location.reload();
             // alert("Government registered succesfully");
             // notifiy1.setAttribute("class", "alert alert-success col-md-12");
             // notifiy1.innerHTML = "Government registered succesfully. Address: <strong>" + centralGovernmentAddress + "</strong>";
