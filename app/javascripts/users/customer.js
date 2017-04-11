@@ -99,12 +99,21 @@ window.customerApp = {
                         console.log(loggedCustomer + " - " + customerData);
                         self.loadApprovedFps();
                         return;
+                    } else {
+                        $('#cover').hide();
+                        self.showHome();
                     }
                 }).catch(function(e){
                     console.log(e);
                     return;
                 });
+            } else {
+                $('#cover').hide();
+                self.showHome();
             }
+        } else {
+            $('#cover').hide();
+            self.showHome();
         }
     },
 
@@ -431,6 +440,7 @@ window.customerApp = {
                     $("#ration-message-2").hide();
                     $("#ration-message-3").hide();
                     $("#ration-main-div").hide();
+                    $('#cover').hide();
                     return;
                 }
             }).catch(function(e){

@@ -79,3 +79,11 @@
   top: 0.5%;
   right: 1%;
 }
+
+#userinfo-div {
+    display: none;
+}
+
+#alert-div {
+    display: none;
+}

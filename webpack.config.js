@@ -13,7 +13,10 @@ module.exports = {
     'fps': './app/javascripts/users/fps.js',
 
     'approvals': './app/javascripts/approvals/approvals.js',
-    'rationcards': './app/javascripts/ration/rationcards.js'
+    'rationcards': './app/javascripts/ration/rationcards.js',
+
+    'pds-users': './app/javascripts/pds-users.js',
+    'accounts': './app/javascripts/accounts.js'
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -51,6 +54,13 @@ module.exports = {
     ]),
     new CopyWebpackPlugin([
       { from: './app/ration/rationcards.html', to: "rationcards.html" }
+    ]),
+
+    new CopyWebpackPlugin([
+        { from: './app/pds-users.html', to: "pds-users.html" }
+    ]),
+    new CopyWebpackPlugin([
+        { from: './app/accounts.html', to: "accounts.html" }
     ])
   ],
   module: {

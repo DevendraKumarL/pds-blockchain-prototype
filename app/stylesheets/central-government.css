@@ -17,11 +17,17 @@
     display: none;
 }
 #ration-home-div {
-    display: none;
+    /*display: none;*/
 }
 #fixed-ration-card-div {
     display: none;
 }
 #flexi-ration-card-div {
+    display: none;
+}
+#fixed-card-give-points-div {
+    display: none;
+}
+#flexi-card-give-points-div {
     display: none;
 }

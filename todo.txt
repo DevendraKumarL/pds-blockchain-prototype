@@ -55,6 +55,8 @@ if possible =>
             ->centralGovernment, stateGovernment
             -> DETAILS:
                 ...
+        -> separate webpage to show testrpc avaiable accounts **Tick**
+        -> separate webpage to get info of registered users on pds blockchain using accounts address **Tick**
         -> blockchain information
             -> all transactions
             -> web3. ...

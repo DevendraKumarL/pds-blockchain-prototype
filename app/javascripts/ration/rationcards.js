@@ -158,13 +158,23 @@ window.RationCardsApp = {
             alert1.setAttribute("class", "alert alert-success col-md-10");
             alert1.innerHTML = "Fixed Scheme Rationcard details fetched successfully";
             alert1.style.display = "block";
+            alert1.style.display = "none";
             var details = document.getElementById("fixed-card-details-div");
             document.getElementById("fixed-card-number").innerHTML = info[1].valueOf();
             document.getElementById("fixed-card-custname").innerHTML = info[2];
             document.getElementById("fixed-card-street").innerHTML = info[3];
             document.getElementById("fixed-card-fps").innerHTML = info[5];
             details.style.display = "block";
-
+            return rationCardGlobal.getRationCardPoints.call(info[1], '');
+        }).then(function(points){
+            if (points) {
+                $("#fixed-card-item1-points").html(points[1].valueOf());
+                $("#fixed-card-item2-points").html(points[2].valueOf());
+                $("#fixed-card-item3-points").html(points[3].valueOf());
+                $("#fixed-card-custaddr").html(points[4]);
+                $("#fixed-card-give-points-div").show();
+                return;
+            }
         }).catch(function(e){
             console.log(e);
             alert1.setAttribute("class", "alert alert-danger col-md-10");
@@ -198,18 +208,80 @@ window.RationCardsApp = {
             }
             alert2.setAttribute("class", "alert alert-success col-md-10");
             alert2.innerHTML = "Flexi Scheme Rationcard details fetched successfully";
-            alert2.style.display = "block";
+            // alert2.style.display = "block";
+            alert2.style.display = "none";
             var details = document.getElementById("flexi-card-details-div");
             document.getElementById("flexi-card-number").innerHTML = info[1].valueOf();
             document.getElementById("flexi-card-custname").innerHTML = info[2];
             document.getElementById("flexi-card-street").innerHTML = info[3];
             document.getElementById("flexi-card-fps").innerHTML = info[5];
             details.style.display = "block";
-
+            return rationCardGlobal.getFlexiRationCardPoints.call(info[1], '');
+        }).then(function(points){
+            if (points[0]) {
+                $("#flexi-card-points").html(points[1].valueOf());
+                $("#flexi-card-custaddr").html(points[2]);
+                $("#flexi-card-give-points-div").show();
+                return;
+            }
         }).catch(function(e){
             console.log(e);
             alert2.setAttribute("class", "alert alert-danger col-md-10");
-            alert2.innerHTML = "Couldn't fetch ration card details. Error: " + e;
+            alert2.innerHTML = "Couldn't fetch ration card details.";
+            alert2.style.display = "block";
+        });
+    },
+
+    giveFixedRationPoints: function() {
+        var self = this;
+        var p1 = $("#give-fixed-point1").val();
+        var p2 = $("#give-fixed-point2").val();
+        var p3 = $("#give-fixed-point3").val();
+        if (p1 == "" || p1 == 0 || p2 == "" || p2 == 0 || p3 == "" || p3 == 0) {
+            alert1.setAttribute("class", "alert alert-danger col-md-10");
+            alert1.innerHTML = "All Points must be greater than 0";
+            alert1.style.display = "block";
+            return;
+        }
+        var custAddr = $("#fixed-card-custaddr").html();
+        console.log("fixed: " + custAddr + " * " + p1 + " * " + p2 + " * " + p3);
+        RationCard.deployed().then(function(instance){
+            rationCardGlobal = instance;
+            return rationCardGlobal.addRationCardPoints(custAddr, p1, p2, p3, {from: centralGovernmentAddress, gas: 200000});
+        }).then(function(res){
+            console.log(res);
+            alert("More points added successfully for card:\n" + custAddr);
+            location.reload();
+        }).catch(function(e){
+            console.log(e);
+            alert1.setAttribute("class", "alert alert-danger col-md-10");
+            alert1.innerHTML = "Sorry something went wrong, couldn't add points for this card";
+            alert1.style.display = "block";
+        });
+    },
+
+    giveFlexiRationPoints: function() {
+        var self = this;
+        var p1 = $("#give-flexi-point").val();
+        if (p1 == "" || p1 == 0) {
+            alert2.setAttribute("class", "alert alert-danger col-md-10");
+            alert2.innerHTML = "Points must be greater than 0";
+            alert2.style.display = "block";
+            return;
+        }
+        var custAddr = $("#flexi-card-custaddr").html();
+        console.log("fixed: " + custAddr + " * " + p1);
+        RationCard.deployed().then(function(instance){
+            rationCardGlobal = instance;
+            return rationCardGlobal.addFlexiRationCardPoints(custAddr, p1, {from: centralGovernmentAddress, gas: 200000});
+        }).then(function(res){
+            console.log(res);
+            alert("More points added successfully for card:\n" + custAddr);
+            location.reload();
+        }).catch(function(e){
+            console.log(e);
+            alert2.setAttribute("class", "alert alert-danger col-md-10");
+            alert2.innerHTML = "Sorry something went wrong, couldn't add points for this card";
             alert2.style.display = "block";
         });
     },
@@ -245,6 +317,8 @@ window.RationCardsApp = {
             $("#alert-message-fixed").hide();
             $("#fixed-card-details-div").hide();
             $("#ration-home-div").hide();
+            $("#fixed-card-give-points-div").hide();
+            $("#flexi-card-give-points-div").hide();
         }
     },
 
@@ -255,6 +329,8 @@ window.RationCardsApp = {
             $("#alert-message-flexi").hide();
             $("#flexi-card-details-div").hide();
             $("#ration-home-div").hide();
+            $("#fixed-card-give-points-div").hide();
+            $("#flexi-card-give-points-div").hide();
         }
     },
 

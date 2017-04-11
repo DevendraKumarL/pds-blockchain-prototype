@@ -76,6 +76,7 @@
                                     <input type="number" id="fixed-ration-card-number" class="form-inline">
                                     <span class="input-group-addon">RationCard Number</span>
                                 </div>
+                                <div class="clearfix"><br></div>
                                 <div class="input-group">
                                     <button type="button" onclick="RationCardsApp.viewFixedRatioCardDetais()" class="btn btn-primary-outline btn-sm">View</button>
                                 </div>
@@ -84,10 +85,37 @@
                             <div class="col-md-8 card card-1" id="fixed-card-details-div">
                                 <h6>Fixed Scheme RationCard Details</h6>
                                 <hr size="2">
-                                <p><label><b>Ration Card Number</b></label>&nbsp;: <span id="fixed-card-number"></span></p>
-                                <p><label><b>Customer Name</b></label>&nbsp;: <span id="fixed-card-custname"></span></p>
-                                <p><label><b>Street Address</b></label>&nbsp;: <span id="fixed-card-street"></span></p>
-                                <p><label><b>FPS</b></label>&nbsp;: <span id="fixed-card-fps"></span></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Ration Card Number</label>&nbsp;: <b><span id="fixed-card-number"></span></b></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Address</label>&nbsp;: <b><span id="fixed-card-custaddr"></span></b></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Name</label>&nbsp;: <b><span id="fixed-card-custname"></span></b></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Street address</label>&nbsp;: <b><span id="fixed-card-street"></span></b></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; FPS Address</label>&nbsp;: <b><span id="fixed-card-fps"></span></b></p>
+                                <h6>Fixed Scheme RationCard Points</h6>
+                                <hr size="2">
+                                <p><label><i class="fa fa-circle-thin"></i>&nbsp; Rice Points</label>&nbsp;: <b><span id="fixed-card-item1-points"></span></b></p>
+                                <p><label><i class="fa fa-circle-thin"></i>&nbsp; Wheat Points</label>&nbsp;: <b><span id="fixed-card-item2-points"></span></b></p>
+                                <p><label><i class="fa fa-circle-thin"></i>&nbsp; Sugar Points</label>&nbsp;: <b><span id="fixed-card-item3-points"></span></b></p>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-8 card card-2" id="fixed-card-give-points-div">
+                                <h6>Add more points for this rationCard</h6>
+                                <hr size="2">
+                                <div class="input-group">
+                                    <input type="number" id="give-fixed-point1" class="form-inline" value="0">
+                                    <span class="input-group-addon">Rice</span>
+                                </div>
+                                <div class="input-group">
+                                    <input type="number" id="give-fixed-point2" class="form-inline" value="0">
+                                    <span class="input-group-addon">Wheat</span>
+                                </div>
+                                <div class="input-group">
+                                    <input type="number" id="give-fixed-point3" class="form-inline" value="0">
+                                    <span class="input-group-addon">Sugar</span>
+                                </div>
+                                <div class="clearfix"><br></div>
+                                <div class="input-group">
+                                    <button type="button" onclick="RationCardsApp.giveFixedRationPoints()" class="btn btn-primary-outline btn-sm">Confirm</button>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12" id="flexi-ration-card-div">
@@ -101,6 +129,7 @@
                                     <input type="number" id="flexi-ration-card-number" class="form-inline">
                                     <span class="input-group-addon">RationCard Number</span>
                                 </div>
+                                <div class="clearfix"><br></div>
                                 <div class="input-group">
                                     <button type="button" onclick="RationCardsApp.viewFlexiRatioCardDetais()" class="btn btn-primary-outline btn-sm">View</button>
                                 </div>
@@ -109,10 +138,27 @@
                             <div class="col-md-8 card card-1" id="flexi-card-details-div">
                                 <h6>Flexi Scheme RationCard Details</h6>
                                 <hr size="2">
-                                <p><label><b>Ration Card Number</b></label>&nbsp;: <span id="flexi-card-number"></span></p>
-                                <p><label><b>Customer Name</b></label>&nbsp;: <span id="flexi-card-custname"></span></p>
-                                <p><label><b>Street Address</b></label>&nbsp;: <span id="flexi-card-street"></span></p>
-                                <p><label><b>FPS</b></label>&nbsp;: <span id="flexi-card-fps"></span></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Ration Card Number</label>&nbsp;: <b><span id="flexi-card-number"></span></b></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Address</label>&nbsp;: <b><span id="flexi-card-custaddr"></span></b></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Name</label>&nbsp;: <b><span id="flexi-card-custname"></span></b></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Street address</label>&nbsp;: <b><span id="flexi-card-street"></span></b></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; FPS Address</label>&nbsp;: <b><span id="flexi-card-fps"></span></b></p>
+                                <h6>Flexi Scheme RationCard Points</h6>
+                                <hr size="2">
+                                <p><label><i class="fa fa-circle-thin"></i>&nbsp; Total Points</label>&nbsp;: <b><span id="flexi-card-points"></span></b></p>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-8 card card-2" id="flexi-card-give-points-div">
+                                <h6>Add more points for this rationCard</h6>
+                                <hr size="2">
+                                <div class="input-group">
+                                    <input type="number" id="give-flexi-point" class="form-inline" value="0">
+                                    <span class="input-group-addon">Points</span>
+                                </div>
+                                <div class="clearfix"><br></div>
+                                <div class="input-group">
+                                    <button type="button" onclick="RationCardsApp.giveFlexiRationPoints()" class="btn btn-primary-outline btn-sm">Confirm</button>
+                                </div>
                             </div>
                         </div>
                     </div>
