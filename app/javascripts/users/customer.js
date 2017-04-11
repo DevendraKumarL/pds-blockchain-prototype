@@ -21,6 +21,8 @@ var userGlobal, approvalGlobal, rationCardGlobal;
 // get all accounts and store whoever is registered
 var userDb = {};
 
+var loggedCustomer, customerData;
+
 var governDiv, custDiv, fpsDiv;
 var loadAcctsEle, selectPlaceEle;
 var i, loadUserInterval;
@@ -106,6 +108,8 @@ window.customerApp = {
                         $("#login-link").remove();
                         $("#profile-link").show();
                         document.getElementById('profile-name').innerHTML = userinfo[1];
+                        loggedCustomer = userinfo[0];
+                        customerData = userinfo;
                         return;
                     }
                 }).catch(function(e){
@@ -345,6 +349,92 @@ window.customerApp = {
         location.reload();
     },
 
+    showCustomerRationCards: function() {
+        var self = this;
+        console.log("customer address => " + loggedCustomer);
+
+        Approval.deployed().then(function(instance){
+            approvalGlobal = instance;
+            return approvalGlobal.getUserApproval.call(loggedCustomer, 2);
+        }).then(function(res) {
+            if (res[1]) {
+                self.hideAll();
+                $("#ration-message").show();
+                $("#ration-message-1").removeClass("alert-info").addClass("alert-success");
+                $("#ration-message-1").html("User Approved by centralGovernment.");
+                $("#ration-message-2").hide();
+                $("#ration-message-3").hide();
+                $("#ration-main-div").show();
+                RationCard.deployed().then(function(instance){
+                    rationCardGlobal = instance;
+                    return rationCardGlobal.checkRationCardExists.call(loggedCustomer);
+                }).then(function(exists){
+                    $("#ration-message-2").show();
+                    if (exists) {
+                        $("#ration-message-2").removeClass("alert-info").addClass("alert-success");
+                        $("#ration-message-2").html("Fixed Scheme RationCard exists.");
+                        $("#fixed-ration-card-div").show();
+                    } else {
+                        $("#ration-message-2").removeClass("alert-info").addClass("alert-danger");
+                        $("#ration-message-2").html("Fixed Scheme RationCard does not exists.");
+                        $("#ration-message-3").hide();
+                        $('input:radio[name="radio_new"]').change(function() {
+                            if ($('input:radio[id="radio3"]').is(':checked')) {
+                                console.log("fixed");
+                                $("#create-ration-card-div").show();
+                                $("#create-ration-card-btn").attr("data-customeraddr", customerData[0]);
+                                $("#create-ration-card-btn").attr("data-usertype", customerData[3]);
+                                $("#create-ration-card-btn").attr("data-customername", customerData[1]);
+                                $("#create-ration-card-div-flexi").hide();
+                            }
+                        });
+                    }
+                    return rationCardGlobal.checkFlexiRationCardExists.call(loggedCustomer);
+                }).then(function(res){
+                    $("#ration-message-3").show();
+                    if (res) {
+                        $("#ration-message-3").removeClass("alert-info").addClass("alert-success");
+                        $("#ration-message-3").html("Flexi Scheme RationCard exists.");
+                        $("#fixed-ration-card-div").show();
+                    } else {
+                        $("#ration-message-3").removeClass("alert-info").addClass("alert-danger");
+                        $("#ration-message-3").html("Flexi Scheme RationCard does not exists.");
+                        $('input:radio[name="radio_new"]').change(function() {
+                            if ($('input:radio[id="radio4"]').is(':checked')) {
+                                console.log("flexi");
+                                $("#create-ration-card-div-flexi").show();
+                                $("#create-ration-card-btn-flexi").attr("data-customeraddr", customerData[0]);
+                                $("#create-ration-card-btn-flexi").attr("data-usertype", customerData[3]);
+                                $("#create-ration-card-btn-flexi").attr("data-customername", customerData[1]);
+                                $("#create-ration-card-div").hide();
+                            }
+                        });
+                    }
+                }).catch(function(e){
+                    console.log(e);
+                });
+                return;
+            } else {
+                $("#ration-message").show();
+                $("#ration-message").removeClass("alert-success").addClass("alert-danger");
+                $("#ration-message").html("User not Approved by centralGovernment yet.");
+                return;
+            }
+        }).catch(function(e){
+            console.log(e);
+            $("#ration-message").html("Approval error : " + e);
+            return;
+        })
+    },
+
+    // createFixedRationCard: function() {
+    //     var self = this;
+    // },
+    //
+    // createFlexiRationCard: function() {
+    //     va self = this;
+    // }
+
 };
 
 window.addEventListener('load', function() {
@@ -359,4 +449,36 @@ window.addEventListener('load', function() {
       window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
     customerApp.start();
+
+    $(document).ready(function(){
+        $('#myModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var custAddr = button.data('customeraddr') // Extract info from data-* attributes
+            var usertype = button.data('usertype')
+            var customername = button.data('customername')
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            // modal.find('.modal-title').text('Ration card for : ' + custAddr)
+            // modal.find('.modal-body input').val(custAddr)
+            $("#ration-customer-addr").val(custAddr)
+            $('#ration-customer-user-type').val(usertype)
+            $('#ration-customer-name').val(customername)
+        });
+        // fix this
+        $('#myModal-flexi').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var custAddr = button.data('customeraddr') // Extract info from data-* attributes
+            var usertype = button.data('usertype')
+            var customername = button.data('customername')
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            // modal.find('.modal-title').text('Ration card for : ' + custAddr)
+            // modal.find('.modal-body input').val(custAddr)
+            $("#ration-customer-addr-flexi").val(custAddr)
+            $('#ration-customer-user-type-flexi').val(usertype)
+            $('#ration-customer-name-flexi').val(customername)
+        });
+    });
 });

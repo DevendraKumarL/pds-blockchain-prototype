@@ -117,21 +117,13 @@ window.ApprovalApp = {
                     } else {
                         $("#profile-link").hide();
                         $("#not-logged-div-card").show();
-                        $("#loading-main").hide();
+                        $("#ration-home-div").hide();
                     }
                 }).catch(function(e){
                     console.log(e);
-                    // return;
+                    return;
                 });
             }
-            // if (!flag) {
-            //     console.log("here");
-            //     $("#profile-link").hide();
-            //     $("#not-logged-div-card").show();
-            //     $("#loading-main").hide();
-            //     // document.getElementById('not-logged-div-card').style.display = "block";
-            //     // document.getElementById('loading-main').style.display = "none";
-            // }
         }
     },
 

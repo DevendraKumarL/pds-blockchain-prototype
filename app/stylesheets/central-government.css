@@ -21,3 +21,10 @@
 #approved-list-fps {
     display: none;
 }
+/*#ration-home-div {
+    margin: auto;
+    top: 100px;
+}*/
+#fixed-ration-card-div {
+    display: none;
+}

@@ -12,7 +12,8 @@ module.exports = {
     'customer': './app/javascripts/users/customer.js',
     'fps': './app/javascripts/users/fps.js',
 
-    'approvals': './app/javascripts/approvals/approvals.js'
+    'approvals': './app/javascripts/approvals/approvals.js',
+    'rationcards': './app/javascripts/ration/rationcards.js'
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -29,25 +30,27 @@ module.exports = {
     // new CopyWebpackPlugin([
     //   { from: './app/ration.html', to: "ration.html" }
     // ]),
-
-
     ////////////////////////////////////////////////////////////////////////////
     // from: "./app/registration/customer.html", to: "registration/customer.html" ??
     ////////////////////////////////////////////////////////////////////////////
     new CopyWebpackPlugin([
-        { from: './app/central-government.html', to: "central-government.html" }
+        { from: './app/users/central-government.html', to: "central-government.html" }
     ]),
     new CopyWebpackPlugin([
-        { from: './app/state-government.html', to: "state-government.html" }
+        { from: './app/users/state-government.html', to: "state-government.html" }
     ]),
     new CopyWebpackPlugin([
-      { from: './app/customer.html', to: "customer.html" }
+      { from: './app/users/customer.html', to: "customer.html" }
     ]),
     new CopyWebpackPlugin([
-      { from: './app/fps.html', to: "fps.html" }
+      { from: './app/users/fps.html', to: "fps.html" }
     ]),
+
     new CopyWebpackPlugin([
       { from: './app/approvals/approvals.html', to: "approvals.html" }
+    ]),
+    new CopyWebpackPlugin([
+      { from: './app/ration/rationcards.html', to: "rationcards.html" }
     ])
   ],
   module: {

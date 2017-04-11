@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>PDS | Ration Cards</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <script src="./rationcards.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse bg-inverse fixed-top navbar-toggleable-sm">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#" id="pds-home">PDS</a>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+                <ul class="navbar-nav my-2 my-lg-0">
+                    <li class="nav-item btn-group" id="profile-link">
+                        <a class="dropdown-toggle nav-link" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user"></i> &nbsp;<span id="profile-name">Profile</span> <b class="caret"></b>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <a class="dropdown-item" href="#" onclick="RationCardsApp.logout()"><i class="fa fa-power-off"></i> Log Out</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="http://localhost:8080/central-government.html" class="nav-link"><i class="fa fa-home"></i> Home</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div id="wrapper" class="toggled">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav">
+                    <li class="sidebar-brand">
+                        <a href="#"><i class="fa fa-dashboard"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="RationCardsApp.showHome()"><i class="fa fa-home"></i>&nbsp; Home</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="RationCardsApp.showFixedRationCard()"><i class="fa fa-check"></i>&nbsp; Fixed Scheme RationCard</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="RationCardsApp.showFlexiRationCard()"><i class="fa fa-check"></i>&nbsp; Flexi Scheme RationCard</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /#sidebar-wrapper -->
+
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid">
+                    <div  id="main">
+                        <div class="card card-2 col-md-4" id="not-logged-div-card">
+                            <center><h3>Must Login</h3></center>
+                        </div>
+                        <div class="card card-2 col-md-8" id="ration-home-div">
+                            <center>
+                                <h3>PDS | Rationcards for Fixed and Flexi PDS Scheme</h3>
+                            </center>
+                        </div>
+                        <div class="container" id="fixed-ration-card-div">
+                            <div class="alert alert-danger col-md-10" id="alert-message">
+                            Message here
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-6 card card-2">
+                                <h6>Enter Ration Card Number</h6>
+                                <div class="input-group">
+                                    <input type="number" id="fixed-ration-card-number" class="form-control">
+                                    <span class="input-group-addon">RationCard Number</span>
+                                </div>
+                                <div class="clearfix"><br></div>
+                                <div class="input-group">
+                                    <button type="button" id="ration-card-number-btn" onclick="RationCardsApp.viewFixedRatioCardDetais()" class="btn btn-primary-outline btn-sm">View</button>
+                                </div>
+                            </div>
+                            <hr size="2">
+                            <div class="clearfix"></div>
+                            <div class="col-md-8 card card-1" id="card-details-div">
+                            <p><label><b>Ration Card Number</b></label>&nbsp;: <span id="card-number">1001</span></p>
+                            <p><label><b>Customer Name</b></label>&nbsp;: <span id="card-custname"> Devendra Kumar</span></p>
+                            <p><label><b>Street Address</b></label>&nbsp;: <span id="card-street"> No.923, 7th main, raghavendra block, Avalahalli main road, Srinagar, Bangalore - 560050</span></p>
+                            <p><label><b>FPS</b></label>&nbsp;: <span id="card-fps">FPS32</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+        <script>
+        $("#pds-home").click(function(e){
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+        </script>
+    </body>
+</html>

@@ -3,6 +3,7 @@ if possible =>
     -> store a global user address for customer and fps when only logged in
     -> ** Optimize approvals.js **Tick**
     -> home div for approvals.html
+    -> remove {from: ...} in .call() method calls
     -> government buys a kg a rice for 26/- and sells it to customer at 1/-
         -> so the contract has to keep tract the foodflow and money from customers
         -> thus track the **BENEFIT FLOW**
@@ -34,6 +35,11 @@ if possible =>
             ->customer and fps (by government) **Tick**
         -> ration card and flexi ration card:
             -> customer after approval
+            <!-- first check if user is approved if not, then nothing to do -->
+            <!-- if approved choose between fixed and flexi RationCard -->
+            <!-- then check for the above choosen card if ration card exists -->
+            <!-- if exists show details upon Authentication -->
+            <!-- if not exists then take details from customer and create a new one -->
         -> give ration card points and flexi ration card points:
             -> customer (by government)
         -> a modal to authenticate user for making any transaction

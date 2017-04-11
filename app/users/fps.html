@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Registration | FPS</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="./fps.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-inverse bg-inverse fixed-top navbar-toggleable-sm">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#" id="pds-home">PDS</a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <!-- <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li> -->
+            </ul>
+            <ul class="navbar-nav my-2 my-lg-0">
+                <li class="nav-item btn-group" id="profile-link">
+                    <a class="dropdown-toggle nav-link" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-user"></i> &nbsp;<span id="profile-name">Profile</span> <b class="caret"></b>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-gear"></i> Settings</a>
+                        <a class="dropdown-item" href="#" onclick="fpsApp.logout()"><i class="fa fa-power-off"></i> Log Out</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fa fa-lemon-o"></i> Food Transfer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fa fa-money"></i> Rupee Transfer</a>
+                </li>
+                <li class="nav-item" id="register-link">
+                    <a class="nav-link" href="#" onclick="fpsApp.showRegister()"><i class="fa fa-user-plus"></i> Register</a>
+                </li>
+                <li class="nav-item" id="login-link">
+                    <a class="nav-link" href="#" onclick="fpsApp.showLogin()"><i class="fa fa-sign-in"></i> Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="clearfix"></div>
+    <div id="wrapper" class="toggled">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#"><i class="fa fa-dashboard"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a href="#" onclick="fpsApp.showHome()"><i class="fa fa-home"></i> Home</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-calendar-o"></i> Events</a>
+                </li>
+                <li>
+                    <a href="#">Overview</a>
+                </li>
+                <li>
+                    <a href="#">Services</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row" id="main">
+                    <div id="landing">
+                        <h1>FPS</h1>
+                        Some image and text here
+                    </div>
+                    <div class="card card-2" id="fps-register">
+                        <h4>FPS Registration</h4>
+                        <div class="input-group center-block">
+                            <input type="text" id="f-name" class="form-control">
+                            <span class="input-group-addon" id="basic-addon1">Name</span>
+                        </div>
+                        <br>
+                        <div class="input-group center-block">
+                            <input type="text" id="f-email" class="form-control">
+                            <span class="input-group-addon" id="basic-addon1">Email</span>
+                        </div>
+                        <br>
+                        <div class="input-group center-block">
+                            <input type="password" id="f-password" class="form-control">
+                            <span class="input-group-addon" id="basic-addon1">Password</span>
+                        </div>
+                        <br>
+                        <div class="">
+                          <select class="custom-select col-md-4" id="place-list">
+                            <option value="-1">Select Area</option>
+                          </select>
+                        </div>
+                        <br>
+                        <div class="input-group center-block">
+                            <button type="button" id="c-g-register" onclick="fpsApp.registerFps()" class="btn btn-primary">Register</button>
+                        </div>
+                    </div>
+                    <div class="card card-2" id="fps-login">
+                        <h4>FPS Login</h4>
+                        <label class="custom-control custom-radio">
+                            <input id="radio1" name="radio" type="radio" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Address</span>
+                        </label>
+                        <label class="custom-control custom-radio">
+                            <input id="radio2" name="radio" type="radio" class="custom-control-input">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Email</span>
+                        </label>
+                        <div class="input-group center-block" id="f-address-login-div">
+                            <input type="text" id="f-address-login" class="form-control">
+                            <span class="input-group-addon" id="basic-addon1">Address</span>
+                        </div>
+                        <div class="input-group center-block" id="f-email-login-div">
+                            <input type="text" id="f-email-login" class="form-control">
+                            <span class="input-group-addon" id="basic-addon1">Email</span>
+                        </div>
+                        <br>
+                        <div class="input-group center-block">
+                            <input type="password" id="f-password-login" class="form-control">
+                            <span class="input-group-addon" id="basic-addon1">Password</span>
+                        </div>
+                        <br>
+                        <div class="input-group center-block">
+                            <button type="button" id="f-login" onclick="fpsApp.login()" class="btn btn-primary">Register</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Scripts -->
+    <script>
+    $("#pds-home").click(function(e){
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    $("#f-address-login-div").hide();
+    $("#f-email-login-div").hide();
+    $('input:radio[name="radio"]').change(function() {
+        if ($('input:radio[id="radio1"]').is(':checked')) {
+            $("#f-address-login-div").show();
+            $("#f-email-login-div").hide();
+        }
+        else {
+            $("#f-email-login-div").show();
+            $("#f-address-login-div").hide();
+        }
+    });
+    $("#profile-link").hide();
+    </script>
+</body>
+</html>
