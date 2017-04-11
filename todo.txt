@@ -1,8 +1,8 @@
 if possible =>
     -> **** change {from: centralGovernmentAddress} of all the transactions to use the address of the actual sender ****
-    -> store a global user address for customer **Tick** and fps when only logged in
+    -> store a global user address for customer **Tick** and fps when only logged-in **Tick**
     -> ** Optimize approvals.js **Tick**
-    -> home div for approvals.html
+    -> home div for approvals.html **Tick**
     -> remove {from: ...} in .call() method calls
     -> add authentication layer for any new transaction execution
     -> government buys a kg a rice for 26/- and sells it to customer at 1/-
@@ -18,7 +18,7 @@ if possible =>
         *SupplyCentralToStateGovernment_HashLog
         confirmed or not ??
         -> Should it be added to the final transfer log analytics/graph/stats ??
-    -> how to reload other windows of fps or customer after registration **leave this**
+    -> use MetaMask, show individual functionalities of each contract, ideal way of using blockchain
     -> UI
         -> ** Rename paths **
         -> **COLORS**
@@ -39,12 +39,14 @@ if possible =>
             <!-- first check if user is approved if not, then nothing to do --> **Tick**
             <!-- if approved choose between fixed and flexi RationCard --> **Tick**
             <!-- then check for the above choosen card if ration card exists --> **Tick**
-            <!-- if exists show details upon Authentication --> **Tick**
-            <!-- if not exists then take details from customer and create a new one upon Authentication --> **Tick**
+            <!-- if exists show details upon *Authentication* --> **Tick**
+            <!-- if not exists then take details from customer and create a new one upon *Authentication* --> **Tick**
         -> view ration card points and details: customer (by government)
             -> view fixed scheme ration card points **Tick**
             -> view flexi scheme ration card points **Tick**
-            -> give points
+            -> give points **Tick**
+        -> separate webpage to show testrpc avaiable accounts **Tick**
+        -> separate webpage to get info of registered users on pds blockchain using accounts address **Tick**
         -> a modal to authenticate user for making any transaction
         -> dashboard1:
             ->centralGovernment to see registrations, approvals, and
@@ -55,12 +57,13 @@ if possible =>
             ->centralGovernment, stateGovernment
             -> DETAILS:
                 ...
-        -> separate webpage to show testrpc avaiable accounts **Tick**
-        -> separate webpage to get info of registered users on pds blockchain using accounts address **Tick**
+        -> use bootstrap tables ??
         -> blockchain information
             -> all transactions
             -> web3. ...
             -> web3.eth. ..
             ... ... ... ... ... ... ...
+        -> loading overlay when loading any webpage so that all the background loading tasks
+            from testrpc are finished before any user action is taken **Tick**
         -> Everything into one page, Generic, possible but leave for now.
-        -> use MetaMask, **No**, cannot get list accounts, so leave for now
+        -> how to reload other windows of fps or customer after registration, leave for now

@@ -76,6 +76,12 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row" id="main">
+                    <div id="loadingOverlay" class="loader-overlay">
+                        <div class="loader-content loader-center">
+                            <img src="http://www.aveva.com/Images/ajax-loader.gif" class="loader-center" alt=""/>
+                            <div class="loader-center loader-text" id="loading-content-text">Loading, please wait...</div>
+                        </div>
+                    </div>
                     <div id="landing">
                         <h1>FPS</h1>
                         Some image and text here
@@ -134,7 +140,7 @@
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <button type="button" id="f-login" onclick="fpsApp.login()" class="btn btn-primary">Register</button>
+                            <button type="button" id="f-login" onclick="fpsApp.login()" class="btn btn-primary">Login</button>
                         </div>
                     </div>
                 </div>

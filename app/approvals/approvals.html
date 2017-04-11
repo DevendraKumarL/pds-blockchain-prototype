@@ -41,6 +41,9 @@
                         <a href="#"><i class="fa fa-dashboard"></i> Dashboard</a>
                     </li>
                     <li>
+                        <a href="#" onclick="ApprovalApp.showHome()"><i class="fa fa-home"></i>&nbsp; Home</a>
+                    </li>
+                    <li>
                         <a href="#" onclick="ApprovalApp.showApprovedCustomersDiv()"><i class="fa fa-check"></i>&nbsp; Approved Customers</a>
                     </li>
                     <li>
@@ -60,8 +63,17 @@
             <div id="page-content-wrapper">
                 <div class="container-fluid">
                     <div  id="main">
+                        <div id="loadingOverlay" class="loader-overlay">
+                            <div class="loader-content loader-center">
+                                <img src="http://www.aveva.com/Images/ajax-loader.gif" class="loader-center" alt=""/>
+                                <div class="loader-center loader-text" id="loading-content-text">Loading, please wait...</div>
+                            </div>
+                        </div>
                         <div class="col-md-4 alert alert-danger" id="not-logged-div-card">
                             Must Login
+                        </div>
+                        <div class="col-md-8" id="approval-home-div">
+                            <h3>PDS | Approval status of customers and fps</h3>
                         </div>
                         <div class="card card-2 col-md-4" id="loading-main">
                             <center>

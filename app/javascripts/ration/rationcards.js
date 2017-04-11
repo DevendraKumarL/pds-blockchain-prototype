@@ -55,6 +55,7 @@ window.RationCardsApp = {
 
     checkCookies: function() {
         var self = this;
+        $("#loading-content-text").html("Checking cookies ...");
         var login = self.checkLoginSessionCookie();
         var flag = false;
         if (login) {
@@ -102,10 +103,12 @@ window.RationCardsApp = {
         $("#profile-link").hide();
         $("#not-logged-div-card").show();
         $("#ration-home-div").hide();
+        $("#loadingOverlay").hide();
     },
 
     getListElements: function() {
         var self = this;
+        $("#loading-content-text").html("Loading DOM elements ...");
         fixedRationCardDiv = document.getElementById('fixed-ration-card-div');
         flexiRationCardDiv = document.getElementById('flexi-ration-card-div');
         self.getLatestCardNumber();
@@ -113,6 +116,7 @@ window.RationCardsApp = {
 
     getLatestCardNumber: function() {
         var self = this;
+        $("#loading-content-text").html("Loading latest rationcard numbers ...");
 
         RationCard.deployed().then(function(instance){
             rationCardGlobal = instance;
@@ -124,9 +128,10 @@ window.RationCardsApp = {
         }).then(function(num){
             console.log("Latest Flexi Rationcard number => " + num.valueOf());
             latestFlexiCardNumber = parseInt(num.valueOf());
+            $("#loadingOverlay").hide();
         }).catch(function(e){
             console.log(e);
-            // alert.setAttribute("class", "alert alert-danger col-md-10");
+            // alert.setAttribute("class", "alert alert-danger col-md-6");
             // alert.innerHTML = "Couldn't fetch the latest ration card number. Error: " + e;
             // alert.style.display = "block";
         });
@@ -136,8 +141,8 @@ window.RationCardsApp = {
         var self = this;
 
         var number = document.getElementById("fixed-ration-card-number");
-        if (number.value < 1001 && number.value >= latestFixedCardNumber) {
-            alert1.setAttribute("class", "alert alert-danger col-md-10");
+        if (number.value < 1001 || number.value >= latestFixedCardNumber) {
+            alert1.setAttribute("class", "alert alert-danger col-md-6");
             alert1.innerHTML = "Fixed RationCard number must between 1001 and  " + latestFixedCardNumber;
             alert1.style.display = "block";
             return;
@@ -149,13 +154,14 @@ window.RationCardsApp = {
         }).then(function(info){
             console.log("RationCard => " + info);
             if (!info[0]) {
-                alert1.setAttribute("class", "alert alert-danger col-md-10");
+                alert1.setAttribute("class", "alert alert-danger col-md-6");
                 alert1.innerHTML = "That ration card number is invalid";
                 alert1.style.display = "block";
                 document.getElementById("fixed-card-details-div").style.display = "none";
+                $("#fixed-card-give-points-div").hide();
                 return;
             }
-            alert1.setAttribute("class", "alert alert-success col-md-10");
+            alert1.setAttribute("class", "alert alert-success col-md-6");
             alert1.innerHTML = "Fixed Scheme Rationcard details fetched successfully";
             alert1.style.display = "block";
             alert1.style.display = "none";
@@ -177,7 +183,7 @@ window.RationCardsApp = {
             }
         }).catch(function(e){
             console.log(e);
-            alert1.setAttribute("class", "alert alert-danger col-md-10");
+            alert1.setAttribute("class", "alert alert-danger col-md-6");
             alert1.innerHTML = "Couldn't fetch ration card details.";
             alert1.style.display = "block";
         });
@@ -187,10 +193,11 @@ window.RationCardsApp = {
         var self = this;
 
         var number = document.getElementById("flexi-ration-card-number");
-        if (number.value < 5001 && number.value >= latestFlexiCardNumber) {
-            alert2.setAttribute("class", "alert alert-danger col-md-10");
-            alert2.innerHTML = "Flexi Scheme RationCard number must between 1001 and  " + latestFixedCardNumber;
+        if (number.value < 5001 || number.value >= latestFlexiCardNumber) {
+            alert2.setAttribute("class", "alert alert-danger col-md-6");
+            alert2.innerHTML = "Flexi Scheme RationCard number must between 5001 and  " + latestFlexiCardNumber;
             alert2.style.display = "block";
+            $("#flexi-card-give-points-div").hide();
             return;
         }
 
@@ -200,13 +207,13 @@ window.RationCardsApp = {
         }).then(function(info){
             console.log(info);
             if (!info[0]) {
-                alert2.setAttribute("class", "alert alert-danger col-md-10");
+                alert2.setAttribute("class", "alert alert-danger col-md-6");
                 alert2.innerHTML = "That ration card number is invalid";
                 alert2.style.display = "block";
                 document.getElementById("flexi-card-details-div").style.display = "none";
                 return;
             }
-            alert2.setAttribute("class", "alert alert-success col-md-10");
+            alert2.setAttribute("class", "alert alert-success col-md-6");
             alert2.innerHTML = "Flexi Scheme Rationcard details fetched successfully";
             // alert2.style.display = "block";
             alert2.style.display = "none";
@@ -226,7 +233,7 @@ window.RationCardsApp = {
             }
         }).catch(function(e){
             console.log(e);
-            alert2.setAttribute("class", "alert alert-danger col-md-10");
+            alert2.setAttribute("class", "alert alert-danger col-md-6");
             alert2.innerHTML = "Couldn't fetch ration card details.";
             alert2.style.display = "block";
         });
@@ -238,7 +245,7 @@ window.RationCardsApp = {
         var p2 = $("#give-fixed-point2").val();
         var p3 = $("#give-fixed-point3").val();
         if (p1 == "" || p1 == 0 || p2 == "" || p2 == 0 || p3 == "" || p3 == 0) {
-            alert1.setAttribute("class", "alert alert-danger col-md-10");
+            alert1.setAttribute("class", "alert alert-danger col-md-6");
             alert1.innerHTML = "All Points must be greater than 0";
             alert1.style.display = "block";
             return;
@@ -254,7 +261,7 @@ window.RationCardsApp = {
             location.reload();
         }).catch(function(e){
             console.log(e);
-            alert1.setAttribute("class", "alert alert-danger col-md-10");
+            alert1.setAttribute("class", "alert alert-danger col-md-6");
             alert1.innerHTML = "Sorry something went wrong, couldn't add points for this card";
             alert1.style.display = "block";
         });
@@ -264,7 +271,7 @@ window.RationCardsApp = {
         var self = this;
         var p1 = $("#give-flexi-point").val();
         if (p1 == "" || p1 == 0) {
-            alert2.setAttribute("class", "alert alert-danger col-md-10");
+            alert2.setAttribute("class", "alert alert-danger col-md-6");
             alert2.innerHTML = "Points must be greater than 0";
             alert2.style.display = "block";
             return;
@@ -280,7 +287,7 @@ window.RationCardsApp = {
             location.reload();
         }).catch(function(e){
             console.log(e);
-            alert2.setAttribute("class", "alert alert-danger col-md-10");
+            alert2.setAttribute("class", "alert alert-danger col-md-6");
             alert2.innerHTML = "Sorry something went wrong, couldn't add points for this card";
             alert2.style.display = "block";
         });

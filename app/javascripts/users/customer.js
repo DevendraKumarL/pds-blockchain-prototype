@@ -72,6 +72,7 @@ window.customerApp = {
 
     checkCookies: function() {
         var self = this;
+        $("#loading-content-text").html("Loading cookies ...");
         var login = self.checkLoginSessionCookie();
         if (login) {
             console.log(document.cookie);
@@ -100,7 +101,7 @@ window.customerApp = {
                         self.loadApprovedFps();
                         return;
                     } else {
-                        $('#cover').hide();
+                        $('#loadingOverlay').hide();
                         self.showHome();
                     }
                 }).catch(function(e){
@@ -108,16 +109,17 @@ window.customerApp = {
                     return;
                 });
             } else {
-                $('#cover').hide();
+                $('#loadingOverlay').hide();
                 self.showHome();
             }
         } else {
-            $('#cover').hide();
+            $('#loadingOverlay').hide();
             self.showHome();
         }
     },
 
     loadPlaces: function() {
+        $("#loading-content-text").html("Loading places ...");
         var self = this;
         var selectPlaceEle = document.getElementById('place-list')
         User.deployed().then(function(instance){
@@ -138,7 +140,7 @@ window.customerApp = {
 
     loadUsers: function() {
         var self = this;
-
+        $("#loading-content-text").html("Loading accounts from testrpc ...");
         // loadAcctsEle.style.display = "block";
         i = 0;
         loadUserInterval = setInterval(self.checkUserRegistered, 150);
@@ -233,8 +235,7 @@ window.customerApp = {
         var nodes = all.childNodes;
         console.log(nodes);
         for (var i = 1; i < nodes.length; i+=2) {
-            if (nodes[i].getAttribute('id') != "cover")
-                nodes[i].style.display = "none";
+            nodes[i].style.display = "none";
         }
     },
 
@@ -362,6 +363,7 @@ window.customerApp = {
 
     loadCustomerRationCards: function() {
         var self = this;
+        $("#loading-content-text").html("Loading customer ration cards ...");
         console.log("customer address => " + loggedCustomer);
         if (typeof loggedCustomer != 'undefined') {
             Approval.deployed().then(function(instance){
@@ -427,7 +429,7 @@ window.customerApp = {
                                 }
                             });
                         }
-                        $('#cover').hide();
+                        $('#loadingOverlay').hide();
                         self.showHome();
                     }).catch(function(e){
                         console.log(e);
@@ -440,7 +442,7 @@ window.customerApp = {
                     $("#ration-message-2").hide();
                     $("#ration-message-3").hide();
                     $("#ration-main-div").hide();
-                    $('#cover').hide();
+                    $('#loadingOverlay').hide();
                     return;
                 }
             }).catch(function(e){
@@ -454,6 +456,7 @@ window.customerApp = {
 
     loadApprovedFps: function() {
         var self = this;
+        $("#loading-content-text").html("Loading approved fps list ...");
         j = 2;
         prevAddr = "";
         loadApprovedFpsInterval = setInterval(self.loadAprovedFpsList, 150);
@@ -595,6 +598,16 @@ window.customerApp = {
             document.getElementById("fixed-card-custname").innerHTML = info[2];
             document.getElementById("fixed-card-street").innerHTML = info[3];
             document.getElementById("fixed-card-fps").innerHTML = info[5];
+            return rationCardGlobal.getRationCardPoints.call(0, loggedCustomer);
+        }).then(function(points){
+            console.log("fixed => " + points);
+            if (points[0]) {
+                $("#fixed-card-item1-points").html(points[1].valueOf());
+                $("#fixed-card-item2-points").html(points[2].valueOf());
+                $("#fixed-card-item3-points").html(points[3].valueOf());
+                $("#fixed-card-custaddr").html(points[4]);
+                return;
+            }
         }).catch(function(e){
             console.log(e);
             // alert.setAttribute("class", "alert alert-danger col-md-10");
@@ -624,6 +637,14 @@ window.customerApp = {
             document.getElementById("flexi-card-custname").innerHTML = info[2];
             document.getElementById("flexi-card-street").innerHTML = info[3];
             document.getElementById("flexi-card-fps").innerHTML = info[5];
+            return rationCardGlobal.getFlexiRationCardPoints.call(0, loggedCustomer);
+        }).then(function(points){
+            console.log("flexi => " + points);
+            if (points[0]) {
+                $("#flexi-card-points").html(points[1].valueOf());
+                $("#flexi-card-custaddr").html(points[2]);
+                return;
+            }
         }).catch(function(e){
             console.log(e);
             // alert.setAttribute("class", "alert alert-danger col-md-10");
@@ -658,6 +679,10 @@ window.customerApp = {
             opt.innerHTML = approvedFpsDb[i][1] + ", " + approvedFpsDb[i][0] + ", " + approvedFpsDb[i][4];
             selectApprovedFpsEle.appendChild(opt);
         }
+    },
+
+    showOverlay: function() {
+        $("#loadingOverlay").show();
     },
 
 };

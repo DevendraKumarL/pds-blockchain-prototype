@@ -65,6 +65,7 @@ window.ApprovalApp = {
 
     checkCookies: function() {
         var self = this;
+        $("#loading-content-text").html("Checking cookies ...");
         var login = self.checkLoginSessionCookie();
         var flag = false;
         if (login) {
@@ -112,10 +113,12 @@ window.ApprovalApp = {
         $("#not-logged-div-card").show();
         $("#ration-home-div").hide();
         $("#loading-main").hide();
+        $("#loadingOverlay").hide();
     },
 
     getListElements: function() {
         var self = this;
+        $("#loading-content-text").html("Loading DOM elements ...");
         $("#not-logged-div-card").hide();
         unapprovedCustDiv = document.getElementById("unapproved-list-customer")
         unapprovedFpsDiv = document.getElementById("unapproved-list-fps");
@@ -128,7 +131,7 @@ window.ApprovalApp = {
 
     loadUsers: function() {
          var self = this;
-
+         $("#loading-content-text").html("Loading accounts from testrpc ...");
         // loadAcctsEle.style.display = "block";
         i = 0;
         loadUserInterval = setInterval(self.checkUserRegistered, 150);
@@ -158,6 +161,7 @@ window.ApprovalApp = {
 
     loadUnApprovedandApprovedCustomersList: function() {
         var self = this;
+        $("#loading-content-text").html("Loading UnApproved and Approved customers ...");
 
         Approval.deployed().then(function(instance) {
             approvalGlobal = instance;
@@ -259,6 +263,7 @@ window.ApprovalApp = {
 
     loadUnapprovedAndApprovedFpsList: function() {
         var self = this;
+        $("#loading-content-text").html("Loading UnApproved and Approved Fps ...");
 
         var fpsNum;
         Approval.deployed().then(function(instance) {
@@ -357,6 +362,7 @@ window.ApprovalApp = {
            clearInterval(loadUnapproandApproFpsInterval);
            document.getElementById("load-3").style.display = "none";
            document.getElementById("load-4").style.display = "none";
+           $("#loadingOverlay").hide();
            $("#loading-main").hide();
            return;
        }
@@ -433,6 +439,7 @@ window.ApprovalApp = {
 
             approvedCustDiv.style.display = "block";
             approvedFpsDiv.style.display = "none";
+            $("#approval-home-div").hide();
         }
     },
 
@@ -443,6 +450,7 @@ window.ApprovalApp = {
 
             approvedCustDiv.style.display = "none";
             approvedFpsDiv.style.display = "block";
+            $("#approval-home-div").hide();
         }
     },
 
@@ -453,6 +461,7 @@ window.ApprovalApp = {
 
             approvedCustDiv.style.display = "none";
             approvedFpsDiv.style.display = "none";
+            $("#approval-home-div").hide();
         }
     },
 
@@ -463,7 +472,17 @@ window.ApprovalApp = {
 
             approvedCustDiv.style.display = "none";
             approvedFpsDiv.style.display = "none";
+            $("#approval-home-div").hide();
         }
+    },
+
+    showHome: function() {
+        $("#approval-home-div").show();
+        unapprovedCustDiv.style.display = "none";
+        unapprovedFpsDiv.style.display = "none";
+
+        approvedCustDiv.style.display = "none";
+        approvedFpsDiv.style.display = "none";
     },
 };
 

@@ -62,14 +62,15 @@ window.centralApp = {
             stateGovernmentAddress = accounts[1];
             console.log("centralGovernmentAddress => " + centralGovernmentAddress);
             console.log("stateGovernmentAddress => " + stateGovernmentAddress);
-            self.loadPlaces();
             self.loadUsers();
-            self.checkCookies();
+            // self.loadPlaces();
+            // self.checkCookies();
         });
     },
 
     checkCookies: function() {
         var self = this;
+        $("#loading-content-text").html("Checking cookies ...");
         var login = self.checkLoginSessionCookie();
         if (login) {
             // console.log(document.cookie);
@@ -91,18 +92,29 @@ window.centralApp = {
                         $("#login-link").remove();
                         $("#profile-link").show();
                         document.getElementById('profile-name').innerHTML = userinfo[1];
+                        $("#loadingOverlay").hide();
                         return;
+                    } else {
+                        $("#loadingOverlay").hide();
+                        self.showHome();
                     }
                 }).catch(function(e){
                     console.log(e);
                     return;
                 });
+            } else {
+                $("#loadingOverlay").hide();
+                self.showHome();
             }
+        } else {
+            $("#loadingOverlay").hide();
+            self.showHome();
         }
     },
 
     loadPlaces: function() {
         var self = this;
+        $("#loading-content-text").html("Loading places ...");
         var selectPlaceEle = document.getElementById('place-list')
         User.deployed().then(function(instance){
             userGlobal = instance;
@@ -113,6 +125,7 @@ window.centralApp = {
                     opt.innerHTML = list[i];
                     selectPlaceEle.appendChild(opt);
                 }
+                window.centralApp.checkCookies();
             });
         }).catch(function(e){
             console.log(e);
@@ -122,7 +135,7 @@ window.centralApp = {
 
     loadUsers: function() {
         var self = this;
-
+        $("#loading-content-text").html("Loading accounts from testrpc ...");
         // loadAcctsEle.style.display = "block";
         i = 0;
         loadUserInterval = setInterval(self.checkUserRegistered, 150);
@@ -139,6 +152,7 @@ window.centralApp = {
               clearInterval(loadUserInterval);
               // loadAcctsEle.style.display = "none";
               console.log("Finished loading/checking user registrations");
+              window.centralApp.loadPlaces();
             //   userDb[centralGovernmentAddress] = true;
             //   userDb[stateGovernmentAddress] = true;
             }

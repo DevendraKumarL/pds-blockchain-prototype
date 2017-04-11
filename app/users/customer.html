@@ -76,7 +76,12 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row" id="main">
-                    <div id="cover" class="col-md-10"></div>
+                    <div id="loadingOverlay" class="loader-overlay">
+                        <div class="loader-content loader-center">
+                            <img src="http://www.aveva.com/Images/ajax-loader.gif" class="loader-center" alt=""/>
+                            <div class="loader-center loader-text" id="loading-content-text">Loading, please wait...</div>
+                        </div>
+                    </div>
                     <div id="landing">
                         <h1>Customer</h1>
                         Some image and text here
@@ -95,7 +100,7 @@
                         <br>
                         <div class="input-group center-block">
                             <input type="password" id="c-password" class="form-control">
-                            <span class="input-group-addon" id="basic-addon1">Password</span>   
+                            <span class="input-group-addon" id="basic-addon1">Password</span>
                         </div>
                         <br>
                         <div class="">
@@ -135,7 +140,7 @@
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <button type="button" id="c-login" onclick="customerApp.login()" class="btn btn-primary">Register</button>
+                            <button type="button" id="c-login" onclick="customerApp.login()" class="btn btn-primary">Login</button>
                         </div>
                     </div>
                     <div class="col-md-12" id="ration-div">
@@ -179,20 +184,30 @@
                             <div class="col-md-12" id="view-card-details-div">
                                 <div class="card card-1" id="fixed-ration-card-div">
                                     <h6>Fixed Scheme RationCard Details</h6>
-                                    <hr size="1">
-                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Ration Card Number</b></label>&nbsp;: <span id="fixed-card-number"></span></p>
-                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Customer Name</b></label>&nbsp;: <span id="fixed-card-custname"></span></p>
-                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Street Address</b></label>&nbsp;: <span id="fixed-card-street"></span></p>
-                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>FPS</b></label>&nbsp;: <span id="fixed-card-fps"></span></p>
+                                    <hr size="2">
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Address</label>&nbsp;: <b><span id="fixed-card-custaddr"></span></b></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Ration Card Number</label>&nbsp;: <b><span id="fixed-card-number"></span></b></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Name</label>&nbsp;: <b><span id="fixed-card-custname"></span></b></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Street address</label>&nbsp;: <b><span id="fixed-card-street"></span></b></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; FPS Address</label>&nbsp;: <b><span id="fixed-card-fps"></span></b></p>
+                                    <h6>Fixed Scheme RationCard Points</h6>
+                                    <hr size="2">
+                                    <p><label><i class="fa fa-circle-thin"></i>&nbsp; Rice Points</label>&nbsp;: <b><span id="fixed-card-item1-points"></span></b></p>
+                                    <p><label><i class="fa fa-circle-thin"></i>&nbsp; Wheat Points</label>&nbsp;: <b><span id="fixed-card-item2-points"></span></b></p>
+                                    <p><label><i class="fa fa-circle-thin"></i>&nbsp; Sugar Points</label>&nbsp;: <b><span id="fixed-card-item3-points"></span></b></p>
                                 </div>
                                 <div class="clearfix"><br></div>
                                 <div class="card card-1" id="flexi-ration-card-div">
                                     <h6>Flexi Scheme RationCard Details</h6>
-                                    <hr size="1">
-                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Ration Card Number</b></label>&nbsp;: <span id="flexi-card-number"></span></p>
-                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Customer Name</b></label>&nbsp;: <span id="flexi-card-custname"></span></p>
-                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Street Address</b></label>&nbsp;: <span id="flexi-card-street"></span></p>
-                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>FPS</b></label>&nbsp;: <span id="flexi-card-fps"></span></p>
+                                    <hr size="2">
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Address</label>&nbsp;: <b><span id="flexi-card-custaddr"></span></b></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Ration Card Number</label>&nbsp;: <b><span id="flexi-card-number"></span></b></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Name</label>&nbsp;: <b><span id="flexi-card-custname"></span></b></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Street address</label>&nbsp;: <b><span id="flexi-card-street"></span></b></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; FPS Address</label>&nbsp;: <b><span id="flexi-card-fps"></span></b></p>
+                                    <h6>Flexi Scheme RationCard Points</h6>
+                                    <hr size="2">
+                                    <p><label><i class="fa fa-circle-thin"></i>&nbsp; Total Points</label>&nbsp;: <b><span id="flexi-card-points"></span></b></p>
                                 </div>
                             </div>
                         </div>
