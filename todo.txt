@@ -42,8 +42,8 @@ if possible =>
             <!-- if exists show details upon Authentication --> **Tick**
             <!-- if not exists then take details from customer and create a new one upon Authentication --> **Tick**
         -> view ration card points and details: customer (by government)
-            -> view fixed scheme ration card points
-            -> view flexi scheme ration card points
+            -> view fixed scheme ration card points **Tick**
+            -> view flexi scheme ration card points **Tick**
             -> give points
         -> a modal to authenticate user for making any transaction
         -> dashboard1:

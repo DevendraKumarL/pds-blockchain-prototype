@@ -222,9 +222,10 @@ window.customerApp = {
     hideAll: function() {
         var all = document.getElementById('main');
         var nodes = all.childNodes;
-        // console.log(nodes);
+        console.log(nodes);
         for (var i = 1; i < nodes.length; i+=2) {
-            nodes[i].style.display = "none";
+            if (nodes[i].getAttribute('id') != "cover")
+                nodes[i].style.display = "none";
         }
     },
 
@@ -417,6 +418,8 @@ window.customerApp = {
                                 }
                             });
                         }
+                        $('#cover').hide();
+                        self.showHome();
                     }).catch(function(e){
                         console.log(e);
                     });
