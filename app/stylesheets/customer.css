@@ -4,10 +4,22 @@
 #customer-login {
     display: none;
 }
+#ration-div {
+    display: none;
+}
 #ration-message {
     display: none;
 }
+#must-login-customer {
+    display: none;
+}
 #ration-main-div {
+    display: none;
+}
+#create-ration-card-div {
+    display: none;
+}
+#create-ration-card-div-flexi {
     display: none;
 }
 #fixed-ration-card-div {
@@ -16,9 +28,6 @@
 #flexi-ration-card-div {
     display: none;
 }
-#create-ration-card-div {
-    display: none;
-}
-#create-ration-card-div-flexi {
+#view-card-details-div {
     display: none;
 }

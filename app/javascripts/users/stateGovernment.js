@@ -48,21 +48,6 @@ window.stateApp = {
             console.log(rationCardGlobal);
         });
 
-        // var login = self.checkLoginSessionCookie();
-        // if (login) {
-        //     console.log(document.cookie);
-        //     var cookies = document.cookie.split("; ");
-        //     for (var a = 0; a < cookies.length; a++) {
-        //         if (cookies[a].split("=")[0] == "state") {
-        //             $("#register-link").remove();
-        //             $("#login-link").remove();
-        //             $("#profile-link").show();
-        //             document.getElementById('profile-name').innerHTML = cookies[a].split("=")[1].split("*")[1];
-        //             return;
-        //         }
-        //     }
-        // }
-
         web3.eth.getAccounts(function(err, accs){
             if (err) {
                 alert("Error loading accounts");

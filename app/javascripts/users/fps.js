@@ -21,6 +21,8 @@ var userGlobal, approvalGlobal, rationCardGlobal;
 // get all accounts and store whoever is registered
 var userDb = {};
 
+var loggedFps, fpsData;
+
 var governDiv, custDiv, fpsDiv;
 var loadAcctsEle, selectPlaceEle;
 var i, loadUserInterval;
@@ -47,21 +49,6 @@ window.fpsApp = {
             rationCardGlobal = instance;
             console.log(rationCardGlobal);
         });
-
-        // var login = self.checkLoginSessionCookie();
-        // if (login) {
-        //     console.log(document.cookie);
-        //     var cookies = document.cookie.split("; ");
-        //     for (var a = 0; a < cookies.length; a++) {
-        //         if (cookies[a].split("=")[0] == "fps") {
-        //             $("#register-link").remove();
-        //             $("#login-link").remove();
-        //             $("#profile-link").show();
-        //             document.getElementById('profile-name').innerHTML = cookies[a].split("=")[1].split("*")[1];
-        //             return;
-        //         }
-        //     }
-        // }
 
         web3.eth.getAccounts(function(err, accs){
             if (err) {
@@ -106,6 +93,9 @@ window.fpsApp = {
                         $("#login-link").remove();
                         $("#profile-link").show();
                         document.getElementById('profile-name').innerHTML = userinfo[1];
+                        loggedFps = userinfo[0];
+                        fpsData = userinfo;
+                        console.log(loggedFps + " - " + fpsData);
                         return;
                     }
                 }).catch(function(e){

@@ -15,8 +15,8 @@ var RationCard = contract(rationCard_artifacts);
 
 var accounts, centralGovernmentAddress;
 var rationCardGlobal, userGlobal;
-var latestCardNUmber;
-var alert, fixedRationCardDiv, flexiRationCardDiv;
+var latestFixedCardNumber, latestFlexiCardNumber;
+var alert1, alert2, fixedRationCardDiv, flexiRationCardDiv;
 var loggedIn = false;
 
 window.RationCardsApp = {
@@ -34,7 +34,8 @@ window.RationCardsApp = {
             console.log(rationCardGlobal);
         });
 
-        alert = document.getElementById("alert-message");
+        alert1 = document.getElementById("alert-message-fixed");
+        alert2 = document.getElementById("alert-message-flexi");
 
         web3.eth.getAccounts(function(err, accs) {
             if (err) {
@@ -76,26 +77,37 @@ window.RationCardsApp = {
                         $("#register-link").remove();
                         $("#login-link").remove();
                         $("#profile-link").show();
+                        $("#not-logged-div-card").hide();
                         document.getElementById('profile-name').innerHTML = userinfo[1];
-                        self.getListElements();
                         loggedIn = true;
+                        self.getListElements();
                         // return;
                     } else {
-                        $("#profile-link").hide();
-                        $("#not-logged-div-card").show();
+                        self.notLoggedIn();
                     }
                 }).catch(function(e){
                     console.log(e);
                     return;
                 });
+            } else {
+                self.notLoggedIn();
             }
+        }  else {
+            self.notLoggedIn();
         }
+    },
+
+    notLoggedIn: function() {
+        var self = this;
+        $("#profile-link").hide();
+        $("#not-logged-div-card").show();
+        $("#ration-home-div").hide();
     },
 
     getListElements: function() {
         var self = this;
         fixedRationCardDiv = document.getElementById('fixed-ration-card-div');
-        // flexiRationCardDiv = document.getElementById('flexi-ration-card-div');
+        flexiRationCardDiv = document.getElementById('flexi-ration-card-div');
         self.getLatestCardNumber();
     },
 
@@ -106,13 +118,17 @@ window.RationCardsApp = {
             rationCardGlobal = instance;
             return rationCardGlobal.cardNumber.call();
         }).then(function(num){
-            console.log("Latest card number => " + num.valueOf());
-            latestCardNUmber = parseInt(num.valueOf());
+            console.log("Latest Fixed Rationcard number => " + num.valueOf());
+            latestFixedCardNumber = parseInt(num.valueOf());
+            return rationCardGlobal.flexiCardNumber.call();
+        }).then(function(num){
+            console.log("Latest Flexi Rationcard number => " + num.valueOf());
+            latestFlexiCardNumber = parseInt(num.valueOf());
         }).catch(function(e){
             console.log(e);
-            alert.setAttribute("class", "alert alert-danger col-md-10");
-            alert.innerHTML = "Couldn't fetch the latest ration card number. Error: " + e;
-            alert.style.display = "block";
+            // alert.setAttribute("class", "alert alert-danger col-md-10");
+            // alert.innerHTML = "Couldn't fetch the latest ration card number. Error: " + e;
+            // alert.style.display = "block";
         });
     },
 
@@ -120,10 +136,10 @@ window.RationCardsApp = {
         var self = this;
 
         var number = document.getElementById("fixed-ration-card-number");
-        if (number.value < 1001 && number.value >= latestCardNUmber) {
-            alert.setAttribute("class", "alert alert-danger col-md-10");
-            alert.innerHTML = "RationCard number must between 1001 and  " + latestCardNUmber;
-            alert.style.display = "block";
+        if (number.value < 1001 && number.value >= latestFixedCardNumber) {
+            alert1.setAttribute("class", "alert alert-danger col-md-10");
+            alert1.innerHTML = "Fixed RationCard number must between 1001 and  " + latestFixedCardNumber;
+            alert1.style.display = "block";
             return;
         }
 
@@ -131,29 +147,70 @@ window.RationCardsApp = {
             rationCardGlobal = instance;
             return rationCardGlobal.getRationCardInfo.call(number.value, '');
         }).then(function(info){
-            console.log(info);
+            console.log("RationCard => " + info);
             if (!info[0]) {
-                alert.setAttribute("class", "alert alert-danger col-md-10");
-                alert.innerHTML = "That ration card number is invalid";
-                alert.style.display = "block";
-                document.getElementById("card-details-div").style.display = "none";
+                alert1.setAttribute("class", "alert alert-danger col-md-10");
+                alert1.innerHTML = "That ration card number is invalid";
+                alert1.style.display = "block";
+                document.getElementById("fixed-card-details-div").style.display = "none";
                 return;
             }
-            alert.setAttribute("class", "alert alert-success col-md-10");
-            alert.innerHTML = "Ration card details fetched successfully";
-            alert.style.display = "block";
-            var details = document.getElementById("card-details-div");
-            document.getElementById("card-number").innerHTML = info[1].valueOf();
-            document.getElementById("card-custname").innerHTML = info[2];
-            document.getElementById("card-street").innerHTML = info[3];
-            document.getElementById("card-fps").innerHTML = info[5];
+            alert1.setAttribute("class", "alert alert-success col-md-10");
+            alert1.innerHTML = "Fixed Scheme Rationcard details fetched successfully";
+            alert1.style.display = "block";
+            var details = document.getElementById("fixed-card-details-div");
+            document.getElementById("fixed-card-number").innerHTML = info[1].valueOf();
+            document.getElementById("fixed-card-custname").innerHTML = info[2];
+            document.getElementById("fixed-card-street").innerHTML = info[3];
+            document.getElementById("fixed-card-fps").innerHTML = info[5];
             details.style.display = "block";
 
         }).catch(function(e){
             console.log(e);
-            alert.setAttribute("class", "alert alert-danger col-md-10");
-            alert.innerHTML = "Couldn't fetch ration card details. Error: " + e;
-            alert.style.display = "block";
+            alert1.setAttribute("class", "alert alert-danger col-md-10");
+            alert1.innerHTML = "Couldn't fetch ration card details.";
+            alert1.style.display = "block";
+        });
+    },
+
+    viewFlexiRatioCardDetais: function() {
+        var self = this;
+
+        var number = document.getElementById("flexi-ration-card-number");
+        if (number.value < 5001 && number.value >= latestFlexiCardNumber) {
+            alert2.setAttribute("class", "alert alert-danger col-md-10");
+            alert2.innerHTML = "Flexi Scheme RationCard number must between 1001 and  " + latestFixedCardNumber;
+            alert2.style.display = "block";
+            return;
+        }
+
+        RationCard.deployed().then(function(instance){
+            rationCardGlobal = instance;
+            return rationCardGlobal.getFlexiRationCardInfo.call(number.value, '');
+        }).then(function(info){
+            console.log(info);
+            if (!info[0]) {
+                alert2.setAttribute("class", "alert alert-danger col-md-10");
+                alert2.innerHTML = "That ration card number is invalid";
+                alert2.style.display = "block";
+                document.getElementById("flexi-card-details-div").style.display = "none";
+                return;
+            }
+            alert2.setAttribute("class", "alert alert-success col-md-10");
+            alert2.innerHTML = "Flexi Scheme Rationcard details fetched successfully";
+            alert2.style.display = "block";
+            var details = document.getElementById("flexi-card-details-div");
+            document.getElementById("flexi-card-number").innerHTML = info[1].valueOf();
+            document.getElementById("flexi-card-custname").innerHTML = info[2];
+            document.getElementById("flexi-card-street").innerHTML = info[3];
+            document.getElementById("flexi-card-fps").innerHTML = info[5];
+            details.style.display = "block";
+
+        }).catch(function(e){
+            console.log(e);
+            alert2.setAttribute("class", "alert alert-danger col-md-10");
+            alert2.innerHTML = "Couldn't fetch ration card details. Error: " + e;
+            alert2.style.display = "block";
         });
     },
 
@@ -173,25 +230,31 @@ window.RationCardsApp = {
         location.reload();
     },
 
-    showFixedRationCard: function() {
-        if (loggedIn) {
-            fixedRationCardDiv.style.display = "block";
-            // flexiRationCardDiv.style.display = "none";
-            $("#ration-home-div").hide();
-        }
-    },
-
     showHome: function() {
         if (loggedIn) {
             fixedRationCardDiv.style.display = "none";
+            flexiRationCardDiv.style.display = "none";
         }
         $("#ration-home-div").show();
     },
 
+    showFixedRationCard: function() {
+        if (loggedIn) {
+            fixedRationCardDiv.style.display = "block";
+            flexiRationCardDiv.style.display = "none";
+            $("#alert-message-fixed").hide();
+            $("#fixed-card-details-div").hide();
+            $("#ration-home-div").hide();
+        }
+    },
+
     showFlexiRationCard: function() {
         if (loggedIn) {
-            // fixedRationCardDiv.style.display = "none";
-            // flexiRationCardDiv.style.display = "block";
+            fixedRationCardDiv.style.display = "none";
+            flexiRationCardDiv.style.display = "block";
+            $("#alert-message-flexi").hide();
+            $("#flexi-card-details-div").hide();
+            $("#ration-home-div").hide();
         }
     },
 

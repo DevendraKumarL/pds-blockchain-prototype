@@ -47,29 +47,6 @@ window.ApprovalApp = {
             console.log(approvalGlobal);
         });
 
-        // var login = self.checkLoginSessionCookie();
-        // var flag = false;
-        // if (login) {
-        //     // console.log(document.cookie);
-        //     var cookies = document.cookie.split("; ");
-        //     for (var a = 0; a < cookies.length; a++) {
-        //         if (cookies[a].split("=")[0] == "central") {
-        //             $("#profile-link").show();
-        //             flag = true;
-        //             document.getElementById('profile-name').innerHTML = cookies[a].split("=")[1].split("*")[1];
-        //             break;
-        //         }
-        //     }
-        // }
-
-        // if (!flag) {
-        //     $("#profile-link").hide();
-        //     $("#not-logged-div-card").show();
-        //     $("#loading-main").hide();
-        //     // document.getElementById('not-logged-div-card').style.display = "block";
-        //     // document.getElementById('loading-main').style.display = "none";
-        // }
-
         web3.eth.getAccounts(function(err, accs) {
             if (err) {
                 alert("Error loading accounts");
@@ -115,20 +92,31 @@ window.ApprovalApp = {
                         loggedIn = true;
                         // return;
                     } else {
-                        $("#profile-link").hide();
-                        $("#not-logged-div-card").show();
-                        $("#ration-home-div").hide();
+                        self.notLoggedIn();
                     }
                 }).catch(function(e){
                     console.log(e);
                     return;
                 });
+            } else {
+                self.notLoggedIn();
             }
+        }  else {
+            self.notLoggedIn();
         }
+    },
+
+    notLoggedIn: function() {
+        var self = this;
+        $("#profile-link").hide();
+        $("#not-logged-div-card").show();
+        $("#ration-home-div").hide();
+        $("#loading-main").hide();
     },
 
     getListElements: function() {
         var self = this;
+        $("#not-logged-div-card").hide();
         unapprovedCustDiv = document.getElementById("unapproved-list-customer")
         unapprovedFpsDiv = document.getElementById("unapproved-list-fps");
 

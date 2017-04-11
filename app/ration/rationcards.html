@@ -65,29 +65,54 @@
                                 <h3>PDS | Rationcards for Fixed and Flexi PDS Scheme</h3>
                             </center>
                         </div>
-                        <div class="container" id="fixed-ration-card-div">
-                            <div class="alert alert-danger col-md-10" id="alert-message">
+                        <div class="col-md-12" id="fixed-ration-card-div">
+                            <div class="alert col-md-10" id="alert-message-fixed">
+                            Message here
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-6 card card-1">
+                                <h6>Enter Fixed Scheme Ration Card Number</h6>
+                                <div class="input-group">
+                                    <input type="number" id="fixed-ration-card-number" class="form-inline">
+                                    <span class="input-group-addon">RationCard Number</span>
+                                </div>
+                                <div class="input-group">
+                                    <button type="button" onclick="RationCardsApp.viewFixedRatioCardDetais()" class="btn btn-primary-outline btn-sm">View</button>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-8 card card-1" id="fixed-card-details-div">
+                                <h6>Fixed Scheme RationCard Details</h6>
+                                <hr size="2">
+                                <p><label><b>Ration Card Number</b></label>&nbsp;: <span id="fixed-card-number"></span></p>
+                                <p><label><b>Customer Name</b></label>&nbsp;: <span id="fixed-card-custname"></span></p>
+                                <p><label><b>Street Address</b></label>&nbsp;: <span id="fixed-card-street"></span></p>
+                                <p><label><b>FPS</b></label>&nbsp;: <span id="fixed-card-fps"></span></p>
+                            </div>
+                        </div>
+                        <div class="col-md-12" id="flexi-ration-card-div">
+                            <div class="alert col-md-10" id="alert-message-flexi">
                             Message here
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-md-6 card card-2">
-                                <h6>Enter Ration Card Number</h6>
+                                <h6>Enter Flexi Scheme Ration Card Number</h6>
                                 <div class="input-group">
-                                    <input type="number" id="fixed-ration-card-number" class="form-control">
+                                    <input type="number" id="flexi-ration-card-number" class="form-inline">
                                     <span class="input-group-addon">RationCard Number</span>
                                 </div>
-                                <div class="clearfix"><br></div>
                                 <div class="input-group">
-                                    <button type="button" id="ration-card-number-btn" onclick="RationCardsApp.viewFixedRatioCardDetais()" class="btn btn-primary-outline btn-sm">View</button>
+                                    <button type="button" onclick="RationCardsApp.viewFlexiRatioCardDetais()" class="btn btn-primary-outline btn-sm">View</button>
                                 </div>
                             </div>
-                            <hr size="2">
                             <div class="clearfix"></div>
-                            <div class="col-md-8 card card-1" id="card-details-div">
-                            <p><label><b>Ration Card Number</b></label>&nbsp;: <span id="card-number">1001</span></p>
-                            <p><label><b>Customer Name</b></label>&nbsp;: <span id="card-custname"> Devendra Kumar</span></p>
-                            <p><label><b>Street Address</b></label>&nbsp;: <span id="card-street"> No.923, 7th main, raghavendra block, Avalahalli main road, Srinagar, Bangalore - 560050</span></p>
-                            <p><label><b>FPS</b></label>&nbsp;: <span id="card-fps">FPS32</span></p>
+                            <div class="col-md-8 card card-1" id="flexi-card-details-div">
+                                <h6>Flexi Scheme RationCard Details</h6>
+                                <hr size="2">
+                                <p><label><b>Ration Card Number</b></label>&nbsp;: <span id="flexi-card-number"></span></p>
+                                <p><label><b>Customer Name</b></label>&nbsp;: <span id="flexi-card-custname"></span></p>
+                                <p><label><b>Street Address</b></label>&nbsp;: <span id="flexi-card-street"></span></p>
+                                <p><label><b>FPS</b></label>&nbsp;: <span id="flexi-card-fps"></span></p>
                             </div>
                         </div>
                     </div>

@@ -4,11 +4,6 @@
 #central-goverment-login {
     display: none;
 }
-#not-logged-div-card {
-    display: none;
-    margin: auto;
-    top: 100px;
-}
 #unapproved-list-customer {
     display: none;
 }
@@ -21,10 +16,12 @@
 #approved-list-fps {
     display: none;
 }
-/*#ration-home-div {
-    margin: auto;
-    top: 100px;
-}*/
+#ration-home-div {
+    display: none;
+}
 #fixed-ration-card-div {
+    display: none;
+}
+#flexi-ration-card-div {
     display: none;
 }

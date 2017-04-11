@@ -15,7 +15,7 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#" id="pds-home">PDS</a>
+        <a class="navbar-brand" href="#" id="pds-home"><i class="fa fa-bars"></i> &nbsp;PDS</a>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <!-- <li class="nav-item active">
@@ -63,7 +63,7 @@
                     <a href="#"><i class="fa fa-calendar-o"></i> Events</a>
                 </li>
                 <li>
-                    <a href="#" onclick="customerApp.showCustomerRationCards()"><i class="fa fa-address-card"></i> RationCards</a>
+                    <a href="#" onclick="customerApp.showRationCards()"><i class="fa fa-address-card"></i> RationCards</a>
                 </li>
                 <li>
                     <a href="#">Services</a>
@@ -137,49 +137,63 @@
                             <button type="button" id="c-login" onclick="customerApp.login()" class="btn btn-primary">Register</button>
                         </div>
                     </div>
-                    <div class="col-md-12" id="ration-message">
-                        <div class="alert col-md-8" id="ration-message-1">
-                            MEssage here ...
+                    <div class="col-md-12" id="ration-div">
+                        <div class="alert alert-danger col-md-6" id="must-login-customer">
+                            Must Login
                         </div>
-                        <div class="alert col-md-8" id="ration-message-2">
-                            MEssage here ...
+                        <div class="col-md-12" id="ration-message">
+                            <div class="alert col-md-6" id="ration-message-1">
+                                MEssage here ...
+                            </div>
+                            <div class="alert col-md-6" id="ration-message-2">
+                                MEssage here ...
+                            </div>
+                            <div class="alert col-md-6" id="ration-message-3">
+                                MEssage here ...
+                            </div>
                         </div>
-                        <div class="alert col-md-8" id="ration-message-3">
-                            MEssage here ...
-                        </div>
-                    </div>
-                    <div class="card card-2" id="ration-main-div">
-                        <div class="clearfix"></div>
-                        <h5>RationCard</h5>
-                        <label class="custom-control custom-radio">
-                            <input id="radio3" name="radio_new" type="radio" class="custom-control-input">
-                            <span class="custom-control-indicator"></span>
-                            <span class="custom-control-description">Fixed Scheme RationCard</span>
-                        </label>
-                        <label class="custom-control custom-radio">
-                            <input id="radio4" name="radio_new" type="radio" class="custom-control-input">
-                            <span class="custom-control-indicator"></span>
-                            <span class="custom-control-description">Flexi Scheme RationCard</span>
-                        </label>
-                        <div class="" id="create-ration-card-div">
-                            <button type="button" id="create-ration-card-btn" data-toggle="modal" data-target="#myModal" class="btn btn-primary btn-md">
-                                Create RationCard for Fixed Scheme
-                            </button>
-                        </div>
-                        <div class="" id="create-ration-card-div-flexi">
-                            <button type="button" id="create-ration-card-btn-flexi" data-toggle="modal" data-target="#myModal-flexi" class="btn btn-primary btn-md">
-                                Create RationCard for Flexi Scheme
-                            </button>
-                        </div>
-                        <div class="" id="fixed-ration-card-div">
-                            <hr size="1">
-                            <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Ration Card Number</b></label>&nbsp;: <span id="fixed-card-number"></span></p>
-                            <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Customer Name</b></label>&nbsp;: <span id="fixed-card-custname"></span></p>
-                            <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Street Address</b></label>&nbsp;: <span id="fixed-card-street"></span></p>
-                            <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>FPS</b></label>&nbsp;: <span id="fixed-card-fps"></span></p>
-                        </div>
-                        <div class="" id="flexi-ration-card-div">
-
+                        <div class="card col-md-6" id="ration-main-div">
+                            <div class="clearfix"></div>
+                            <h5>RationCards</h5>
+                            <label class="custom-control custom-radio" id="radio3-label">
+                                <input id="radio3" name="radio_new" type="radio" class="custom-control-input">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Fixed Scheme RationCard</span>
+                            </label>
+                            <label class="custom-control custom-radio" id="radio4-label">
+                                <input id="radio4" name="radio_new" type="radio" class="custom-control-input">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Flexi Scheme RationCard</span>
+                            </label>
+                            <div class="" id="create-ration-card-div">
+                                <button type="button" id="create-ration-card-btn" data-toggle="modal" data-target="#myModal" class="btn btn-primary btn-md">
+                                    Create RationCard for Fixed Scheme
+                                </button>
+                            </div>
+                            <div class="" id="create-ration-card-div-flexi">
+                                <button type="button" id="create-ration-card-btn-flexi" data-toggle="modal" data-target="#myModal-flexi" class="btn btn-primary btn-md">
+                                    Create RationCard for Flexi Scheme
+                                </button>
+                            </div>
+                            <div class="col-md-10" id="view-card-details-div">
+                                <div class="card card-1" id="fixed-ration-card-div">
+                                    <h6>Fixed Scheme RationCard Details</h6>
+                                    <hr size="1">
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Ration Card Number</b></label>&nbsp;: <span id="fixed-card-number"></span></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Customer Name</b></label>&nbsp;: <span id="fixed-card-custname"></span></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Street Address</b></label>&nbsp;: <span id="fixed-card-street"></span></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>FPS</b></label>&nbsp;: <span id="fixed-card-fps"></span></p>
+                                </div>
+                                <div class="clearfix"><br></div>
+                                <div class="card card-1" id="flexi-ration-card-div">
+                                    <h6>Flexi Scheme RationCard Details</h6>
+                                    <hr size="1">
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Ration Card Number</b></label>&nbsp;: <span id="flexi-card-number"></span></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Customer Name</b></label>&nbsp;: <span id="flexi-card-custname"></span></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>Street Address</b></label>&nbsp;: <span id="flexi-card-street"></span></p>
+                                    <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; <b>FPS</b></label>&nbsp;: <span id="flexi-card-fps"></span></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -209,14 +223,14 @@
                         <input type="text" id="ration-customer-addr" class="form-control col-md-8" disabled="true">
                         <span class="input-group-addon">Customer Address</span>
                     </div>
-                    <!-- <div class="clearfix"><br></div> -->
+                    <div class="clearfix"><br></div>
                     <!-- customer must choose from the list, [fpsaddr, name, place] -->
-                    <!-- <div class="input-group center-block">
-                        <select id="select-approved-list-fps" class="custom-select col-md-8">
+                    <div class="input-group center-block">
+                        <select id="select-approved-list-fps-fixed" class="custom-select col-md-8">
                         <option value="-1">Select FPS</option>
                         </select>
-                        <span class="input-group-addon">FPS Address</span>
-                    </div> -->
+                        <span class="input-group-addon" id="fps-address-fixed">FPS Address</span>
+                    </div>
                     <div class="clearfix"><br></div>
                     <div class="input-group center-block">
                         <textarea id="ration-customer-street-address" rows="3" cols="80" placeholder="Street address"></textarea>
@@ -225,6 +239,11 @@
                     <div class="input-group center-block">
                         <input type="text" id="ration-customer-user-type"class="form-control" disabled="true">
                         <span class="input-group-addon">Usertype</span>
+                    </div>
+                    <div class="clearfix"><br></div>
+                    <div class="input-group center-block">
+                        <input type="text" id="ration-customer-place"class="form-control" disabled="true">
+                        <span class="input-group-addon">Place</span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -254,22 +273,27 @@
                         <input type="text" id="ration-customer-addr-flexi" class="form-control col-md-8" disabled="true">
                         <span class="input-group-addon">Customer Address</span>
                     </div>
-                    <!-- <div class="clearfix"><br></div> -->
+                    <div class="clearfix"><br></div>
                     <!-- customer must choose from the list, [fpsaddr, name, place] -->
-                    <!-- <div class="input-group center-block">
-                        <select id="select-approved-list-fps" class="custom-select col-md-8">
+                    <div class="input-group center-block">
+                        <select id="select-approved-list-fps-flexi" class="custom-select col-md-8">
                         <option value="-1">Select FPS</option>
                         </select>
-                        <span class="input-group-addon">FPS Address</span>
-                    </div> -->
+                        <span class="input-group-addon" id="fps-address-flexi">FPS Address</span>
+                    </div>
                     <div class="clearfix"><br></div>
                     <div class="input-group center-block">
-                        <textarea id="ration-customer-street-address" rows="3" cols="80" placeholder="Street address"></textarea>
+                        <textarea id="ration-customer-street-address-flexi" rows="3" cols="80" placeholder="Street address"></textarea>
                     </div>
                     <div class="clearfix"><br></div>
                     <div class="input-group center-block">
                         <input type="text" id="ration-customer-user-type-flexi"class="form-control" disabled="true">
                         <span class="input-group-addon">Usertype</span>
+                    </div>
+                    <div class="clearfix"><br></div>
+                    <div class="input-group center-block">
+                        <input type="text" id="ration-customer-place-flexi"class="form-control" disabled="true">
+                        <span class="input-group-addon">Place</span>
                     </div>
                 </div>
                 <div class="modal-footer">
