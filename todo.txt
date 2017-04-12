@@ -1,5 +1,10 @@
 if possible =>
     -> **** change {from: centralGovernmentAddress} of all the transactions to use the address of the actual sender ****
+    -> optimize js code and remove unwanted code
+    -> write tests for creating central, state government, 2 customers, 3 fps
+        -> approve customers and fps
+        -> then create fixed & flexi ration cards
+        -> central government to provide points for each card
     -> store a global user address for customer **Tick** and fps when only logged-in **Tick**
     -> ** Optimize approvals.js **Tick**
     -> home div for approvals.html **Tick**
