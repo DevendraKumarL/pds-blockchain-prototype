@@ -8,6 +8,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Droid+Sans|Merriweather|PT+Sans" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lato|Questrial|Signika" rel="stylesheet">
         <script src="./approvals.js"></script>
     </head>
     <body>
@@ -15,7 +17,7 @@
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="#" id="pds-home">PDS</a>
+            <a class="navbar-brand" href="#" id="pds-home"><i class="fa fa-bars"></i> &nbsp;PDS</a>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
                 <ul class="navbar-nav my-2 my-lg-0">
@@ -171,6 +173,22 @@
 
         </div>
         <!-- /#wrapper -->
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to approve ?&nbsp;</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" class="close" data-dismiss="modal" aria-label="Close">No</button>
+                        <button type="button" class="btn btn-primary" id="confirm-approve-btn" class="close" data-dismiss="modal" aria-label="Close">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scripts -->
         <script>
         $("#pds-home").click(function(e){
             e.preventDefault();

@@ -1,3 +1,31 @@
+body, input, button, p, span, div {
+    /*font-family: 'PT Sans', sans-serif;*/
+    /*font-family: 'Merriweather', serif;*/
+    /*font-family: 'Droid Sans', sans-serif;*/
+    font-family: 'Signika', sans-serif;
+    /*font-family: 'Questrial', sans-serif;*/
+    /*font-family: 'Lato', sans-serif;*/
+}
+
+.modal {
+  text-align: center;
+  padding: 0!important;
+}
+
+.modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
 .card {
   background: #fff;
   border-radius: 2px;

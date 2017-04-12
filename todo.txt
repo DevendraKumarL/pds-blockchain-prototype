@@ -8,8 +8,11 @@ if possible =>
     -> store a global user address for customer **Tick** and fps when only logged-in **Tick**
     -> ** Optimize approvals.js **Tick**
     -> home div for approvals.html **Tick**
+    -> check validations from user input in ui ??
     -> remove {from: ...} in .call() method calls
-    -> add authentication layer for any new transaction execution
+    -> add authentication layer (modal) for any new transaction execution (food and money transfer)
+    -> notification panel/alert modal after successfully executing a transaction
+    -> notification panel/alert modal after failure of transaction call
     -> government buys a kg a rice for 26/- and sells it to customer at 1/-
         -> so the contract has to keep tract the foodflow and money from customers
         -> thus track the **BENEFIT FLOW**
@@ -23,7 +26,6 @@ if possible =>
         *SupplyCentralToStateGovernment_HashLog
         confirmed or not ??
         -> Should it be added to the final transfer log analytics/graph/stats ??
-    -> use MetaMask, show individual functionalities of each contract, ideal way of using blockchain
     -> UI
         -> ** Rename paths **
         -> **COLORS**
@@ -49,13 +51,13 @@ if possible =>
         -> view ration card points and details: customer (by government)
             -> view fixed scheme ration card points **Tick**
             -> view flexi scheme ration card points **Tick**
-            -> give points **Tick**
+            -> give ration card points **Tick**
         -> separate webpage to show testrpc avaiable accounts **Tick**
         -> separate webpage to get info of registered users on pds blockchain using accounts address **Tick**
         -> a modal to authenticate user for making any transaction
         -> dashboard1:
-            ->centralGovernment to see registrations, approvals, and
-                 to see ration card points and flexi ration card points given (based on budget ??)
+            ->centralGovernment to see registrations, approvals, ration cards creations and
+                to see ration card points and flexi ration card points given (based on budget ??)
         -> food and rupee transaction:
             ->customer
             ->fps
@@ -64,10 +66,11 @@ if possible =>
                 ...
         -> use bootstrap tables ??
         -> blockchain information
-            -> all transactions
+            -> all transactions, block count
             -> web3. ...
             -> web3.eth. ..
             ... ... ... ... ... ... ...
+        -> use MetaMask, show individual functionalities of each contract, ideal way of using blockchain
         -> loading overlay when loading any webpage so that all the background loading tasks
             from testrpc are finished before any user action is taken **Tick**
         -> Everything into one page, Generic, possible but leave for now.
