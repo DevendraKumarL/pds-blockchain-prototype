@@ -179,24 +179,14 @@ contract RationCard {
             }
         }
 
-        if (rationCardOf[_customerAddress].foodItem1Points == _point1
-            && rationCardOf[_customerAddress].foodItem2Points == _point2
-            && rationCardOf[_customerAddress].foodItem3Points == _point3) {
-            uint tmp;
-            for (uint i = 0; i < rationCards.length; i++) {
-                if (rationCards[i].customerAddress == _customerAddress) {
-                    rationCards[i].foodItem1Points += _point1;
-                    rationCards[i].foodItem2Points += _point2;
-                    rationCards[i].foodItem3Points += _point3;
-                    tmp = i;
-                    break;
-                }
-            }
-            if (rationCards[tmp].foodItem1Points == _point1
-                && rationCards[tmp].foodItem2Points == _point2
-                && rationCards[tmp].foodItem3Points == _point3) {
+        for (uint i = 0; i < rationCards.length; i++) {
+            if (rationCards[i].customerAddress == _customerAddress) {
+                rationCards[i].foodItem1Points += _point1;
+                rationCards[i].foodItem2Points += _point2;
+                rationCards[i].foodItem3Points += _point3;
                 success = true;
                 RationCardPointsAdded(_customerAddress, _point1, _point2, _point3);
+                break;
             }
         }
         return success;
@@ -229,19 +219,12 @@ contract RationCard {
                 flexiCardOf[_customerAddress].creditPoints += _points;
             }
         }
-
-        if (flexiCardOf[_customerAddress].creditPoints == _points) {
-            uint tmp;
-            for (uint i = 0; i < flexiCards.length; i++) {
-                if (flexiCards[i].customerAddress == _customerAddress) {
-                    flexiCards[i].creditPoints += _points;
-                    tmp = i;
-                    break;
-                }
-            }
-            if (flexiCards[tmp].creditPoints == _points) {
+        for (uint i = 0; i < flexiCards.length; i++) {
+            if (flexiCards[i].customerAddress == _customerAddress) {
+                flexiCards[i].creditPoints += _points;
                 success = true;
                 FlexiRationCardPointsAdded(_customerAddress, _points);
+                break;
             }
         }
         return success;

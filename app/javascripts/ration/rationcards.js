@@ -250,15 +250,30 @@ window.RationCardsApp = {
             alert1.style.display = "block";
             return;
         }
+        if ($("#confirm-fixed-card-password").val() == "") {
+            return;
+        }
         var custAddr = $("#fixed-card-custaddr").html();
         console.log("fixed: " + custAddr + " * " + p1 + " * " + p2 + " * " + p3);
-        RationCard.deployed().then(function(instance){
-            rationCardGlobal = instance;
-            return rationCardGlobal.addRationCardPoints(custAddr, p1, p2, p3, {from: centralGovernmentAddress, gas: 200000});
+        var pass = $("#confirm-fixed-card-password").val();
+        User.deployed().then(function(instance){
+            userGlobal = instance;
+            return userGlobal.authenticateUserWithAddress.call(centralGovernmentAddress, pass);
         }).then(function(res){
-            console.log(res);
-            alert("More points added successfully for card:\n" + custAddr);
-            location.reload();
+            if (!res) {
+                alert1.setAttribute("class", "alert alert-danger col-md-6");
+                alert1.innerHTML = "Sorry authentication failed, password is incorrect, try again.";
+                alert1.style.display = "block";
+                return;
+            }
+            RationCard.deployed().then(function(instance){
+                rationCardGlobal = instance;
+                return rationCardGlobal.addRationCardPoints(custAddr, p1, p2, p3, {from: centralGovernmentAddress, gas: 200000});
+            }).then(function(res){
+                console.log(res);
+                alert("More points added successfully for card:\n" + custAddr);
+                location.reload();
+            });
         }).catch(function(e){
             console.log(e);
             alert1.setAttribute("class", "alert alert-danger col-md-6");
@@ -270,21 +285,36 @@ window.RationCardsApp = {
     giveFlexiRationPoints: function() {
         var self = this;
         var p1 = $("#give-flexi-point").val();
-        if (p1 == "" || p1 == 0) {
+        if (p1 == "" || p1 == 0 || p1 < 3) {
             alert2.setAttribute("class", "alert alert-danger col-md-6");
-            alert2.innerHTML = "Points must be greater than 0";
+            alert2.innerHTML = "Points must be 3 at minimum";
             alert2.style.display = "block";
             return;
         }
         var custAddr = $("#flexi-card-custaddr").html();
         console.log("fixed: " + custAddr + " * " + p1);
-        RationCard.deployed().then(function(instance){
-            rationCardGlobal = instance;
-            return rationCardGlobal.addFlexiRationCardPoints(custAddr, p1, {from: centralGovernmentAddress, gas: 200000});
+        if ($("#confirm-flexi-card-password").val() == "") {
+            return;
+        }
+        var pass = $("#confirm-flexi-card-password").val();
+        User.deployed().then(function(instance){
+            userGlobal = instance;
+            return userGlobal.authenticateUserWithAddress.call(centralGovernmentAddress, pass);
         }).then(function(res){
-            console.log(res);
-            alert("More points added successfully for card:\n" + custAddr);
-            location.reload();
+            if (!res) {
+                alert2.setAttribute("class", "alert alert-danger col-md-6");
+                alert2.innerHTML = "Sorry authentication failed, password is incorrect, try again.";
+                alert2.style.display = "block";
+                return;
+            }
+            RationCard.deployed().then(function(instance){
+                rationCardGlobal = instance;
+                return rationCardGlobal.addFlexiRationCardPoints(custAddr, p1, {from: centralGovernmentAddress, gas: 200000});
+            }).then(function(res){
+                console.log(res);
+                alert("More points added successfully for card:\n" + custAddr);
+                location.reload();
+            })
         }).catch(function(e){
             console.log(e);
             alert2.setAttribute("class", "alert alert-danger col-md-6");

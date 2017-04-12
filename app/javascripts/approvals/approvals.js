@@ -211,13 +211,18 @@ window.ApprovalApp = {
                                 b.setAttribute("class", "btn btn-primary-outline btn-sm");
                                 b.value = "Approve";
                                 b.id = userinfo[0];
+                                b.setAttribute("data-toggle", "modal");
+                                b.setAttribute("data-target", "#myModal");
                                 b.onclick = function(e) {
-                                    console.log(e.target.id);
-                                    var result = confirm("Are you sure you want to approve this customer?");
-                                    if (result) {
-                                        window.ApprovalApp.approveCustomer(e.target);
-                                        // e.target.style.display = "none";
-                                    }
+                                    console.log("btn => " + e.target);
+                                    $("#confirm-approve-btn").click(function(event){
+                                        console.log("confirm => " + (event.target.id == "confirm-approve-btn"));
+                                            window.ApprovalApp.approveCustomer(e.target);
+                                    });
+                                    // var result = confirm("Are you sure you want to approve this customer?");
+                                    // if (result) {
+                                    //     window.ApprovalApp.approveCustomer(e.target);
+                                    // }
                                 }
                                 td5.appendChild(b);
                                 tr.appendChild(td1);
@@ -314,15 +319,18 @@ window.ApprovalApp = {
                                 b.setAttribute("class", "btn btn-primary-outline btn-sm");
                                 b.value = "Approve";
                                 b.id = userinfo[0];
+                                b.setAttribute("data-toggle", "modal");
+                                b.setAttribute("data-target", "#myModal");
                                 b.onclick = function(e) {
-                                    console.log(e.target.id);
-                                    var result = confirm("Are you sure you want to approve this fps?");
-                                    if (result) {
-                                        window.ApprovalApp.approveFPS(e.target);
-                                        // e.target.style.display = "none";
-                                    }
-                                    // e.target.style.display = "none";
-                                    // window.ApprovalApp.approveCustomer(e.target.id);
+                                    console.log("btn => " + e.target);
+                                    $("#confirm-approve-btn").click(function(event){
+                                        console.log("confirm => " + (event.target.id == "confirm-approve-btn"));
+                                            window.ApprovalApp.approveFPS(e.target);
+                                    });
+                                    // var result = confirm("Are you sure you want to approve this fps?");
+                                    // if (result) {
+                                    //     window.ApprovalApp.approveFPS(e.target);
+                                    // }
                                 }
                                 td5.appendChild(b);
                                 tr.appendChild(td1);
