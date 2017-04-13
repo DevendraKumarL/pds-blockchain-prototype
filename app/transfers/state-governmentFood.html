@@ -50,7 +50,7 @@
                         <a href="#" onclick="stateFoodApp.showSupplyToFpsDiv()"><i class="fa fa-bullseye"></i> Supply To FPS</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-calendar-o"></i> Events</a>
+                        <a href="#" onclick="stateFoodApp.showFoodSuppliedtoStateEventsdiv()"><i class="fa fa-calendar-o"></i> Events</a>
                     </li>
                 </ul>
             </div>
@@ -73,8 +73,23 @@
                             <h1>State Government Food and Rupee Transfers</h1>
                             Some image and text here
                         </div>
+                        <div class="list-group col-md-10" id="food-supplied-to-state-events-div">
+                            <a href="#" class="list-group-item">Food Stock received from centralGovernment</a>
+                            <br>
+                            <div class="table-responsive">
+                                <table class="table table-hover" style="border:1px solid black;">
+                                    <thead class="thead-inverse">
+                                        <th style="width:30%;">FoodItem</th>
+                                        <th style="width:25%;">Quantity</th>
+                                        <th style="width:25%;">Cost</th>
+                                        <th style="width:20%;">Pay Status</th>
+                                    </thead>
+                                    <tbody id="food-supplied-to-state-events-table"></tbody>
+                                </table>
+                            </div>
+                        </div>
                         <div class="card card-1 col-md-8" id="supply-to-fps-div">
-                            <h4>Supply FooItem to FPS</h4>
+                            <h4>Supply FoodItem to FPS</h4>
                             <select class="custom-select col-md-4" id="food-item-list-supply-fps">
                                 <option value="-1">Select Food Item</option>
                             </select>
@@ -100,12 +115,84 @@
         </div>
         <!-- /#wrapper -->
 
+        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to proceed ?&nbsp;</h5>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Confirm the food stock received and pay to centralGovernment</h4>
+                        <div class="input-group center-block">
+                            <input type="text" id="state-government-pay-food-name" class="form-control" disabled>
+                            <span class="input-group-addon">FoodItem</span>
+                        </div>
+                        <input type="hidden" id="state-government-pay-food-item" disabled>
+                        <br>
+                        <div class="input-group center-block">
+                            <input type="number" id="state-government-pay-expense" class="form-control" disabled>
+                            <span class="input-group-addon">Cost</span>
+                        </div>
+                        <br>
+                        <div class="input-group center-block">
+                            <input type="password" id="state-government-pay-secret" class="form-control">
+                            <span class="input-group-addon">Secret Key</span>
+                        </div>
+                        <br>
+                        <div class="input-group center-block">
+                            <input type="password" id="state-government-pay-password" class="form-control">
+                            <span class="input-group-addon">Password</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" class="close" data-dismiss="modal" aria-label="Close">No</button>
+                        <button type="button" class="btn btn-primary" id="state-confirm-pay-btn" class="close" data-dismiss="modal" aria-label="Close">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to proceed ?&nbsp;</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group center-block">
+                            <input type="password" id="central-government-password" class="form-control">
+                            <span class="input-group-addon">Password</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" class="close" data-dismiss="modal" aria-label="Close">No</button>
+                        <button type="button" class="btn btn-primary" id="confirm-password-btn" class="close" data-dismiss="modal" aria-label="Close">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Scripts -->
         <script>
         $("#pds-home").click(function(e){
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
         });
+        $('#myModal1').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var food = button.data('foodname');
+            var cost = button.data('foodcost');
+            var fooditem = button.data('fooditem');
+            // var recipient = button.data('whatever') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            // var modal = $(this)
+            // modal.find('.modal-title').text('New message to ' + recipient)
+            // modal.find('.modal-body input').val(recipient)
+            $("#state-government-pay-food-name").val(food);
+            $("#state-government-pay-food-item").val(fooditem);
+            $("#state-government-pay-expense").val(parseInt(cost));
+        })
         </script>
     </body>
 </html>

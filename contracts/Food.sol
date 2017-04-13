@@ -199,6 +199,9 @@ contract Food {
         if (stateGovernment == address(0)) throw;
         uint _fixed;
         _fixed = foodItemsList[_foodIndex].fixedQuantityToSupplyToFPS;
+        // Previous transfer not completed by stateGovernment
+        if (foodStocksOf[stateGovernment][_foodIndex].transferHash != bytes32(0)) throw;
+        // Previous transfer not completed by fps
         if (foodStocksOf[_fps][_foodIndex].transferHash != bytes32(0)) throw;
         if (foodStocksOf[stateGovernment][_foodIndex].balanceSupply < _fixed) throw;
         if (foodStocksOf[_fps][_foodIndex].userAddress == address(0)) {
@@ -282,6 +285,8 @@ contract Food {
     //    fooditem of this customer's foodStock to confirm the transfer
     function fpsSupplyToCustomer_Hash(address _fps, address _customer, uint _foodIndex, uint _quantity, bytes32 _hash) {
         if (_foodIndex >= numberOFFoodItems) throw;
+        // Previous transfer not completed by fps
+        if (foodStocksOf[_fps][_foodIndex].transferHash != bytes32(0)) throw;
         // Previous transfer not completed by customer
         if (foodStocksOf[_customer][_foodIndex].transferHash != bytes32(0)) throw;
         uint _fixed;

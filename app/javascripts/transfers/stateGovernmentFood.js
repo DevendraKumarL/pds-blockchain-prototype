@@ -29,6 +29,13 @@ var i, loadUserInterval;
 var foodItems = {};
 var j, foodItemInterval;
 var loggedIn = false;
+var k, foodStockToStateInterval;
+
+var foodStockToStateEvents;
+var foodStoredMap = {};
+foodStoredMap[0] = false;
+foodStoredMap[1] = false;
+foodStoredMap[2] = false;
 
 window.stateFoodApp = {
     start: function() {
@@ -211,7 +218,8 @@ window.stateFoodApp = {
                 // selectLiStockBalance.appendChild(opt4);
             }
         }
-        setTimeout(self.hideOverlay, 1000);
+        // setTimeout(self.hideOverlay, 1000);
+        setTimeout(self.loadFoodSuppliedToStateEvents, 1000);
     },
 
     supplyToFps: function() {
@@ -222,18 +230,184 @@ window.stateFoodApp = {
         if (fooditem.selectedIndex == 0 || itemhash.value == "" || fpsAddr.value == "") {
             return;
         }
-        alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " sent to FPS: " + fpsAddr.value);
         Food.deployed().then(function(instance) {
             foodGlobal = instance;
             return foodGlobal.supplyToFPS_Hash(fpsAddr.value, fooditem.options[fooditem.selectedIndex].value, itemhash.value, {from: centralGovernmentAddress, gas: 200000});
         }).then(function(res){
             console.log(res);
+            alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " sent to FPS: " + fpsAddr.value);
             fooditem.selectedIndex = 0;
             fpsAddr.value = "";
             itemhash.value = "";
         }).catch(function(e){
             console.log(e);
+            alert("Cannot execute this transaction, either food stock received from centralGovernment is not confirmed or state doesn't have enough food stock to supply");
         });
+    },
+
+    loadFoodSuppliedToStateEvents: function() {
+        var self = this;
+        $("#loading-content-text").html("Loading food stock supplied to state events ...");
+
+        var events;
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            events = foodGlobal.SupplyCentralToStateGovernment_HashLog({}, {fromBlock: 0, toBlock: 'latest'});
+            events.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    $("#loadingOverlay").hide();
+                    return;
+                }
+                foodStockToStateEvents = result;
+                k = foodStockToStateEvents.length-1;
+                $("#loading-content-text").html("Loading events status details ...");
+                foodStockToStateInterval = setInterval(window.stateFoodApp.loadFoodStockToStateEventsStatus, 300);
+            });
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
+    },
+
+    loadFoodStockToStateEventsStatus: function() {
+        var self = this;
+
+        var foodSuppliedToStateEventsTable = document.getElementById("food-supplied-to-state-events-table");
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            return foodGlobal.getFoodStockHashOf.call(stateGovernmentAddress, foodStockToStateEvents[k].args._foodIndex);
+        }).then(function(res){
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("td");
+            var td2 = document.createElement("td");
+            var td3 = document.createElement("td");
+            var td4 = document.createElement("td");
+            td1.appendChild(document.createTextNode(foodItems[foodStockToStateEvents[k].args._foodIndex][0]));
+            td2.appendChild(document.createTextNode(foodStockToStateEvents[k].args._quantity));
+            td3.appendChild(document.createTextNode(foodStockToStateEvents[k].args._expense));
+            var b;
+            if (res.valueOf() == "0x0000000000000000000000000000000000000000000000000000000000000000" || foodStoredMap[foodStockToStateEvents[k].args._foodIndex]) {
+                b = document.createElement("input");
+                b.type = "button";
+                b.setAttribute("class", "btn btn-success btn-sm");
+                b.value = "Paid";
+            } else if (res.valueOf() != "0x0000000000000000000000000000000000000000000000000000000000000000"){
+                foodStoredMap[foodStockToStateEvents[k].args._foodIndex] = true;
+                b = document.createElement("input");
+                b.type = "button";
+                b.setAttribute("class", "btn btn-primary btn-sm");
+                b.setAttribute("data-toggle", "modal");
+                b.setAttribute("data-target", "#myModal1");
+                b.setAttribute("data-foodname", foodItems[foodStockToStateEvents[k].args._foodIndex][0]);
+                b.setAttribute("data-fooditem", foodStockToStateEvents[k].args._foodIndex);
+                b.setAttribute("data-foodcost", foodStockToStateEvents[k].args._expense);
+                b.value = "Pay Now";
+                b.onclick = function(e) {
+                    $("#state-confirm-pay-btn").click(function(){
+                        window.stateFoodApp.confirmAndPay();
+                        $("#state-confirm-pay-btn").off();
+                    });
+                }
+            }
+            td4.appendChild(b);
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            foodSuppliedToStateEventsTable.appendChild(tr);
+            k--;
+            if (k < 0) {
+                k = 0;
+                clearInterval(foodStockToStateInterval);
+                console.log("Finished loading food supplied to state events");
+                $("#loadingOverlay").hide();
+            }
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
+    },
+
+    confirmAndPay: function() {
+        var self = this;
+
+        var fooditem = document.getElementById("state-government-pay-food-item");
+        var cost = document.getElementById("state-government-pay-expense");
+        var secret = document.getElementById("state-government-pay-secret");
+        var password = document.getElementById("state-government-pay-password");
+        console.log(fooditem.value + " - " + cost.value + " - " + secret.value + " - " + password.value);
+        if (secret.value == "" || password.value == "") {
+            return;
+        }
+        // first authenticate
+        User.deployed().then(function(instance){
+            userGlobal = instance;
+            return userGlobal.authenticateUserWithAddress.call(stateGovernmentAddress, password.value);
+        }).then(function(res){
+            if (!res) {
+                alert("Authentication failed, password is incorrect, please try again")
+                secret.value = "";
+                password.value = "";
+                return;
+            }
+            // check if state has enough balance to pay for this cost
+            var budgetBal;
+            Rupee.deployed().then(function(instance){
+                rupeeGlobal = instance;
+                return rupeeGlobal.getBudgetBalance.call();
+            }).then(function(res){
+                budgetBal = res.valueOf();
+                // console.log("budgetBal => " + budgetBal);
+                if (parseInt(budgetBal) >= parseInt(cost.value)) {
+                    console.log("state has enough balance");
+                    // second confirm food supply
+                    Food.deployed().then(function(instance){
+                        foodGlobal = instance;
+                        return foodGlobal.confirm_supplyCentralToStateGovernment_Hash(fooditem.value, secret.value, {from: centralGovernmentAddress, gas: 200000});
+                    }).then(function(res){
+                        console.log(res);
+                        console.log("food supply confirmed");
+                        // third transfer money
+                        Rupee.deployed().then(function(instance){
+                            rupeeGlobal = instance;
+                            return rupeeGlobal.stateTransferToCentral(cost.value, fooditem.value, {from: centralGovernmentAddress, gas: 150000});
+                        }).then(function(res){
+                            console.log(res);
+                            alert("Food Supplied to state confirmed and state paid successfully");
+                            location.reload();
+                        }).catch(function(e){
+                            console.log(e);
+                            alert("Couldn't transfer money");
+                            return;
+                        });
+                    }).catch(function(e){
+                        console.log(e);
+                        alert("food supply not confirmed, aborting transaction now");
+                        secret.value = "";
+                        password.value = "";
+                        return;
+                    });
+                } else {
+                    alert("stateGovernment doesn't have enough balance");
+                    secret.value = "";
+                    password.value = "";
+                    return;
+                }
+            }).catch(function(e){
+                console.log(e);
+                alert("Error getting stateGovernment balance");
+                secret.value = "";
+                password.value = "";
+                return;
+            });
+        }).catch(function(e){
+            console.log(e);
+            secret.value = "";
+            password.value = "";
+            return;
+        });
+
     },
 
     hideOverlay: function() {
@@ -269,6 +443,14 @@ window.stateFoodApp = {
         if (loggedIn) {
             self.hideAll();
             $("#supply-to-fps-div").show();
+        }
+    },
+
+    showFoodSuppliedtoStateEventsdiv: function() {
+        var self = this;
+        if (loggedIn) {
+            self.hideAll();
+            $("#food-supplied-to-state-events-div").show();
         }
     },
 

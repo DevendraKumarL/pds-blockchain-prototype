@@ -85,7 +85,20 @@ window.centralFoodApp = {
                     return foodGlobal.setStateGovernmentAddress(stateGovernmentAddress, {from: centralGovernmentAddress});
                 }
             }).then(function(res){
-                console.log("setStateGovernmentAddress => " + res);
+                console.log("food setStateGovernmentAddress => " + res);
+                // self.loadUsers();
+            }).catch(function(e){
+                console.log(e);
+            })
+            Rupee.deployed().then(function(instance){
+                rupeeGlobal = instance;
+                return rupeeGlobal.stateGovernment.call();
+            }).then(function(addr){
+                if (addr.valueOf() == "0x0000000000000000000000000000000000000000") {
+                    return rupeeGlobal.setStateGovernmentAddress(stateGovernmentAddress, {from: centralGovernmentAddress});
+                }
+            }).then(function(res){
+                console.log("rupee setStateGovernmentAddress => " + res);
                 self.loadUsers();
             }).catch(function(e){
                 console.log(e);
@@ -328,6 +341,82 @@ window.centralFoodApp = {
         });
     },
 
+    addBudgetToState: function() {
+        var self = this;
+
+        var budgetValue = document.getElementById("add-budget-value");
+        var password = document.getElementById("central-government-password");
+        if (budgetValue.value == "" || budgetValue.value == 0) {
+            return;
+        }
+        if (password.value == "") {
+            return;
+        }
+        User.deployed().then(function(instance){
+            userGlobal = instance;
+            return userGlobal.authenticateUserWithAddress.call(centralGovernmentAddress, password.value);
+        }).then(function(res){
+            if (!res) {
+                alert("Failed to authenticate, password is in correct");
+                budgetValue.value = "";
+                password.value = "";
+                return;
+            }
+            Rupee.deployed().then(function(instance){
+                rupeeGlobal = instance;
+                return rupeeGlobal.addBudget(budgetValue.value, {from: centralGovernmentAddress});
+            }).then(function(res){
+                console.log(res);
+                alert("Budget added to state government successfully");
+                budgetValue.value = "";
+                password.value = "";
+            }).catch(function(e){
+                console.log(e);
+            });
+        }).catch(function(e){
+            console.log(e);
+        })
+    },
+
+    addMoneyToCustomer: function() {
+        var self = this;
+
+        var custaddr = document.getElementById("add-money-customer-addr");
+        var moneyValue = document.getElementById("add-money-value");
+        var password = document.getElementById("central-government-password-2");
+        if (moneyValue.value == "" || moneyValue.value == 0 || custaddr.value == "") {
+            return;
+        }
+        if (password.value == "") {
+            return;
+        }
+        User.deployed().then(function(instance){
+            userGlobal = instance;
+            return userGlobal.authenticateUserWithAddress.call(centralGovernmentAddress, password.value);
+        }).then(function(res){
+            if (!res) {
+                alert("Failed to authenticate, password is in correct");
+                moneyValue.value = "";
+                password.value = "";
+                return;
+            }
+            Rupee.deployed().then(function(instance){
+                rupeeGlobal = instance;
+                return rupeeGlobal.addMoney(custaddr.value, moneyValue.value, {from: centralGovernmentAddress});
+            }).then(function(res){
+                console.log(res);
+                alert("Money " + moneyValue.value + " added to customer: " + custaddr.value + " successfully");
+                custaddr.value = ""
+                moneyValue.value = "";
+                password.value = "";
+            }).catch(function(e){
+                console.log(e);
+            });
+        }).catch(function(e){
+            console.log(e);
+        })
+    },
+
     notLoggedIn: function() {
         var self = this;
         $("#profile-link").hide();
@@ -373,6 +462,22 @@ window.centralFoodApp = {
         if (loggedIn) {
             self.hideAll();
             $("#supply-to-state-div").show();
+        }
+    },
+
+    showAddBudgetToStatediv: function() {
+        var self = this;
+        if (loggedIn) {
+            self.hideAll();
+            $("#add-budget-to-state-div").show();
+        }
+    },
+
+    showAddMoneyToCustomerdiv: function() {
+        var self = this;
+        if (loggedIn) {
+            self.hideAll();
+            $("#add-money-to-customer-div").show();
         }
     },
 

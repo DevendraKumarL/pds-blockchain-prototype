@@ -37,3 +37,18 @@
 #supply-to-state-div {
     display: none;
 }
+#user-added-events-div {
+    display: none;
+}
+#approval-events-div {
+    display: none;
+}
+#ration-card-events-div {
+    display: none;
+}
+#add-budget-to-state-div {
+    display: none;
+}
+#add-money-to-customer-div {
+    display: none;
+}

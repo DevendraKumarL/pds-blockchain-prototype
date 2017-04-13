@@ -1,10 +1,5 @@
 pragma solidity ^0.4.2;
 
-////////////////////////////////////////////////////////////////////////////////
-// -> add Aadhaar number for customers ??
-// -> customers and fps can register only if they have aadhaar number and government
-//    will approve seeing the aadhaar details ??
-////////////////////////////////////////////////////////////////////////////////
 contract User {
     address public centralGovernment;
     uint public totalUsersInBlockchain;
