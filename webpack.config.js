@@ -22,7 +22,12 @@ module.exports = {
     'centralGovernmentFood': './app/javascripts/transfers/centralGovernmentFood.js',
     'stateGovernmentFood': './app/javascripts/transfers/stateGovernmentFood.js',
     'fpsFood': './app/javascripts/transfers/fpsFood.js',
-    'customerFood': './app/javascripts/transfers/customerFood.js'
+    'customerFood': './app/javascripts/transfers/customerFood.js',
+
+    'centralGovernmentEvents': './app/javascripts/events/centralGovernmentEvents.js',
+    'stateGovernmentEvents': './app/javascripts/events/stateGovernmentEvents.js',
+    'fpsEvents': './app/javascripts/events/fpsEvents.js',
+    'customerEvents': './app/javascripts/events/customerEvents.js',
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -83,6 +88,19 @@ module.exports = {
     ]),
     new CopyWebpackPlugin([
       { from: './app/transfers/customerFood.html', to: "customerFood.html" }
+    ]),
+
+    new CopyWebpackPlugin([
+      { from: './app/events/central-governmentEvents.html', to: "central-governmentEvents.html" }
+    ]),
+    new CopyWebpackPlugin([
+      { from: './app/events/state-governmentEvents.html', to: "state-governmentEvents.html" }
+    ]),
+    new CopyWebpackPlugin([
+      { from: './app/events/fpsEvents.html', to: "fpsEvents.html" }
+    ]),
+    new CopyWebpackPlugin([
+      { from: './app/events/customerEvents.html', to: "customerEvents.html" }
     ]),
   ],
   module: {
