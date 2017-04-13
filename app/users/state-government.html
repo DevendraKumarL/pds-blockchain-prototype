@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Registration | State Government</title>
+    <title>PDS | State Government</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
@@ -17,13 +17,9 @@
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#" id="pds-home"><i class="fa fa-bars"></i> &nbsp;PDS</a>
+        <a class="navbar-brand" href="#" id="pds-home"><i class="fa fa-bars"></i> &nbsp;PDS Registration and Login</a>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <!-- <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li> -->
-            </ul>
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
             <ul class="navbar-nav my-2 my-lg-0">
                 <li class="nav-item btn-group" id="profile-link">
                     <a class="dropdown-toggle nav-link" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -36,10 +32,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-lemon-o"></i> Food Transfer</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-money"></i> Rupee Transfer</a>
+                    <a class="nav-link" href="http://localhost:8080/state-governmentFood.html"><i class="fa fa-lemon-o"></i> Food and <i class="fa fa-money"></i> Rupee Transfer</a>
                 </li>
                 <li class="nav-item" id="register-link">
                     <a class="nav-link" href="#" onclick="stateApp.showRegister()"><i class="fa fa-user-plus"></i> Register</a>
@@ -82,20 +75,20 @@
                         <h1>State Government</h1>
                         Some image and text here
                     </div>
-                    <div class="card card-2" id="state-goverment-register">
+                    <div class="card card-2 col-md-5" id="state-goverment-register">
                         <h4>State Government Registration</h4>
                         <div class="input-group center-block">
-                            <input type="text" id="s-g-name" class="form-control">
+                            <input type="text" id="s-g-name" class="form-control" placeholder="Name">
                             <span class="input-group-addon" id="basic-addon1">Name</span>
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <input type="text" id="s-g-email" class="form-control">
+                            <input type="text" id="s-g-email" class="form-control" placeholder="Email">
                             <span class="input-group-addon" id="basic-addon1">Email</span>
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <input type="password" id="s-g-password" class="form-control">
+                            <input type="password" id="s-g-password" class="form-control" placeholder="Password">
                             <span class="input-group-addon" id="basic-addon1">Password</span>
                         </div>
                         <br>
@@ -109,7 +102,7 @@
                             <button type="button" id="c-g-register" onclick="stateApp.registerStateGovernment()" class="btn btn-primary">Register</button>
                         </div>
                     </div>
-                    <div class="card card-2" id="state-goverment-login">
+                    <div class="card card-2 col-md-8" id="state-goverment-login">
                         <h4>State Government Login</h4>
                         <label class="custom-control custom-radio">
                             <input id="radio1" name="radio" type="radio" class="custom-control-input">
@@ -122,16 +115,16 @@
                             <span class="custom-control-description">Email</span>
                         </label>
                         <div class="input-group center-block" id="s-g-address-login-div">
-                            <input type="text" id="s-g-address-login" class="form-control">
+                            <input type="text" id="s-g-address-login" class="form-control" placeholder="0x...">
                             <span class="input-group-addon" id="basic-addon1">Address</span>
                         </div>
                         <div class="input-group center-block" id="s-g-email-login-div">
-                            <input type="text" id="s-g-email-login" class="form-control">
+                            <input type="text" id="s-g-email-login" class="form-control" placeholder="Email">
                             <span class="input-group-addon" id="basic-addon1">Email</span>
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <input type="password" id="s-g-password-login" class="form-control">
+                            <input type="password" id="s-g-password-login" class="form-control" placeholder="Password">
                             <span class="input-group-addon" id="basic-addon1">Password</span>
                         </div>
                         <br>

@@ -31,3 +31,9 @@
 #view-card-details-div {
     display: none;
 }
+#not-logged-div-card {
+    display: none;
+}
+#not-approved-div-card {
+    display: none;
+}

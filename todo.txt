@@ -2,10 +2,10 @@ if possible =>
     -> add authentication layer (modal) for any new transaction execution (food and money transfer)
     -> show balance of food stock and rupee of a user somewhere in food and rupee transfer webpages
     -> add #loadingOverlay on all transaction execution by users
-    -> provide placeholders for all <input> tags
-    -> increase width of input field
-    -> add home for all webpages
     -> **** change {from: centralGovernmentAddress} of all the transactions to use the address of the actual sender ****
+    -> provide placeholders for all <input> tags  **Tick**
+    -> increase width of input field **Tick**
+    -> add home for all webpages **Tick**
     -> optimize js code and remove unwanted code
     -> write tests for creating central, state government, 2 customers, 3 fps
         -> approve customers and fps
