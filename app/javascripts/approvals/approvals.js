@@ -173,7 +173,7 @@ window.ApprovalApp = {
             prevAddr = "";
             // loop through 0 to customerNum
             $("#loading-message").html("Loading unapproved and approved customers ...");
-            loadUnapproandApproCustInterval = setInterval(self.loadUnapproandApproCust, 200);
+            loadUnapproandApproCustInterval = setInterval(self.loadUnapproandApproCust, 300);
         });
     },
 
@@ -214,10 +214,11 @@ window.ApprovalApp = {
                                 b.setAttribute("data-toggle", "modal");
                                 b.setAttribute("data-target", "#myModal");
                                 b.onclick = function(e) {
-                                    console.log("btn => " + e.target);
+                                    console.log("btn => " + e.target.id);
                                     $("#confirm-approve-btn").click(function(event){
-                                        console.log("confirm => " + (event.target.id == "confirm-approve-btn"));
-                                            window.ApprovalApp.approveCustomer(e.target);
+                                        console.log("confirm customer=> " + (event.target.id == "confirm-approve-btn"));
+                                        window.ApprovalApp.approveCustomer(e.target);
+                                        $("#confirm-approve-btn").off();
                                     });
                                     // var result = confirm("Are you sure you want to approve this customer?");
                                     // if (result) {
@@ -322,10 +323,11 @@ window.ApprovalApp = {
                                 b.setAttribute("data-toggle", "modal");
                                 b.setAttribute("data-target", "#myModal");
                                 b.onclick = function(e) {
-                                    console.log("btn => " + e.target);
+                                    console.log("btn => " + e.target.id);
                                     $("#confirm-approve-btn").click(function(event){
-                                        console.log("confirm => " + (event.target.id == "confirm-approve-btn"));
-                                            window.ApprovalApp.approveFPS(e.target);
+                                        console.log("confirm fps => " + (event.target.id == "confirm-approve-btn"));
+                                        window.ApprovalApp.approveFPS(e.target);
+                                        $("#confirm-approve-btn").off();
                                     });
                                     // var result = confirm("Are you sure you want to approve this fps?");
                                     // if (result) {

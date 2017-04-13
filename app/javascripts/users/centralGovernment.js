@@ -21,8 +21,7 @@ var userGlobal, approvalGlobal, rationCardGlobal;
 // get all accounts and store whoever is registered
 var userDb = {};
 
-var governDiv, custDiv, fpsDiv;
-var loadAcctsEle, selectPlaceEle;
+var selectPlaceEle;
 var i, loadUserInterval;
 var notifiy1, notifiy2;
 
@@ -136,7 +135,6 @@ window.centralApp = {
     loadUsers: function() {
         var self = this;
         $("#loading-content-text").html("Loading accounts from testrpc ...");
-        // loadAcctsEle.style.display = "block";
         i = 0;
         loadUserInterval = setInterval(self.checkUserRegistered, 150);
     },
@@ -147,10 +145,9 @@ window.centralApp = {
             console.log(accounts[i] + " => " + res);
             userDb[accounts[i]] = res;
             i++;
-            if (i == 10) {
+            if (i == accounts.length) {
               i = 0;
               clearInterval(loadUserInterval);
-              // loadAcctsEle.style.display = "none";
               console.log("Finished loading/checking user registrations");
               window.centralApp.loadPlaces();
             //   userDb[centralGovernmentAddress] = true;

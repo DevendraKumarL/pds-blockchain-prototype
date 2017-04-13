@@ -1,4 +1,8 @@
 if possible =>
+    -> provide placeholders for all <input> tags
+    -> increase width of input field
+    -> add home for all webpages
+    -> show balance of food stock and rupee of a user somewhere in food and rupee transfer webpages
     -> **** change {from: centralGovernmentAddress} of all the transactions to use the address of the actual sender ****
     -> optimize js code and remove unwanted code
     -> write tests for creating central, state government, 2 customers, 3 fps
@@ -18,9 +22,6 @@ if possible =>
         -> thus track the **BENEFIT FLOW**
         -> make analysis/graph depicting flow of food/benegfit versus amount spent
         -> i.e., is/visualization the amount spent benefitting the customers ??
-    -> add Aadhaar number for customers ??
-        -> customers and fps can register only if they have aadhaar number and government
-        will approve seeing the aadhaar details
     -> How to check if
         *SellToCustomer_HashLog
         *SupplyCentralToStateGovernment_HashLog
@@ -75,3 +76,6 @@ if possible =>
             from testrpc are finished before any user action is taken **Tick**
         -> Everything into one page, Generic, possible but leave for now.
         -> how to reload other windows of fps or customer after registration, leave for now
+        -> add Aadhaar number for customers ??, leave for now
+        -> customers and fps can register only if they have aadhaar number and government
+        will approve seeing the aadhaar details, leave for now
