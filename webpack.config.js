@@ -16,7 +16,13 @@ module.exports = {
     'rationcards': './app/javascripts/ration/rationcards.js',
 
     'pds-users': './app/javascripts/pds-users.js',
-    'accounts': './app/javascripts/accounts.js'
+    'accounts': './app/javascripts/accounts.js',
+    'hashGenerator': './app/javascripts/hashGenerator.js',
+
+    'centralGovernmentFood': './app/javascripts/transfers/centralGovernmentFood.js',
+    'stateGovernmentFood': './app/javascripts/transfers/stateGovernmentFood.js',
+    'fpsFood': './app/javascripts/transfers/fpsFood.js',
+    'customerFood': './app/javascripts/transfers/customerFood.js'
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -61,7 +67,23 @@ module.exports = {
     ]),
     new CopyWebpackPlugin([
         { from: './app/accounts.html', to: "accounts.html" }
-    ])
+    ]),
+    new CopyWebpackPlugin([
+        { from: './app/hashGeneratorApp.html', to: "hashGeneratorApp.html" }
+    ]),
+
+    new CopyWebpackPlugin([
+      { from: './app/transfers/central-governmentFood.html', to: "central-governmentFood.html" }
+    ]),
+    new CopyWebpackPlugin([
+      { from: './app/transfers/state-governmentFood.html', to: "state-governmentFood.html" }
+    ]),
+    new CopyWebpackPlugin([
+      { from: './app/transfers/fpsFood.html', to: "fpsFood.html" }
+    ]),
+    new CopyWebpackPlugin([
+      { from: './app/transfers/customerFood.html', to: "customerFood.html" }
+    ]),
   ],
   module: {
     rules: [

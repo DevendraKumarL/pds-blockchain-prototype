@@ -47,6 +47,8 @@ contract RationCard {
     event FlexiRationCardCreated(address indexed _customerAddress, uint _rationCardNumber);
     event RationCardPointsAdded(address indexed _customerAddress, uint _point1, uint _point2, uint _point3);
     event FlexiRationCardPointsAdded(address indexed _customerAddress, uint _points);
+    event RationCardPointsDeducted(address indexed _customerAddress, uint _point1, uint _point2, uint _point3);
+    event FlexiRationCardPointsDeducted(address indexed _customerAddress, uint _points);
 
     function RationCard() {
         government = tx.origin;
@@ -178,7 +180,6 @@ contract RationCard {
                 rationCardOf[_customerAddress].foodItem3Points += _point3;
             }
         }
-
         for (uint i = 0; i < rationCards.length; i++) {
             if (rationCards[i].customerAddress == _customerAddress) {
                 rationCards[i].foodItem1Points += _point1;
@@ -212,6 +213,34 @@ contract RationCard {
         return (exists, point1, point2, point3, custAddr);
     }
 
+    // deduct points function
+    function deductRationCardPoints(address _customerAddress, uint _point1, uint _point2, uint _point3) returns (bool) {
+        bool success;
+        if (rationCardOf[_customerAddress].customerAddress != address(0)) {
+            if (_point1 != 0)
+                rationCardOf[_customerAddress].foodItem1Points -= _point1;
+            if (_point2 != 0)
+                rationCardOf[_customerAddress].foodItem2Points -= _point2;
+            if (_point3 != 0)
+                rationCardOf[_customerAddress].foodItem3Points -= _point3;
+        }
+        for (uint i = 0; i < rationCards.length; i++) {
+            if (rationCards[i].customerAddress == _customerAddress) {
+                if (_point1 != 0)
+                    rationCards[i].foodItem1Points -= _point1;
+                if (_point2 != 0)
+                    rationCards[i].foodItem2Points -= _point2;
+                if (_point3 != 0)
+                    rationCards[i].foodItem3Points -= _point3;
+                success = true;
+                RationCardPointsDeducted(_customerAddress, _point1, _point2, _point3);
+                break;
+            }
+        }
+        return success;
+    }
+
+
     function addFlexiRationCardPoints(address _customerAddress, uint _points) returns (bool) {
         bool success;
         if (flexiCardOf[_customerAddress].customerAddress != address(0)) {
@@ -244,6 +273,23 @@ contract RationCard {
             }
         }
         return (exists, points, custAddr);
+    }
+
+    // deduct points function
+    function deductFlexiRationCardPoints(address _customerAddress, uint _points) returns (bool) {
+        bool success;
+        if (flexiCardOf[_customerAddress].customerAddress != address(0)) {
+            flexiCardOf[_customerAddress].creditPoints -= _points;
+        }
+        for (uint i = 0; i < flexiCards.length; i++) {
+            if (flexiCards[i].customerAddress == _customerAddress) {
+                flexiCards[i].creditPoints -= _points;
+                success = true;
+                FlexiRationCardPointsDeducted(_customerAddress, _points);
+                break;
+            }
+        }
+        return success;
     }
 
     // To prevent accidental sending of ether to this contract
