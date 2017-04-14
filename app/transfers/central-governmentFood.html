@@ -62,7 +62,7 @@
                     <a href="#" onclick="centralFoodApp.showSupplyToStateDiv()"><i class="fa fa-bullseye"></i> Supply To StateGovern</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-calendar-o"></i> Events</a>
+                    <a href="http://localhost:8080/central-governmentEvents.html"><i class="fa fa-calendar-o"></i> Events</a>
                 </li>
             </ul>
         </div>
@@ -133,7 +133,7 @@
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <button type="button" class="btn btn-primary btn-md" id="add-food-item-btn" onclick="centralFoodApp.addFoodToStock()">Add</button>
+                            <button type="button" class="btn btn-primary btn-md" id="add-food-item-btn" data-toggle="modal" data-target="#myModal3">Add</button>
                         </div>
                     </div>
                     <div class="card card-1 col-md-8" id="supply-to-state-div">
@@ -153,7 +153,7 @@
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <button type="button" class="btn btn-primary btn-md" id="supply-food-item-to-state-btn" onclick="centralFoodApp.supplyToState()">Supply</button>
+                            <button type="button" class="btn btn-primary btn-md" id="supply-food-item-to-state-btn" data-toggle="modal" data-target="#myModal4">Supply</button>
                         </div>
                     </div>
                     <div class="card card-1 col-md-4" id="add-budget-to-state-div">
@@ -198,7 +198,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group center-block">
-                        <input type="password" id="central-government-password" class="form-control">
+                        <input type="password" id="central-government-password" class="form-control" placeholder="Password">
                         <span class="input-group-addon">Password</span>
                     </div>
                 </div>
@@ -218,13 +218,53 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group center-block">
-                        <input type="password" id="central-government-password-2" class="form-control">
+                        <input type="password" id="central-government-password-2" class="form-control" placeholder="Password">
                         <span class="input-group-addon">Password</span>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" class="close" data-dismiss="modal" aria-label="Close">No</button>
                     <button type="button" class="btn btn-primary" id="confirm-password-btn" class="close" data-dismiss="modal" aria-label="Close" onclick="centralFoodApp.addMoneyToCustomer()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to proceed ?&nbsp;</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group center-block">
+                        <input type="password" id="central-government-password-3" class="form-control" placeholder="Password">
+                        <span class="input-group-addon">Password</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" class="close" data-dismiss="modal" aria-label="Close">No</button>
+                    <button type="button" class="btn btn-primary" id="confirm-password-btn" class="close" data-dismiss="modal" aria-label="Close" onclick="centralFoodApp.addFoodToStock()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to proceed ?&nbsp;</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group center-block">
+                        <input type="password" id="central-government-password-4" class="form-control" placeholder="Password">
+                        <span class="input-group-addon">Password</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" class="close" data-dismiss="modal" aria-label="Close">No</button>
+                    <button type="button" class="btn btn-primary" id="confirm-password-btn" class="close" data-dismiss="modal" aria-label="Close" onclick="centralFoodApp.supplyToState()">Confirm</button>
                 </div>
             </div>
         </div>

@@ -1,13 +1,15 @@
 if possible =>
-    -> add authentication layer (modal) for any new transaction execution (food and money transfer)
     -> show balance of food stock and rupee of a user somewhere in food and rupee transfer webpages
-    -> show all events in reverse order
-    -> food and rupee contract events for stateGovernment, centralGovernment, customer
     -> deduct points feature **Tick** and cancel order feature
     -> notification panel/alert modal after successfully executing a transaction
     -> notification panel/alert modal after failure of transaction call
     -> change {from: centralGovernmentAddress} of all the transactions to use the address of the actual sender
+    -> events related fps, state, and customer only
+    -> a floating div showing current address in use on all the webpages
 
+    -> add authentication layer (modal) for any new transaction execution (food and money transfer) **Tick**
+    -> all food and rupee contract events of stateGovernment, centralGovernment, customer **Tick**
+    -> show all events in reverse order **Tick**
     -> retrieve ration card details using customer/rationcard address in rationcards.html **Tick**
     -> remove {from: ...} in .call() method calls **Tick**
     -> provide placeholders for all <input> tags  **Tick**

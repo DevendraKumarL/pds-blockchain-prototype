@@ -56,10 +56,10 @@
                     <a href="#" onclick="centralEventsApp.showRationCardEventsdiv()"><i class="fa fa-calendar-o"></i> RationCard Events</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-calendar-minus-o"></i> Food Transfer Events</a>
+                    <a href="#" onclick="centralEventsApp.showFoodTransferEventsdiv()"><i class="fa fa-calendar-minus-o"></i> Food Transfer Events</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-calendar-plus-o"></i> Rupee Transfer Events</a>
+                    <a href="#" onclick="centralEventsApp.showRupeeTransferEvensdiv()"><i class="fa fa-calendar-plus-o"></i> Rupee Transfer Events</a>
                 </li>
             </ul>
         </div>
@@ -79,7 +79,7 @@
                         Must Login
                     </div>
                     <div id="landing" class="col-md-10">
-                        <h1>Central Government Events</h1>
+                        <h1>All contract can be found here Events</h1>
                         Some image and text here
                     </div>
                     <div class="list-group col-md-10" id="user-added-events-div">
@@ -125,13 +125,13 @@
                         <div id="accordion" role="tablist" aria-multiselectable="true">
                             <div class="card col-md-12">
                                 <div class="card-header" role="tab" id="headingOne">
-                                    <h5 class="mb-0">
+                                    <h6 class="mb-0">
                                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                         RationCardCreated Events
                                         </a>
-                                    </h5>
+                                    </h6>
                                 </div>
-                                <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
                                     <div class="card-block">
                                         <div class="table-responsive">
                                             <table class="table table-hover" style="border:1px solid black;">
@@ -149,11 +149,11 @@
 
                             <div class="card col-md-12">
                                 <div class="card-header" role="tab" id="headingTwo">
-                                    <h5 class="mb-0">
+                                    <h6 class="mb-0">
                                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                         FlexiRationCardCreated Events
                                         </a>
-                                    </h5>
+                                    </h6>
                                 </div>
                                 <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
                                     <div class="card-block">
@@ -173,11 +173,11 @@
 
                             <div class="card col-md-12">
                                 <div class="card-header" role="tab" id="headingThree">
-                                    <h5 class="mb-0">
+                                    <h6 class="mb-0">
                                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                         RationCardPointsAdded Events
                                         </a>
-                                    </h5>
+                                    </h6>
                                 </div>
                                 <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
                                     <div class="card-block">
@@ -198,11 +198,11 @@
 
                             <div class="card col-md-12">
                                 <div class="card-header" role="tab" id="headingFour">
-                                    <h5 class="mb-0">
+                                    <h6 class="mb-0">
                                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                                         FlexiRationCardPointsAdded Events
                                         </a>
-                                    </h5>
+                                    </h6>
                                 </div>
                                 <div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingFour">
                                     <div class="card-block">
@@ -221,11 +221,11 @@
 
                             <div class="card col-md-12">
                                 <div class="card-header" role="tab" id="headingFive">
-                                    <h5 class="mb-0">
+                                    <h6 class="mb-0">
                                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                                         RationCardPointsDeducted Events
                                         </a>
-                                    </h5>
+                                    </h6>
                                 </div>
                                 <div id="collapseFive" class="collapse" role="tabpanel" aria-labelledby="headingFive">
                                     <div class="card-block">
@@ -246,11 +246,11 @@
 
                             <div class="card col-md-12">
                                 <div class="card-header" role="tab" id="headingSix">
-                                    <h5 class="mb-0">
+                                    <h6 class="mb-0">
                                         <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
                                         FlexiRationCardPointsDeducted Events
                                         </a>
-                                    </h5>
+                                    </h6>
                                 </div>
                                 <div id="collapseSix" class="collapse" role="tabpanel" aria-labelledby="headingSix">
                                     <div class="card-block">
@@ -261,6 +261,210 @@
                                                     <th style="width:40%;">Points Deducted</th>
                                                 </thead>
                                                 <tbody id="flexi-ration-card-points-deducted-events-table"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group col-md-12" id="food-transfer-events-div">
+                        <div id="accordionTwo" role="tablist" aria-multiselectable="true">
+                            <div class="card col-md-6">
+                                <div class="card-header" role="tab" id="headingFourteen">
+                                    <h6 class="mb-0">
+                                        <a data-toggle="collapse" data-parent="#accordionTwo" href="#collapseFouteen" aria-expanded="true" aria-controls="collapseFouteen">
+                                            Food Stock Added to Central Government Events
+                                        </a>
+                                    </h6>
+                                </div>
+
+                                <div id="collapseFouteen" class="collapse show" role="tabpanel" aria-labelledby="headingFourteen">
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" style="border:1px solid black;">
+                                                <thead class="thead-inverse">
+                                                    <th style="width:50%;">Food Item</th>
+                                                    <th style="width:50%;">Quantity</th>
+                                                </thead>
+                                                <tbody id="food-added-to-central-events-table"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card col-md-12">
+                                <div class="card-header" role="tab" id="headingSeven">
+                                    <h6 class="mb-0">
+                                        <a data-toggle="collapse" data-parent="#accordionTwo" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                                            Food Supply to StateGovernment Events
+                                        </a>
+                                    </h6>
+                                </div>
+
+                                <div id="collapseSeven" class="collapse show" role="tabpanel" aria-labelledby="headingSeven">
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" style="border:1px solid black;">
+                                                <thead class="thead-inverse">
+                                                    <th style="width:35%;">Food Item</th>
+                                                    <th style="width:35%;">Quantity</th>
+                                                    <th style="width:30%;">Cost</th>
+                                                </thead>
+                                                <tbody id="food-transfer-to-state-events-table"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card col-md-12">
+                                <div class="card-header" role="tab" id="headingEight">
+                                    <h6 class="mb-0">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordionTwo" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                                            Food Supply to FPS Events
+                                        </a>
+                                    </h6>
+                                </div>
+                                <div id="collapseEight" class="collapse" role="tabpanel" aria-labelledby="headingEight">
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" style="border:1px solid black;">
+                                                <thead class="thead-inverse">
+                                                    <th style="width:35%;">FPS Address(Id)</th>
+                                                    <th style="width:30%;">Food Item</th>
+                                                    <th style="width:35%;">Quantity</th>
+                                                </thead>
+                                                <tbody id="food-transfer-to-fps-events-table"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card col-md-12">
+                                <div class="card-header" role="tab" id="headingNine">
+                                    <h6 class="mb-0">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordionTwo" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                                            Food Supply to Customer Events
+                                        </a>
+                                    </h6>
+                                </div>
+                                <div id="collapseNine" class="collapse" role="tabpanel" aria-labelledby="headingNine">
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" style="border:1px solid black;">
+                                                <thead class="thead-inverse">
+                                                    <th style="width:25%;">FPS Address(Id)</th>
+                                                    <th style="width:25%;">Customer Address(Id)</th>
+                                                    <th style="width:10%;">Food Item</th>
+                                                    <th style="width:10%;">Quantity</th>
+                                                    <th style="width:10%;">Cost</th>
+                                                    <th style="width:20%;">RationCard</th>
+                                                </thead>
+                                                <tbody id="food-transfer-to-customer-events-table"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 list-group" id="rupee-transfer-events-div">
+                        <div id="accordionThree" role="tablist" aria-multiselectable="true">
+                            <div class="card col-md-4">
+                                <div class="card-header" role="tab" id="headingTen">
+                                    <h6 class="mb-0">
+                                        <a data-toggle="collapse" data-parent="#accordionThree" href="#collapseTen" aria-expanded="true" aria-controls="collapseTen">
+                                            Budget Added to StateGovernment Events
+                                        </a>
+                                    </h6>
+                                </div>
+
+                                <div id="collapseTen" class="collapse show" role="tabpanel" aria-labelledby="headingTen">
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" style="border:1px solid black;">
+                                                <thead class="thead-inverse">
+                                                    <th>Budget Value</th>
+                                                </thead>
+                                                <tbody id="rupee-transfer-to-state-events-table"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"><br></div>
+
+                            <div class="card col-md-6">
+                                <div class="card-header" role="tab" id="headingEleven">
+                                    <h6 class="mb-0">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordionThree" href="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
+                                            Money Added to Customer Events
+                                        </a>
+                                    </h6>
+                                </div>
+                                <div id="collapseEleven" class="collapse" role="tabpanel" aria-labelledby="headingEleven">
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" style="border:1px solid black;">
+                                                <thead class="thead-inverse">
+                                                    <th>Customer Address(Id)</th>
+                                                    <th>Amount Value</th>
+                                                </thead>
+                                                <tbody id="rupee-transfer-to-customer-events-table"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"><br></div>
+
+                            <div class="card col-md-6">
+                                <div class="card-header" role="tab" id="headingTwelve">
+                                    <h6 class="mb-0">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordionThree" href="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
+                                            State To CentralGovernment RupeeTransfer Events
+                                        </a>
+                                    </h6>
+                                </div>
+                                <div id="collapseTwelve" class="collapse" role="tabpanel" aria-labelledby="headingTwelve">
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" style="border:1px solid black;">
+                                                <thead class="thead-inverse">
+                                                    <th>Food Item</th>
+                                                    <th>Amount Value</th>
+                                                </thead>
+                                                <tbody id="rupee-transfer-from-state-to-central-events-table"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"><br></div>
+
+                            <div class="card col-md-12">
+                                <div class="card-header" role="tab" id="headingThirteen">
+                                    <h6 class="mb-0">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordionThree" href="#collapseThirteen" aria-expanded="false" aria-controls="collapseThirteen">
+                                            Customer To StateGoverment RupeeTransfer Events
+                                        </a>
+                                    </h6>
+                                </div>
+                                <div id="collapseThirteen" class="collapse" role="tabpanel" aria-labelledby="headingThirteen">
+                                    <div class="card-block">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" style="border:1px solid black;">
+                                                <thead class="thead-inverse">
+                                                    <th style="width:25%;">Customer Address(Id)</th>
+                                                    <th style="width:25%;">Food Item</th>
+                                                    <th style="width:25%;">Amount Value</th>
+                                                    <th style="width:25%;">FPS Address(Id)</th>
+                                                </thead>
+                                                <tbody id="rupee-transfer-from-customer-to-state-events-table"></tbody>
                                             </table>
                                         </div>
                                     </div>

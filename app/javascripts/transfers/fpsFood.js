@@ -253,6 +253,7 @@ window.fpsFoodApp = {
         var custaddr = document.getElementById("supply-to-customer-item-address");
         var itemhash = document.getElementById("supply-to-customer-item-hash");
         var qty = document.getElementById("supply-to-customer-item-qty");
+        var password = document.getElementById("fps-supply-password");
         var fixed = true;
         if($('input:radio[id="radio1"]').is(':checked')) {
             fixed = true;
@@ -260,7 +261,7 @@ window.fpsFoodApp = {
         if($('input:radio[id="radio2"]').is(':checked')) {
             fixed = false;
         }
-        if (fooditem.selectedIndex == 0 || itemhash.value == "" || custaddr.value == "" || qty == "") {
+        if (fooditem.selectedIndex == 0 || itemhash.value == "" || custaddr.value == "" || qty == "" || password.value == "") {
             return;
         }
         var foodindex = fooditem.options[fooditem.selectedIndex].value;
@@ -276,111 +277,131 @@ window.fpsFoodApp = {
         // check if the receipient customer is approved
         // then check if the customer has enough fixed/flexi ration card points to allow the transfer
 
-        Approval.deployed().then(function(instance){
-            approvalGlobal = instance;
-            return approvalGlobal.getUserApproval.call(custaddr.value, 2);
+        User.deployed().then(function(instance){
+            userGlobal = instance;
+            return userGlobal.authenticateUserWithAddress.call(fpsData[0], password.value);
         }).then(function(res){
-            console.log(res);
-            if (res[0] != custaddr.value || !res[1]) {
-                alert("Customer: " + custaddr.value + " is not approved by centralGovernment");
+            if (!res) {
+                alert("Authentication failure, password is incorrect");
+                password.value = "";
                 return;
             }
-            if (res[0] == custaddr.value && res[1]) {
-                console.log("Customer: " + custaddr.value + " is approved by centralGovernment");
-                RationCard.deployed().then(function(instance){
-                    rationCardGlobal = instance;
-                    if (fixed) {
-                        return rationCardGlobal.getRationCardInfo.call(0, custaddr.value);
-                    }
-                    if (!fixed) {
-                        return rationCardGlobal.getFlexiRationCardInfo.call(0, custaddr.value);
-                    }
-                }).then(function(cardinfo){
-                    console.log(cardinfo);
-                    if (!cardinfo[0]) {
+            Approval.deployed().then(function(instance){
+                approvalGlobal = instance;
+                return approvalGlobal.getUserApproval.call(custaddr.value, 2);
+            }).then(function(res){
+                console.log(res);
+                if (res[0] != custaddr.value || !res[1]) {
+                    alert("Customer: " + custaddr.value + " is not approved by centralGovernment");
+                    password.value = "";
+                    return;
+                }
+                if (res[0] == custaddr.value && res[1]) {
+                    console.log("Customer: " + custaddr.value + " is approved by centralGovernment");
+                    RationCard.deployed().then(function(instance){
+                        rationCardGlobal = instance;
                         if (fixed) {
-                            alert("Customer: " + custaddr.value + " has no fixed scheme ration card");
+                            return rationCardGlobal.getRationCardInfo.call(0, custaddr.value);
                         }
-                        else {
-                            alert("Customer: " + custaddr.value + " has no flexi scheme ration card");
+                        if (!fixed) {
+                            return rationCardGlobal.getFlexiRationCardInfo.call(0, custaddr.value);
                         }
-                        return;
-                    }
-                    if (cardinfo[5] != fpsData[0]) {
-                        alert("Customer: " + custaddr.value + " is not registered to this fps: " + fpsData[0]);
-                        return;
-                    }
-                    if (fixed) {
-                        RationCard.deployed().then(function(instance){
-                            rationCardGlobal = instance;
-                            return rationCardGlobal.getRationCardPoints.call(0, custaddr.value);
-                        }).then(function(points){
-                            console.log(points);
-                            if ( parseInt(points[parseInt(foodindex) + 1].valueOf()) < parseInt(foodItems[parseInt(foodindex)][1].valueOf()) ) {
-                                alert("Customer: " + custaddr.value + " doesn't have enough fixed points for foodItem: " + foodItems[parseInt(foodindex)][0]);
-                                return;
+                    }).then(function(cardinfo){
+                        console.log(cardinfo);
+                        if (!cardinfo[0]) {
+                            if (fixed) {
+                                alert("Customer: " + custaddr.value + " has no fixed scheme ration card");
                             }
-                            if ( points[0] && parseInt(points[parseInt(foodindex) + 1].valueOf()) >= parseInt(foodItems[parseInt(foodindex)][1].valueOf()) ) {
-                                Food.deployed().then(function(instance) {
-                                    foodGlobal = instance;
-                                    // add another parameter to store which ration card was used ??
-                                    return foodGlobal.fpsSupplyToCustomer_Hash(fpsData[0], custaddr.value, parseInt(foodindex), 0, itemhash.value, 0, {from: centralGovernmentAddress, gas: 200000});
-                                }).then(function(res){
-                                    console.log(res);
-                                    alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " sent to customer: " + custaddr.value);
-                                    fooditem.selectedIndex = 0;
-                                    custaddr.value = "";
-                                    itemhash.value = "";
-                                    document.getElementById("supply-to-customer-item-qty").value = "";
-                                }).catch(function(e){
-                                    console.log(e);
-                                    alert("Food supply not confirmed, either fps has not confirmed the food supplied from state or customer as not confirmed food supplied to it, or fps doesn't enough supply");
-                                });
+                            else {
+                                alert("Customer: " + custaddr.value + " has no flexi scheme ration card");
                             }
-                        }).catch(function(e){
-                            console.log(e);
-                        });
-                        return;
-                    }
-                    if (!fixed) {
-                        RationCard.deployed().then(function(instance){
-                            rationCardGlobal = instance;
-                            return rationCardGlobal.getFlexiRationCardPoints.call(0, custaddr.value);
-                        }).then(function(points){
-                            console.log(points);
-                            if (parseInt(points[1].valueOf()) < parseInt(qty.value)) {
-                                alert("Customer: " + custaddr.value + " doesn't have enough flexi points for foodItem: " + foodItems[parseInt(foodindex)][0]);
-                                return;
-                            }
-                            if (points[0] && parseInt(points[1].valueOf()) >= parseInt(qty.value)) {
-                                Food.deployed().then(function(instance) {
-                                    foodGlobal = instance;
-                                    return foodGlobal.fpsSupplyToCustomer_Hash(fpsData[0], custaddr.value, parseInt(foodindex), qty.value, itemhash.value, 1, {from: centralGovernmentAddress, gas: 200000});
-                                }).then(function(res){
-                                    console.log(res);
-                                    alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " sent to customer: " + custaddr.value);
-                                    fooditem.selectedIndex = 0;
-                                    custaddr.value = "";
-                                    itemhash.value = "";
-                                    document.getElementById("supply-to-customer-item-qty").value = "";
-                                }).catch(function(e){
-                                    console.log(e);
-                                    alert("Food supply not confirmed, either fps has not confirmed the food supplied from state or customer as not confirmed food supplied to it, or fps doesn't enough supply");
-                                });
-                            }
-                        }).catch(function(e){
-                            console.log(e);
-                        });
-                        return;
-                    }
-                }).catch(function(e){
-                    console.log(e);
-                });
-                return;
-            }
+                            password.value = "";
+                            return;
+                        }
+                        if (cardinfo[5] != fpsData[0]) {
+                            alert("Customer: " + custaddr.value + " is not registered to this fps: " + fpsData[0]);
+                            password.value = "";
+                            return;
+                        }
+                        if (fixed) {
+                            RationCard.deployed().then(function(instance){
+                                rationCardGlobal = instance;
+                                return rationCardGlobal.getRationCardPoints.call(0, custaddr.value);
+                            }).then(function(points){
+                                console.log(points);
+                                if ( parseInt(points[parseInt(foodindex) + 1].valueOf()) < parseInt(foodItems[parseInt(foodindex)][1].valueOf()) ) {
+                                    alert("Customer: " + custaddr.value + " doesn't have enough fixed points for foodItem: " + foodItems[parseInt(foodindex)][0]);
+                                    password.value = "";
+                                    return;
+                                }
+                                if ( points[0] && parseInt(points[parseInt(foodindex) + 1].valueOf()) >= parseInt(foodItems[parseInt(foodindex)][1].valueOf()) ) {
+                                    Food.deployed().then(function(instance) {
+                                        foodGlobal = instance;
+                                        // add another parameter to store which ration card was used ??
+                                        return foodGlobal.fpsSupplyToCustomer_Hash(fpsData[0], custaddr.value, parseInt(foodindex), 0, itemhash.value, 0, {from: centralGovernmentAddress, gas: 200000});
+                                    }).then(function(res){
+                                        console.log(res);
+                                        alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " sent to customer: " + custaddr.value);
+                                        fooditem.selectedIndex = 0;
+                                        custaddr.value = "";
+                                        itemhash.value = "";
+                                        document.getElementById("supply-to-customer-item-qty").value = "";
+                                    }).catch(function(e){
+                                        console.log(e);
+                                        alert("Food supply not confirmed, either fps has not confirmed the food supplied from state or customer as not confirmed food supplied to it, or fps doesn't enough supply");
+                                        password.value = "";
+                                    });
+                                }
+                            }).catch(function(e){
+                                console.log(e);
+                            });
+                            return;
+                        }
+                        if (!fixed) {
+                            RationCard.deployed().then(function(instance){
+                                rationCardGlobal = instance;
+                                return rationCardGlobal.getFlexiRationCardPoints.call(0, custaddr.value);
+                            }).then(function(points){
+                                console.log(points);
+                                if (parseInt(points[1].valueOf()) < parseInt(qty.value)) {
+                                    alert("Customer: " + custaddr.value + " doesn't have enough flexi points for foodItem: " + foodItems[parseInt(foodindex)][0]);
+                                    password.value = "";
+                                    return;
+                                }
+                                if (points[0] && parseInt(points[1].valueOf()) >= parseInt(qty.value)) {
+                                    Food.deployed().then(function(instance) {
+                                        foodGlobal = instance;
+                                        return foodGlobal.fpsSupplyToCustomer_Hash(fpsData[0], custaddr.value, parseInt(foodindex), qty.value, itemhash.value, 1, {from: centralGovernmentAddress, gas: 200000});
+                                    }).then(function(res){
+                                        console.log(res);
+                                        alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " sent to customer: " + custaddr.value);
+                                        fooditem.selectedIndex = 0;
+                                        custaddr.value = "";
+                                        itemhash.value = "";
+                                        document.getElementById("supply-to-customer-item-qty").value = "";
+                                    }).catch(function(e){
+                                        console.log(e);
+                                        alert("Food supply not confirmed, either fps has not confirmed the food supplied from state or customer as not confirmed food supplied to it, or fps doesn't enough supply");
+                                        password.value = "";
+                                    });
+                                }
+                            }).catch(function(e){
+                                console.log(e);
+                            });
+                            return;
+                        }
+                    }).catch(function(e){
+                        console.log(e);
+                    });
+                    return;
+                }
+            }).catch(function(e){
+                console.log(e);
+            });
         }).catch(function(e){
             console.log(e);
         });
+
     },
 
     loadFoodSuppliedToFpsEvents: function() {

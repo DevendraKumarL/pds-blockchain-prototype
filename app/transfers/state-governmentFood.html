@@ -105,7 +105,7 @@
                             </div>
                             <br>
                             <div class="input-group center-block">
-                                <button type="button" class="btn btn-primary btn-md" id="supply-food-item-to-fps-btn" onclick="stateFoodApp.supplyToFps()">Supply</button>
+                                <button type="button" class="btn btn-primary btn-md" id="supply-food-item-to-fps-btn" data-toggle="modal" data-target="#myModal2">Supply</button>
                             </div>
                         </div>
                     </div>
@@ -135,12 +135,12 @@
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <input type="password" id="state-government-pay-secret" class="form-control">
+                            <input type="password" id="state-government-pay-secret" class="form-control" placeholder="Secret Key">
                             <span class="input-group-addon">Secret Key</span>
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <input type="password" id="state-government-pay-password" class="form-control">
+                            <input type="password" id="state-government-pay-password" class="form-control" placeholder="Password">
                             <span class="input-group-addon">Password</span>
                         </div>
                     </div>
@@ -160,13 +160,13 @@
                     </div>
                     <div class="modal-body">
                         <div class="input-group center-block">
-                            <input type="password" id="central-government-password" class="form-control">
+                            <input type="password" id="state-government-supply-password" class="form-control" placeholder="Password">
                             <span class="input-group-addon">Password</span>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" class="close" data-dismiss="modal" aria-label="Close">No</button>
-                        <button type="button" class="btn btn-primary" id="confirm-password-btn" class="close" data-dismiss="modal" aria-label="Close">Confirm</button>
+                        <button type="button" class="btn btn-primary" id="state-supply-confirm-password-btn" class="close" data-dismiss="modal" aria-label="Close" onclick="stateFoodApp.supplyToFps()">Confirm</button>
                     </div>
                 </div>
             </div>

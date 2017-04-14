@@ -299,24 +299,42 @@ window.centralFoodApp = {
         if (qty.value == "" || qty.value <= 0) {
             return;
         }
-        Food.deployed().then(function(instance){
-            foodGlobal = instance;
-            return foodGlobal.addFoodItemToStock(foodindex, qty.value, {from: centralGovernmentAddress, gas: 100000});
+        var password = document.getElementById("central-government-password-3");
+        if (password.value == "") {
+            return;
+        }
+
+        User.deployed().then(function(instance){
+            userGlobal = instance;
+            return userGlobal.authenticateUserWithAddress.call(centralGovernmentAddress, password.value);
         }).then(function(res){
-            console.log(res);
-            // notify.setAttribute("class", "alert alert-success col-md-6");
-            // notify.innerHTML = "<strong>" + li.options[li.selectedIndex].text + " | Qty : " + qty.value + "</strong>, added to government's food stock";
-            // notify.style.display = "block";
-            alert("FoodItem: " + li.options[li.selectedIndex].text + " Qty: " + qty.value + "\n" + "Added to centralGovernment food stock");
-            qty.value = "";
-            li.selectedIndex = 0;
-            // location.reload();
+            if (!res) {
+                alert("Authentication failure, password is incorrect");
+                password.value = "";
+                qty.value = "";
+                return;
+            }
+            Food.deployed().then(function(instance){
+                foodGlobal = instance;
+                return foodGlobal.addFoodItemToStock(foodindex, qty.value, {from: centralGovernmentAddress, gas: 100000});
+            }).then(function(res){
+                console.log(res);
+                // notify.setAttribute("class", "alert alert-success col-md-6");
+                // notify.innerHTML = "<strong>" + li.options[li.selectedIndex].text + " | Qty : " + qty.value + "</strong>, added to government's food stock";
+                // notify.style.display = "block";
+                alert("FoodItem: " + li.options[li.selectedIndex].text + " Qty: " + qty.value + "\n" + "Added to centralGovernment food stock");
+                qty.value = "";
+                li.selectedIndex = 0;
+                // location.reload();
+            }).catch(function(e){
+                console.log(e);
+                // notify.setAttribute("class", "alert alert-danger col-md-12");
+                // notify.innerHTML = "Could not add to government's food stock. Error: " + e;
+                // notify.style.display = "block";
+            });
         }).catch(function(e){
             console.log(e);
-            // notify.setAttribute("class", "alert alert-danger col-md-12");
-            // notify.innerHTML = "Could not add to government's food stock. Error: " + e;
-            // notify.style.display = "block";
-        });
+        })
     },
 
     supplyToState: function() {
@@ -324,21 +342,37 @@ window.centralFoodApp = {
         var fooditem = document.getElementById("food-item-list-supply-state");
         var itemqty = document.getElementById("supply-to-state-item-qty");
         var itemhash = document.getElementById("supply-to-state-item-hash");
+        var password = document.getElementById("central-government-password-4");
         if (fooditem.selectedIndex == 0 || itemqty.value == "" || itemqty.value <= 0 || itemhash.value == "") {
             return;
         }
-        Food.deployed().then(function(instance) {
-            foodGlobal = instance;
-            return foodGlobal.supplyCentralToStateGovernment_Hash(fooditem.options[fooditem.selectedIndex].value, itemqty.value, itemhash.value, {from: centralGovernmentAddress, gas: 200000});
+        if (password.value == "") {
+            return;
+        }
+        User.deployed().then(function(instance){
+            userGlobal = instance;
+            return userGlobal.authenticateUserWithAddress.call(centralGovernmentAddress, password.value);
         }).then(function(res){
-            console.log(res);
-            alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " Qty: " + itemqty.value + " sent to stateGovernment: " + stateGovernmentAddress);
-            fooditem.selectedIndex = 0;
-            itemqty.value = "";
-            itemhash.value = "";
+            if (!res){
+                alert("Authentication failure, password is incorrect");
+                password.value = "";
+                return;
+            }
+            Food.deployed().then(function(instance) {
+                foodGlobal = instance;
+                return foodGlobal.supplyCentralToStateGovernment_Hash(fooditem.options[fooditem.selectedIndex].value, itemqty.value, itemhash.value, {from: centralGovernmentAddress, gas: 200000});
+            }).then(function(res){
+                console.log(res);
+                alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " Qty: " + itemqty.value + " sent to stateGovernment: " + stateGovernmentAddress);
+                fooditem.selectedIndex = 0;
+                itemqty.value = "";
+                itemhash.value = "";
+            }).catch(function(e){
+                console.log(e);
+            });
         }).catch(function(e){
             console.log(e);
-        });
+        })
     },
 
     addBudgetToState: function() {

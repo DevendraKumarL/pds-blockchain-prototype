@@ -193,10 +193,11 @@ window.centralEventsApp = {
             event1.get(function(error, result){
                 if (error) {
                     console.log(error);
+                    window.centralEventsApp.hideOverlay();
                     return;
                 }
                 console.log("UserAdded Events = >");
-                for (var i = 0; i < result.length; i++) {
+                for (var i = result.length-1; i > -1; i--) {
                     // console.log(result[i].args._userAddress + " : " + result[i].args._userName);
                     var tr = document.createElement("tr");
                     var td1 = document.createElement("td");
@@ -240,10 +241,12 @@ window.centralEventsApp = {
             event1.get(function(error, result){
                 if (error) {
                     console.log(error);
+                    window.centralEventsApp.hideOverlay();
                     return;
                 }
                 console.log("CustomerApproved Events = >");
-                for (var i = 0; i < result.length; i++) {
+                for (var i = result.length-1; i > -1; i--) {
+                // for (var i = 0; i < result.length; i++) {
                     // console.log(result[i].args._customerAddress);
                     var tr = document.createElement("tr");
                     var td1 = document.createElement("td");
@@ -268,10 +271,12 @@ window.centralEventsApp = {
             event2.get(function(error, result){
                 if (error) {
                     console.log(error);
+                    window.centralEventsApp.hideOverlay();
                     return;
                 }
                 console.log("FPSApproved Events = >");
-                for (var i = 0; i < result.length; i++) {
+                for (var i = result.length-1; i > -1; i--) {
+                // for (var i = 0; i < result.length; i++) {
                     // console.log(result[i].args._customerAddress);
                     var tr = document.createElement("tr");
                     var td1 = document.createElement("td");
@@ -318,10 +323,12 @@ window.centralEventsApp = {
             e1.get(function(error, result){
                 if (error) {
                     console.log(error);
+                    window.centralEventsApp.hideOverlay();
                     return;
                 }
                 console.log("RationCardCreated Events = >");
-                for (var i = 0; i < result.length; i++) {
+                for (var i = result.length-1; i > -1; i--) {
+                // for (var i = 0; i < result.length; i++) {
                     // console.log(result[i].args._customerAddress);
                     var tr = document.createElement("tr");
                     var td1 = document.createElement("td");
@@ -349,10 +356,12 @@ window.centralEventsApp = {
             e2.get(function(error, result){
                 if (error) {
                     console.log(error);
+                    window.centralEventsApp.hideOverlay();
                     return;
                 }
                 console.log("FlexiRationCardCreated Events = >");
-                for (var i = 0; i < result.length; i++) {
+                for (var i = result.length-1; i > -1; i--) {
+                // for (var i = 0; i < result.length; i++) {
                     // console.log(result[i].args._customerAddress);
                     var tr = document.createElement("tr");
                     var td1 = document.createElement("td");
@@ -380,10 +389,12 @@ window.centralEventsApp = {
             e3.get(function(error, result){
                 if (error) {
                     console.log(error);
+                    window.centralEventsApp.hideOverlay();
                     return;
                 }
                 console.log("RationCardPointsAdded Events = >");
-                for (var i = 0; i < result.length; i++) {
+                for (var i = result.length-1; i > -1; i--) {
+                // for (var i = 0; i < result.length; i++) {
                     // console.log(result[i].args._customerAddress);
                     var tr = document.createElement("tr");
                     var td1 = document.createElement("td");
@@ -405,10 +416,12 @@ window.centralEventsApp = {
             e4.get(function(error, result){
                 if (error) {
                     console.log(error);
+                    window.centralEventsApp.hideOverlay();
                     return;
                 }
                 console.log("FlexiRationCardPointsAdded Events = >");
-                for (var i = 0; i < result.length; i++) {
+                for (var i = result.length-1; i > -1; i--) {
+                // for (var i = 0; i < result.length; i++) {
                     // console.log(result[i].args._customerAddress);
                     var tr = document.createElement("tr");
                     var td1 = document.createElement("td");
@@ -424,10 +437,12 @@ window.centralEventsApp = {
             e5.get(function(error, result){
                 if (error) {
                     console.log(error);
+                    window.centralEventsApp.hideOverlay();
                     return;
                 }
                 console.log("RationCardPointsDeducted Events = >");
-                for (var i = 0; i < result.length; i++) {
+                for (var i = result.length-1; i > -1; i--) {
+                // for (var i = 0; i < result.length; i++) {
                     // console.log(result[i].args._customerAddress);
                     var tr = document.createElement("tr");
                     var td1 = document.createElement("td");
@@ -449,10 +464,12 @@ window.centralEventsApp = {
             e6.get(function(error, result){
                 if (error) {
                     console.log(error);
+                    window.centralEventsApp.hideOverlay();
                     return;
                 }
                 console.log("FlexiRationCardPointsDeducted Events = >");
-                for (var i = 0; i < result.length; i++) {
+                for (var i = result.length-1; i > -1; i--) {
+                // for (var i = 0; i < result.length; i++) {
                     // console.log(result[i].args._customerAddress);
                     var tr = document.createElement("tr");
                     var td1 = document.createElement("td");
@@ -466,11 +483,222 @@ window.centralEventsApp = {
             });
 
             // $("#loadingOverlay").hide();
-            setTimeout(window.centralEventsApp.hideOverlay, 3000);
+            setTimeout(window.centralEventsApp.loadFoodTransferEvents, 2000);
         }).catch(function(e){
             console.log(e);
             $("#loadingOverlay").hide();
         });
+    },
+
+    loadFoodTransferEvents: function() {
+        var self = this;
+        $("#loading-content-text").html("Loading all food transfer events ...");
+
+        var r1 = document.getElementById("food-transfer-to-state-events-table");
+        var r2 = document.getElementById("food-transfer-to-fps-events-table");
+        var r3 = document.getElementById("food-transfer-to-customer-events-table");
+        var r4 = document.getElementById("food-added-to-central-events-table");
+
+        var e1, e2, e3, e4;
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            e1 = foodGlobal.SupplyCentralToStateGovernment_HashLog({}, {fromBlock: 0, toBlock: 'latest'});
+            e1.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    window.centralEventsApp.hideOverlay();
+                    return;
+                }
+                console.log("SupplyCentralToStateGovernment_HashLog => ");
+                for (var i = result.length-1; i > -1; i--) {
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    var td3 = document.createElement("td");
+                    td1.appendChild(document.createTextNode(foodItems[result[i].args._foodIndex][0]));
+                    td2.appendChild(document.createTextNode(result[i].args._quantity));
+                    td3.appendChild(document.createTextNode(result[i].args._expense));
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    tr.appendChild(td3);
+                    r1.appendChild(tr);
+                }
+            });
+            e2 = foodGlobal.SupplyToFPS_HashLog({}, {fromBlock: 0, toBlock: 'latest'});
+            e2.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    window.centralEventsApp.hideOverlay();
+                    return;
+                }
+                console.log("SupplyToFPS_HashLog => ");
+                for (var i = result.length-1; i > -1; i--) {
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    var td3 = document.createElement("td");
+                    td1.appendChild(document.createTextNode(result[i].args._fpsAddress));
+                    td2.appendChild(document.createTextNode(foodItems[result[i].args._foodIndex][0]));
+                    td3.appendChild(document.createTextNode(result[i].args._quantity));
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    tr.appendChild(td3);
+                    r2.appendChild(tr);
+                }
+            });
+            e3 = foodGlobal.SellToCustomer_HashLog({}, {fromBlock: 0, toBlock: 'latest'});
+            e3.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    window.centralEventsApp.hideOverlay();
+                    return;
+                }
+                var rationMap = { 0: "Fixed Scheme", 1: "Flexi Scheme"};
+                console.log("SellToCustomer_HashLog => ");
+                for (var i = result.length-1; i > -1; i--) {
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    var td3 = document.createElement("td");
+                    var td4 = document.createElement("td");
+                    var td5 = document.createElement("td");
+                    var td6 = document.createElement("td");
+                    td1.appendChild(document.createTextNode(result[i].args._fpsAddress));
+                    td2.appendChild(document.createTextNode(result[i].args._customerAddress));
+                    td3.appendChild(document.createTextNode(foodItems[result[i].args._foodIndex][0]));
+                    td4.appendChild(document.createTextNode(result[i].args._quantity));
+                    td5.appendChild(document.createTextNode(result[i].args._totalCost));
+                    td6.appendChild(document.createTextNode(rationMap[result[i].args._rationCard]));
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    tr.appendChild(td3);
+                    tr.appendChild(td4);
+                    tr.appendChild(td5);
+                    tr.appendChild(td6);
+                    r3.appendChild(tr);
+                }
+            });
+            e4 = foodGlobal.AddedFoodItemToStockLog({}, {fromBlock: 0, toBlock: 'latest'});
+            e4.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    window.centralEventsApp.hideOverlay();
+                    return;
+                }
+                console.log("AddedFoodItemToStockLog => ");
+                for (var i = result.length-1; i > -1; i--) {
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    td1.appendChild(document.createTextNode(foodItems[result[i].args._foodIndex][0]));
+                    td2.appendChild(document.createTextNode(result[i].args._quantity));
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    r4.appendChild(tr);
+                }
+            });
+            setTimeout(window.centralEventsApp.loadRupeeTransferEvents, 2000);
+        }).catch(function(e){
+            console.log(e);
+        })
+    },
+
+    loadRupeeTransferEvents: function() {
+        var self = this;
+        $("#loading-content-text").html("Loading all rupee transfer events ...");
+
+        var r1 = document.getElementById("rupee-transfer-to-state-events-table");
+        var r2 = document.getElementById("rupee-transfer-to-customer-events-table");
+        var r3 = document.getElementById("rupee-transfer-from-state-to-central-events-table");
+        var r4 = document.getElementById("rupee-transfer-from-customer-to-state-events-table");
+
+        var e1, e2, e3, e4;
+        Rupee.deployed().then(function(instance){
+            rupeeGlobal = instance;
+            e1 = rupeeGlobal.BudgetAddedLog({}, {fromBlock: 0, toBlock: 'latest'});
+            e1.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    window.centralEventsApp.hideOverlay();
+                    return;
+                }
+                console.log("BudgetAddedLog => ");
+                for (var i = result.length-1; i > -1; i--) {
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    td1.appendChild(document.createTextNode(result[i].args._budget));
+                    tr.appendChild(td1);
+                    r1.appendChild(tr);
+                }
+            });
+            e2 = rupeeGlobal.MoneyAddedLog({}, {fromBlock: 0, toBlock: 'latest'});
+            e2.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    window.centralEventsApp.hideOverlay();
+                    return;
+                }
+                console.log("MoneyAddedLog => ");
+                for (var i = result.length-1; i > -1; i--) {
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    td1.appendChild(document.createTextNode(result[i].args._userAddress));
+                    td2.appendChild(document.createTextNode(result[i].args._amount));
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    r2.appendChild(tr);
+                }
+            });
+            e3 = rupeeGlobal.StateToCentralRupeeTransferLog({}, {fromBlock: 0, toBlock: 'latest'});
+            e3.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    window.centralEventsApp.hideOverlay();
+                    return;
+                }
+                var rationMap = { 0: "Fixed Scheme", 1: "Flexi Scheme"};
+                console.log("StateToCentralRupeeTransferLog => ");
+                for (var i = result.length-1; i > -1; i--) {
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    td1.appendChild(document.createTextNode(foodItems[result[i].args._foodIndex][0]));
+                    td2.appendChild(document.createTextNode(result[i].args._amount));
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    r3.appendChild(tr);
+                }
+            });
+            e4 = rupeeGlobal.CustomerToStateRupeeTransferLog({}, {fromBlock: 0, toBlock: 'latest'});
+            e4.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    window.centralEventsApp.hideOverlay();
+                    return;
+                }
+                console.log("CustomerToStateRupeeTransferLog => ");
+                for (var i = result.length-1; i > -1; i--) {
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    var td2 = document.createElement("td");
+                    var td3 = document.createElement("td");
+                    var td4 = document.createElement("td");
+                    td1.appendChild(document.createTextNode(result[i].args._customerAddress));
+                    td2.appendChild(document.createTextNode(foodItems[result[i].args._foodIndex][0]));
+                    td3.appendChild(document.createTextNode(result[i].args._amount));
+                    td4.appendChild(document.createTextNode(result[i].args._fpsAddress));
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    tr.appendChild(td3);
+                    tr.appendChild(td4);
+                    r4.appendChild(tr);
+                }
+            });
+            setTimeout(window.centralEventsApp.hideOverlay, 2000);
+        }).catch(function(e){
+            console.log(e);
+        })
     },
 
     hideOverlay: function() {
@@ -506,6 +734,22 @@ window.centralEventsApp = {
         if (loggedIn) {
             self.hideAll();
             $("#ration-card-events-div").show();
+        }
+    },
+
+    showFoodTransferEventsdiv: function() {
+        var self = this;
+        if (loggedIn) {
+            self.hideAll();
+            $("#food-transfer-events-div").show();
+        }
+    },
+
+    showRupeeTransferEvensdiv: function() {
+        var self = this;
+        if (loggedIn) {
+            self.hideAll();
+            $("#rupee-transfer-events-div").show();
         }
     },
 

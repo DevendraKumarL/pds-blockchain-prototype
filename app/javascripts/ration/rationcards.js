@@ -238,7 +238,7 @@ window.RationCardsApp = {
                 // $("#fixed-card-item1-points").html(points[1].valueOf());
                 // $("#fixed-card-item2-points").html(points[2].valueOf());
                 // $("#fixed-card-item3-points").html(points[3].valueOf());
-                // $("#fixed-card-custaddr").html(points[4]);
+                $("#fixed-card-custaddr").html(points[4]);
                 $("#fixed-card-give-points-div").show();
 
                 var tr6 = document.createElement("tr");
@@ -387,8 +387,8 @@ window.RationCardsApp = {
         }).then(function(points){
             if (points[0]) {
                 // $("#flexi-card-points").html(points[1].valueOf());
-                // $("#flexi-card-custaddr").html(points[2]);
-                // $("#flexi-card-give-points-div").show();
+                $("#flexi-card-custaddr").html(points[2]);
+                $("#flexi-card-give-points-div").show();
 
                 var tr6 = document.createElement("tr");
                 var td11 = document.createElement("td");

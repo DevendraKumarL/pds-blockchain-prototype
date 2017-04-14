@@ -459,7 +459,7 @@ window.customerApp = {
         $("#loading-content-text").html("Loading approved fps list ...");
         j = 2;
         prevAddr = "";
-        loadApprovedFpsInterval = setInterval(self.loadAprovedFpsList, 150);
+        loadApprovedFpsInterval = setInterval(self.loadAprovedFpsList, 200);
     },
 
     loadAprovedFpsList: function() {
@@ -528,21 +528,36 @@ window.customerApp = {
     createRationCard1: function(userinfo) {
         var self = this;
         console.log(userinfo[0] + " ? " + userinfo[4]);
+        var password = document.getElementById("ration-customer-password");
+        if (password.value == "") {
+            return;
+        }
         if (userDb[userinfo[0]] && userDb[userinfo[4]]) {
-            RationCard.deployed().then(function(instance){
-                rationCardGlobal = instance;
-                return rationCardGlobal.addRationCard(userinfo[0], userinfo[1], userinfo[2], userinfo[3], userinfo[4], {from: centralGovernmentAddress, gas: 500000});
+            User.deployed().then(function(instance){
+                userGlobal = instance;
+                return userGlobal.authenticateUserWithAddress.call(customerData[0], password.value);
             }).then(function(res){
-                console.log(res);
-                alert("Fixed Scheme Ration card created for customer: " + userinfo[0]);
-                location.reload();
+                if (!res) {
+                    alert("Authentication failure, password is incorrect");
+                    password.value == "";
+                    return;
+                }
+                RationCard.deployed().then(function(instance){
+                    rationCardGlobal = instance;
+                    return rationCardGlobal.addRationCard(userinfo[0], userinfo[1], userinfo[2], userinfo[3], userinfo[4], {from: centralGovernmentAddress, gas: 500000});
+                }).then(function(res){
+                    console.log(res);
+                    alert("Fixed Scheme Ration card created for customer: " + userinfo[0]);
+                    location.reload();
+                }).catch(function(e){
+                    console.log(e);
+                    // notify3.setAttribute("class", "alert alert-danger col-md-12");
+                    // notify3.innerHTML = "Something went wrong while creating ration card. Error:  " + e;
+                    // notify3.style.display = "block";
+                });
             }).catch(function(e){
                 console.log(e);
-                // notify3.setAttribute("class", "alert alert-danger col-md-12");
-                // notify3.innerHTML = "Something went wrong while creating ration card. Error:  " + e;
-                // notify3.style.display = "block";
-            });
-            return;
+            })
         } else {
             // notify3.setAttribute("class", "alert alert-danger col-md-12");
             // notify3.innerHTML = "Either customer or fps hasn't registered.";
@@ -554,21 +569,36 @@ window.customerApp = {
     createRationCard2: function(userinfo) {
         var self = this;
         console.log(userinfo[0] + " ? " + userinfo[4]);
+        var password = document.getElementById("ration-customer-password-flexi");
+        if (password.value == "") {
+            return;
+        }
         if (userDb[userinfo[0]] && userDb[userinfo[4]]) {
-            RationCard.deployed().then(function(instance){
-                rationCardGlobal = instance;
-                return rationCardGlobal.addFlexiRationCard(userinfo[0], userinfo[1], userinfo[2], userinfo[3], userinfo[4], {from: centralGovernmentAddress, gas: 500000});
+            User.deployed().then(function(instance){
+                userGlobal = instance;
+                return userGlobal.authenticateUserWithAddress.call(customerData[0], password.value);
             }).then(function(res){
-                console.log(res);
-                alert("Flexi Scheme Ration card created for customer: " + userinfo[0]);
-                location.reload();
+                if (!res) {
+                    alert("Authentication failure, password is incorrect");
+                    password.value == "";
+                    return;
+                }
+                RationCard.deployed().then(function(instance){
+                    rationCardGlobal = instance;
+                    return rationCardGlobal.addFlexiRationCard(userinfo[0], userinfo[1], userinfo[2], userinfo[3], userinfo[4], {from: centralGovernmentAddress, gas: 500000});
+                }).then(function(res){
+                    console.log(res);
+                    alert("Flexi Scheme Ration card created for customer: " + userinfo[0]);
+                    location.reload();
+                }).catch(function(e){
+                    console.log(e);
+                    // notify3.setAttribute("class", "alert alert-danger col-md-12");
+                    // notify3.innerHTML = "Something went wrong while creating ration card. Error:  " + e;
+                    // notify3.style.display = "block";
+                });
             }).catch(function(e){
                 console.log(e);
-                // notify3.setAttribute("class", "alert alert-danger col-md-12");
-                // notify3.innerHTML = "Something went wrong while creating ration card. Error:  " + e;
-                // notify3.style.display = "block";
-            });
-            return;
+            })
         } else {
             // notify3.setAttribute("class", "alert alert-danger col-md-12");
             // notify3.innerHTML = "Either customer or fps hasn't registered.";

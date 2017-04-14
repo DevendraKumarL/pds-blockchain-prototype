@@ -46,6 +46,12 @@
 #ration-card-events-div {
     display: none;
 }
+#food-transfer-events-div {
+    display: none;
+}
+#rupee-transfer-events-div {
+    display: none;
+}
 #add-budget-to-state-div {
     display: none;
 }

@@ -227,22 +227,33 @@ window.stateFoodApp = {
         var fooditem = document.getElementById("food-item-list-supply-fps");
         var fpsAddr = document.getElementById("supply-to-fps-item-address");
         var itemhash = document.getElementById("supply-to-fps-item-hash");
-        if (fooditem.selectedIndex == 0 || itemhash.value == "" || fpsAddr.value == "") {
+        var password = document.getElementById("state-government-supply-password");
+        if (fooditem.selectedIndex == 0 || itemhash.value == "" || fpsAddr.value == "" || password.value == "") {
             return;
         }
-        Food.deployed().then(function(instance) {
-            foodGlobal = instance;
-            return foodGlobal.supplyToFPS_Hash(fpsAddr.value, fooditem.options[fooditem.selectedIndex].value, itemhash.value, {from: centralGovernmentAddress, gas: 200000});
+        User.deployed().then(function(instance){
+            userGlobal = instance;
+            return userGlobal.authenticateUserWithAddress.call(stateGovernmentAddress, password.value);
         }).then(function(res){
-            console.log(res);
-            alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " sent to FPS: " + fpsAddr.value);
-            fooditem.selectedIndex = 0;
-            fpsAddr.value = "";
-            itemhash.value = "";
-        }).catch(function(e){
-            console.log(e);
-            alert("Cannot execute this transaction, either food stock received from centralGovernment is not confirmed or state doesn't have enough food stock to supply");
-        });
+            if (!res) {
+                alert("Authentication failure, password is incorrect");
+                password.value = "";
+                return;
+            }
+            Food.deployed().then(function(instance) {
+                foodGlobal = instance;
+                return foodGlobal.supplyToFPS_Hash(fpsAddr.value, fooditem.options[fooditem.selectedIndex].value, itemhash.value, {from: centralGovernmentAddress, gas: 200000});
+            }).then(function(res){
+                console.log(res);
+                alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " sent to FPS: " + fpsAddr.value);
+                fooditem.selectedIndex = 0;
+                fpsAddr.value = "";
+                itemhash.value = "";
+            }).catch(function(e){
+                console.log(e);
+                alert("Cannot execute this transaction, either food stock received from centralGovernment is not confirmed or state doesn't have enough food stock to supply");
+            });
+        })
     },
 
     loadFoodSuppliedToStateEvents: function() {
