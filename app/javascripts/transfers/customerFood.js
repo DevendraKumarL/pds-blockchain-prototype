@@ -246,56 +246,58 @@ window.customerFoodApp = {
             foodGlobal = instance;
             return foodGlobal.getFoodStockHashOf.call(customerData[0], foodStockToCustomerEvents[k].args._foodIndex);
         }).then(function(res){
-            var tr = document.createElement("tr");
-            var td1 = document.createElement("td");
-            var td2 = document.createElement("td");
-            var td3 = document.createElement("td");
-            var td4 = document.createElement("td");
-            var td5 = document.createElement("td");
-            var td6 = document.createElement("td");
-            td1.appendChild(document.createTextNode(foodItems[foodStockToCustomerEvents[k].args._foodIndex][0]));
-            td2.appendChild(document.createTextNode(foodStockToCustomerEvents[k].args._fpsAddress));
-            td3.appendChild(document.createTextNode(foodStockToCustomerEvents[k].args._quantity));
-            td4.appendChild(document.createTextNode(foodStockToCustomerEvents[k].args._totalCost));
-            if (foodStockToCustomerEvents[k].args._rationCard == 0)
-                td5.appendChild(document.createTextNode("Fixed Scheme"));
-            else
-                td5.appendChild(document.createTextNode("Flexi Scheme"));
-            var b;
-            if (res.valueOf() == "0x0000000000000000000000000000000000000000000000000000000000000000" || foodStoredMap[foodStockToCustomerEvents[k].args._foodIndex]) {
-                b = document.createElement("input");
-                b.type = "button";
-                b.setAttribute("class", "btn btn-success btn-sm");
-                b.value = "Paid";
-            } else if (res.valueOf() != "0x0000000000000000000000000000000000000000000000000000000000000000") {
-                foodStoredMap[foodStockToCustomerEvents[k].args._foodIndex] = true;
-                b = document.createElement("input");
-                b.type = "button";
-                b.setAttribute("class", "btn btn-primary btn-sm");
-                b.setAttribute("data-toggle", "modal");
-                b.setAttribute("data-target", "#myModal1");
-                b.setAttribute("data-foodname", foodItems[foodStockToCustomerEvents[k].args._foodIndex][0]);
-                b.setAttribute("data-fooditem", foodStockToCustomerEvents[k].args._foodIndex);
-                b.setAttribute("data-foodcost", foodStockToCustomerEvents[k].args._totalCost);
-                b.setAttribute("data-foodfps", foodStockToCustomerEvents[k].args._fpsAddress);
-                b.setAttribute("data-foodration", foodStockToCustomerEvents[k].args._rationCard);
-                b.setAttribute("data-foodqty", foodStockToCustomerEvents[k].args._quantity);
-                b.value = "Confirm Now";
-                b.onclick = function(e) {
-                    $("#customer-confirm-pay-btn").click(function(){
-                        window.customerFoodApp.confirmCustomerFoodSuppliedandPay();
-                        $("#customer-confirm-pay-btn").off();
-                    });
+            if (foodStockToCustomerEvents[k].args._customerAddress == customerData[0]) {
+                var tr = document.createElement("tr");
+                var td1 = document.createElement("td");
+                var td2 = document.createElement("td");
+                var td3 = document.createElement("td");
+                var td4 = document.createElement("td");
+                var td5 = document.createElement("td");
+                var td6 = document.createElement("td");
+                td1.appendChild(document.createTextNode(foodItems[foodStockToCustomerEvents[k].args._foodIndex][0]));
+                td2.appendChild(document.createTextNode(foodStockToCustomerEvents[k].args._fpsAddress));
+                td3.appendChild(document.createTextNode(foodStockToCustomerEvents[k].args._quantity));
+                td4.appendChild(document.createTextNode(foodStockToCustomerEvents[k].args._totalCost));
+                if (foodStockToCustomerEvents[k].args._rationCard == 0)
+                    td5.appendChild(document.createTextNode("Fixed Scheme"));
+                else
+                    td5.appendChild(document.createTextNode("Flexi Scheme"));
+                var b;
+                if (res.valueOf() == "0x0000000000000000000000000000000000000000000000000000000000000000" || foodStoredMap[foodStockToCustomerEvents[k].args._foodIndex]) {
+                    b = document.createElement("input");
+                    b.type = "button";
+                    b.setAttribute("class", "btn btn-success btn-sm");
+                    b.value = "Paid";
+                } else if (res.valueOf() != "0x0000000000000000000000000000000000000000000000000000000000000000") {
+                    foodStoredMap[foodStockToCustomerEvents[k].args._foodIndex] = true;
+                    b = document.createElement("input");
+                    b.type = "button";
+                    b.setAttribute("class", "btn btn-primary btn-sm");
+                    b.setAttribute("data-toggle", "modal");
+                    b.setAttribute("data-target", "#myModal1");
+                    b.setAttribute("data-foodname", foodItems[foodStockToCustomerEvents[k].args._foodIndex][0]);
+                    b.setAttribute("data-fooditem", foodStockToCustomerEvents[k].args._foodIndex);
+                    b.setAttribute("data-foodcost", foodStockToCustomerEvents[k].args._totalCost);
+                    b.setAttribute("data-foodfps", foodStockToCustomerEvents[k].args._fpsAddress);
+                    b.setAttribute("data-foodration", foodStockToCustomerEvents[k].args._rationCard);
+                    b.setAttribute("data-foodqty", foodStockToCustomerEvents[k].args._quantity);
+                    b.value = "Confirm Now";
+                    b.onclick = function(e) {
+                        $("#customer-confirm-pay-btn").click(function(){
+                            window.customerFoodApp.confirmCustomerFoodSuppliedandPay();
+                            $("#customer-confirm-pay-btn").off();
+                        });
+                    }
                 }
+                td6.appendChild(b);
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+                tr.appendChild(td5);
+                tr.appendChild(td6);
+                foodSuppliedToCustomerEventsTable.appendChild(tr);
             }
-            td6.appendChild(b);
-            tr.appendChild(td1);
-            tr.appendChild(td2);
-            tr.appendChild(td3);
-            tr.appendChild(td4);
-            tr.appendChild(td5);
-            tr.appendChild(td6);
-            foodSuppliedToCustomerEventsTable.appendChild(tr);
             k--;
             if (k < 0) {
                 k = 0;

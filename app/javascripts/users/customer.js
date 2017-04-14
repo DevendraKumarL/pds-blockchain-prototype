@@ -88,7 +88,7 @@ window.customerApp = {
             if (cookieAddr) {
                 User.deployed().then(function(instance) {
                     userGlobal = instance;
-                    return userGlobal.getUserDetails.call(cookieAddr, {from: centralGovernmentAddress});
+                    return userGlobal.getUserDetails.call(cookieAddr);
                 }).then(function(userinfo) {
                     if (userinfo[0] == cookieAddr) {
                         $("#register-link").remove();
@@ -266,7 +266,7 @@ window.customerApp = {
                 alert("address and password cannot empty");
                 return;
             }
-            userGlobal.authenticateUserWithAddress.call(addr.value, pass.value, {from: centralGovernmentAddress})
+            userGlobal.authenticateUserWithAddress.call(addr.value, pass.value)
             .then(function(res) {
                 if (res) {
                     // alert("FPS Authenticated using address");
@@ -284,7 +284,7 @@ window.customerApp = {
                 alert("email and password cannot empty");
                 return;
             }
-            userGlobal.authenticateUserWithEmail.call(email.value, pass.value, {from: centralGovernmentAddress})
+            userGlobal.authenticateUserWithEmail.call(email.value, pass.value)
             .then(function(res) {
                 if (res) {
                     // alert("centralGovernment Authenticated using email");
@@ -302,13 +302,13 @@ window.customerApp = {
         var self = this;
         console.log("type : " + type + " userId : " + userId);
         if (type == 0) {
-            userGlobal.getUserDetails.call(userId, {from: centralGovernmentAddress, gas: 150000})
+            userGlobal.getUserDetails.call(userId)
             .then(function(userinfo){
                 console.log(userinfo);
                 self.storeLoginSessionCookie(userId, expDays, userinfo);
             });
         } else if (type == 1) {
-            userGlobal.getUserDetailsUsingEmail.call(userId, {from: centralGovernmentAddress, gas: 150000})
+            userGlobal.getUserDetailsUsingEmail.call(userId)
             .then(function(userinfo){
                 console.log(userinfo);
                 self.storeLoginSessionCookie(userId, expDays, userinfo);
@@ -582,6 +582,23 @@ window.customerApp = {
 
         $("#view-card-details-div").show();
         $("#fixed-ration-card-div").show();
+        var fixedRationCustomerTable = document.getElementById("fixed-ration-customer-table");
+        var fixedRationPointsCustomerTable = document.getElementById("fixed-ration-points-customer-table");
+        var tr1 = document.createElement("tr");
+        var tr2 = document.createElement("tr");
+        var tr3 = document.createElement("tr");
+        var tr4 = document.createElement("tr");
+        var tr5 = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
+        var td5 = document.createElement("td");
+        var td6 = document.createElement("td");
+        var td7 = document.createElement("td");
+        var td8 = document.createElement("td");
+        var td9 = document.createElement("td");
+        var td10 = document.createElement("td");
         RationCard.deployed().then(function(instance){
             rationCardGlobal = instance;
             return rationCardGlobal.getRationCardInfo.call(0, loggedCustomer);
@@ -594,18 +611,74 @@ window.customerApp = {
                 // document.getElementById("card-details-div").style.display = "none";
                 return;
             }
-            document.getElementById("fixed-card-number").innerHTML = info[1].valueOf();
-            document.getElementById("fixed-card-custname").innerHTML = info[2];
-            document.getElementById("fixed-card-street").innerHTML = info[3];
-            document.getElementById("fixed-card-fps").innerHTML = info[5];
+            // document.getElementById("fixed-card-number").innerHTML = info[1].valueOf();
+            // document.getElementById("fixed-card-custname").innerHTML = info[2];
+            // document.getElementById("fixed-card-street").innerHTML = info[3];
+            // document.getElementById("fixed-card-fps").innerHTML = info[5];
+
+            td3.appendChild(document.createTextNode("RationCard Number"));
+            td4.appendChild(document.createTextNode(info[1].valueOf()));
+            tr2.appendChild(td3);
+            tr2.appendChild(td4);
+            td5.appendChild(document.createTextNode("Customer Name"));
+            td6.appendChild(document.createTextNode(info[2]));
+            tr3.appendChild(td5);
+            tr3.appendChild(td6);
+            td7.appendChild(document.createTextNode("Street address"));
+            td8.appendChild(document.createTextNode(info[3]));
+            tr4.appendChild(td7);
+            tr4.appendChild(td8);
+            td9.appendChild(document.createTextNode("FPS Address(Id)"));
+            td10.appendChild(document.createTextNode(info[5]));
+            tr5.appendChild(td9);
+            tr5.appendChild(td10);
+
             return rationCardGlobal.getRationCardPoints.call(0, loggedCustomer);
         }).then(function(points){
             console.log("fixed => " + points);
             if (points[0]) {
-                $("#fixed-card-item1-points").html(points[1].valueOf());
-                $("#fixed-card-item2-points").html(points[2].valueOf());
-                $("#fixed-card-item3-points").html(points[3].valueOf());
-                $("#fixed-card-custaddr").html(points[4]);
+                var tr6 = document.createElement("tr");
+                var tr7 = document.createElement("tr");
+                var tr8 = document.createElement("tr");
+
+                var td11 = document.createElement("td");
+                var td12 = document.createElement("td");
+                var td13 = document.createElement("td");
+                var td14 = document.createElement("td");
+                var td15 = document.createElement("td");
+                var td16 = document.createElement("td");
+                // $("#fixed-card-item1-points").html(points[1].valueOf());
+                // $("#fixed-card-item2-points").html(points[2].valueOf());
+                // $("#fixed-card-item3-points").html(points[3].valueOf());
+                // $("#fixed-card-custaddr").html(points[4]);
+
+                td11.appendChild(document.createTextNode("Rice"));
+                td12.appendChild(document.createTextNode(points[1].valueOf()));
+                tr6.appendChild(td11);
+                tr6.appendChild(td12);
+                td13.appendChild(document.createTextNode("Wheat"));
+                td14.appendChild(document.createTextNode(points[2].valueOf()));
+                tr7.appendChild(td13);
+                tr7.appendChild(td14);
+                td15.appendChild(document.createTextNode("Sugar"));
+                td16.appendChild(document.createTextNode(points[3].valueOf()));
+                tr8.appendChild(td15);
+                tr8.appendChild(td16);
+
+                fixedRationPointsCustomerTable.appendChild(tr6);
+                fixedRationPointsCustomerTable.appendChild(tr7);
+                fixedRationPointsCustomerTable.appendChild(tr8);
+
+                td1.appendChild(document.createTextNode("Customer Address(Id)"));
+                td2.appendChild(document.createTextNode(points[4]));
+                tr1.appendChild(td1);
+                tr1.appendChild(td2);
+
+                fixedRationCustomerTable.appendChild(tr1);
+                fixedRationCustomerTable.appendChild(tr2);
+                fixedRationCustomerTable.appendChild(tr3);
+                fixedRationCustomerTable.appendChild(tr4);
+                fixedRationCustomerTable.appendChild(tr5);
                 return;
             }
         }).catch(function(e){
@@ -621,6 +694,23 @@ window.customerApp = {
 
         $("#view-card-details-div").show();
         $("#flexi-ration-card-div").show();
+        var flexiRationCustomerTable = document.getElementById("flexi-ration-customer-table");
+        var flexiRationPointsCustomerTable = document.getElementById("flexi-ration-points-customer-table");
+        var tr1 = document.createElement("tr");
+        var tr2 = document.createElement("tr");
+        var tr3 = document.createElement("tr");
+        var tr4 = document.createElement("tr");
+        var tr5 = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
+        var td5 = document.createElement("td");
+        var td6 = document.createElement("td");
+        var td7 = document.createElement("td");
+        var td8 = document.createElement("td");
+        var td9 = document.createElement("td");
+        var td10 = document.createElement("td");
         RationCard.deployed().then(function(instance){
             rationCardGlobal = instance;
             return rationCardGlobal.getFlexiRationCardInfo.call(0, loggedCustomer);
@@ -633,16 +723,58 @@ window.customerApp = {
                 // document.getElementById("card-details-div").style.display = "none";
                 return;
             }
-            document.getElementById("flexi-card-number").innerHTML = info[1].valueOf();
-            document.getElementById("flexi-card-custname").innerHTML = info[2];
-            document.getElementById("flexi-card-street").innerHTML = info[3];
-            document.getElementById("flexi-card-fps").innerHTML = info[5];
+            // document.getElementById("flexi-card-number").innerHTML = info[1].valueOf();
+            // document.getElementById("flexi-card-custname").innerHTML = info[2];
+            // document.getElementById("flexi-card-street").innerHTML = info[3];
+            // document.getElementById("flexi-card-fps").innerHTML = info[5];
+
+            td3.appendChild(document.createTextNode("RationCard Number"));
+            td4.appendChild(document.createTextNode(info[1].valueOf()));
+            tr2.appendChild(td3);
+            tr2.appendChild(td4);
+            td5.appendChild(document.createTextNode("Customer Name"));
+            td6.appendChild(document.createTextNode(info[2]));
+            tr3.appendChild(td5);
+            tr3.appendChild(td6);
+            td7.appendChild(document.createTextNode("Street address"));
+            td8.appendChild(document.createTextNode(info[3]));
+            tr4.appendChild(td7);
+            tr4.appendChild(td8);
+            td9.appendChild(document.createTextNode("FPS Address(Id)"));
+            td10.appendChild(document.createTextNode(info[5]));
+            tr5.appendChild(td9);
+            tr5.appendChild(td10);
+
             return rationCardGlobal.getFlexiRationCardPoints.call(0, loggedCustomer);
         }).then(function(points){
             console.log("flexi => " + points);
             if (points[0]) {
-                $("#flexi-card-points").html(points[1].valueOf());
-                $("#flexi-card-custaddr").html(points[2]);
+                var tr6 = document.createElement("tr");
+                var td11 = document.createElement("td");
+                var td12 = document.createElement("td");
+
+                // $("#flexi-card-points").html(points[1].valueOf());
+                // $("#flexi-card-custaddr").html(points[2]);
+
+                td11.appendChild(document.createTextNode("Points"));
+                td12.appendChild(document.createTextNode(points[1].valueOf()));
+                tr6.appendChild(td11);
+                tr6.appendChild(td12);
+
+                flexiRationPointsCustomerTable.appendChild(tr6);
+
+                td1.appendChild(document.createTextNode("Customer Address(Id)"));
+                td2.appendChild(document.createTextNode(points[2]));
+                tr1.appendChild(td1);
+                tr1.appendChild(td2);
+
+                flexiRationCustomerTable.appendChild(tr1);
+                flexiRationCustomerTable.appendChild(tr2);
+                flexiRationCustomerTable.appendChild(tr3);
+                flexiRationCustomerTable.appendChild(tr4);
+                flexiRationCustomerTable.appendChild(tr5);
+                return;
+
                 return;
             }
         }).catch(function(e){

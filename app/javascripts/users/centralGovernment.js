@@ -84,7 +84,7 @@ window.centralApp = {
             if (cookieAddr) {
                 User.deployed().then(function(instance) {
                     userGlobal = instance;
-                    return userGlobal.getUserDetails.call(cookieAddr, {from: centralGovernmentAddress});
+                    return userGlobal.getUserDetails.call(cookieAddr);
                 }).then(function(userinfo) {
                     if (userinfo[0] == cookieAddr) {
                         $("#register-link").remove();
@@ -238,7 +238,7 @@ window.centralApp = {
                 alert("address and password cannot empty");
                 return;
             }
-            userGlobal.authenticateUserWithAddress.call(addr.value, pass.value, {from: centralGovernmentAddress})
+            userGlobal.authenticateUserWithAddress.call(addr.value, pass.value)
             .then(function(res) {
                 if (res) {
                     // alert("centralGovernment Authenticated using address");
@@ -256,7 +256,7 @@ window.centralApp = {
                 alert("email and password cannot empty");
                 return;
             }
-            userGlobal.authenticateUserWithEmail.call(email.value, pass.value, {from: centralGovernmentAddress})
+            userGlobal.authenticateUserWithEmail.call(email.value, pass.value)
             .then(function(res) {
                 if (res) {
                     // alert("centralGovernment Authenticated using email");
@@ -272,7 +272,7 @@ window.centralApp = {
 
     getUserDetails: function(userId, expDays) {
         var self = this;
-        userGlobal.getUserDetails.call(centralGovernmentAddress, {from: centralGovernmentAddress, gas: 150000})
+        userGlobal.getUserDetails.call(centralGovernmentAddress)
         .then(function(userinfo){
             console.log(userinfo);
             self.storeLoginSessionCookie(userId, expDays, userinfo);

@@ -72,7 +72,7 @@ window.RationCardsApp = {
             if (cookieAddr && flag) {
                 User.deployed().then(function(instance) {
                     userGlobal = instance;
-                    return userGlobal.getUserDetails.call(cookieAddr, {from: centralGovernmentAddress});
+                    return userGlobal.getUserDetails.call(cookieAddr);
                 }).then(function(userinfo) {
                     if (userinfo[0] == cookieAddr) {
                         $("#register-link").remove();
@@ -141,16 +141,59 @@ window.RationCardsApp = {
         var self = this;
 
         var number = document.getElementById("fixed-ration-card-number");
-        if (number.value < 1001 || number.value >= latestFixedCardNumber) {
+        var addr = document.getElementById("fixed-ration-card-addr");
+
+        var useNumber = false;
+        if ($('input:radio[id="radio1"]').is(':checked')) {
+            useNumber = true;
+        }
+        else if ($('input:radio[id="radio2"]').is(':checked')) {
+            useNumber = false;
+        }
+        console.log("useNumber => " + useNumber);
+
+        if (useNumber && (number.value == "" || number.value < 1001 || number.value >= latestFixedCardNumber)) {
             alert1.setAttribute("class", "alert alert-danger col-md-6");
-            alert1.innerHTML = "Fixed RationCard number must between 1001 and  " + latestFixedCardNumber;
+            alert1.innerHTML = "Fixed Scheme RationCard number must between 1001 and  " + (latestFixedCardNumber - 1);
             alert1.style.display = "block";
+            $("#fixed-card-give-points-div").hide();
             return;
         }
 
+        if (!useNumber && (addr.value == "")) {
+            alert1.setAttribute("class", "alert alert-danger col-md-6");
+            alert1.innerHTML = "Please give the addres of the customer/ RationCard";
+            alert1.style.display = "block";
+            $("#fixed-card-give-points-div").hide();
+            return;
+        }
+
+        var fixedRationCustomerTable = document.getElementById("fixed-ration-customer-table");
+        var fixedRationPointsCustomerTable = document.getElementById("fixed-ration-points-customer-table");
+        fixedRationCustomerTable.innerHTML = "";
+        fixedRationPointsCustomerTable.innerHTML = "";
+        var tr1 = document.createElement("tr");
+        var tr2 = document.createElement("tr");
+        var tr3 = document.createElement("tr");
+        var tr4 = document.createElement("tr");
+        var tr5 = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
+        var td5 = document.createElement("td");
+        var td6 = document.createElement("td");
+        var td7 = document.createElement("td");
+        var td8 = document.createElement("td");
+        var td9 = document.createElement("td");
+        var td10 = document.createElement("td");
+
         RationCard.deployed().then(function(instance){
             rationCardGlobal = instance;
-            return rationCardGlobal.getRationCardInfo.call(number.value, '');
+            if (useNumber)
+                return rationCardGlobal.getRationCardInfo.call(number.value, '');
+            else
+                return rationCardGlobal.getRationCardInfo.call(0, addr.value);
         }).then(function(info){
             console.log("RationCard => " + info);
             if (!info[0]) {
@@ -166,19 +209,76 @@ window.RationCardsApp = {
             alert1.style.display = "block";
             alert1.style.display = "none";
             var details = document.getElementById("fixed-card-details-div");
-            document.getElementById("fixed-card-number").innerHTML = info[1].valueOf();
-            document.getElementById("fixed-card-custname").innerHTML = info[2];
-            document.getElementById("fixed-card-street").innerHTML = info[3];
-            document.getElementById("fixed-card-fps").innerHTML = info[5];
+            // document.getElementById("fixed-card-number").innerHTML = info[1].valueOf();
+            // document.getElementById("fixed-card-custname").innerHTML = info[2];
+            // document.getElementById("fixed-card-street").innerHTML = info[3];
+            // document.getElementById("fixed-card-fps").innerHTML = info[5];
             details.style.display = "block";
+
+            td3.appendChild(document.createTextNode("RationCard Number"));
+            td4.appendChild(document.createTextNode(info[1].valueOf()));
+            tr2.appendChild(td3);
+            tr2.appendChild(td4);
+            td5.appendChild(document.createTextNode("Customer Name"));
+            td6.appendChild(document.createTextNode(info[2]));
+            tr3.appendChild(td5);
+            tr3.appendChild(td6);
+            td7.appendChild(document.createTextNode("Street address"));
+            td8.appendChild(document.createTextNode(info[3]));
+            tr4.appendChild(td7);
+            tr4.appendChild(td8);
+            td9.appendChild(document.createTextNode("FPS Address(Id)"));
+            td10.appendChild(document.createTextNode(info[5]));
+            tr5.appendChild(td9);
+            tr5.appendChild(td10);
+
             return rationCardGlobal.getRationCardPoints.call(info[1], '');
         }).then(function(points){
             if (points) {
-                $("#fixed-card-item1-points").html(points[1].valueOf());
-                $("#fixed-card-item2-points").html(points[2].valueOf());
-                $("#fixed-card-item3-points").html(points[3].valueOf());
-                $("#fixed-card-custaddr").html(points[4]);
+                // $("#fixed-card-item1-points").html(points[1].valueOf());
+                // $("#fixed-card-item2-points").html(points[2].valueOf());
+                // $("#fixed-card-item3-points").html(points[3].valueOf());
+                // $("#fixed-card-custaddr").html(points[4]);
                 $("#fixed-card-give-points-div").show();
+
+                var tr6 = document.createElement("tr");
+                var tr7 = document.createElement("tr");
+                var tr8 = document.createElement("tr");
+
+                var td11 = document.createElement("td");
+                var td12 = document.createElement("td");
+                var td13 = document.createElement("td");
+                var td14 = document.createElement("td");
+                var td15 = document.createElement("td");
+                var td16 = document.createElement("td");
+
+                td11.appendChild(document.createTextNode("Rice"));
+                td12.appendChild(document.createTextNode(points[1].valueOf()));
+                tr6.appendChild(td11);
+                tr6.appendChild(td12);
+                td13.appendChild(document.createTextNode("Wheat"));
+                td14.appendChild(document.createTextNode(points[2].valueOf()));
+                tr7.appendChild(td13);
+                tr7.appendChild(td14);
+                td15.appendChild(document.createTextNode("Sugar"));
+                td16.appendChild(document.createTextNode(points[3].valueOf()));
+                tr8.appendChild(td15);
+                tr8.appendChild(td16);
+
+                fixedRationPointsCustomerTable.appendChild(tr6);
+                fixedRationPointsCustomerTable.appendChild(tr7);
+                fixedRationPointsCustomerTable.appendChild(tr8);
+
+                td1.appendChild(document.createTextNode("Customer Address(Id)"));
+                td2.appendChild(document.createTextNode(points[4]));
+                tr1.appendChild(td1);
+                tr1.appendChild(td2);
+
+                fixedRationCustomerTable.appendChild(tr1);
+                fixedRationCustomerTable.appendChild(tr2);
+                fixedRationCustomerTable.appendChild(tr3);
+                fixedRationCustomerTable.appendChild(tr4);
+                fixedRationCustomerTable.appendChild(tr5);
                 return;
             }
         }).catch(function(e){
@@ -193,17 +293,59 @@ window.RationCardsApp = {
         var self = this;
 
         var number = document.getElementById("flexi-ration-card-number");
-        if (number.value < 5001 || number.value >= latestFlexiCardNumber) {
+        var addr = document.getElementById("flexi-ration-card-addr");
+
+        var useNumber = false;
+        if ($('input:radio[id="radio3"]').is(':checked')) {
+            useNumber = true;
+        }
+        else if ($('input:radio[id="radio4"]').is(':checked')) {
+            useNumber = false;
+        }
+        console.log("useNumber => " + useNumber);
+
+        if (useNumber && (number.value == "" || number.value < 5001 || number.value >= latestFlexiCardNumber)) {
             alert2.setAttribute("class", "alert alert-danger col-md-6");
-            alert2.innerHTML = "Flexi Scheme RationCard number must between 5001 and  " + latestFlexiCardNumber;
+            alert2.innerHTML = "Fixed Scheme RationCard number must between 1001 and  " + (latestFlexiCardNumber - 1);
             alert2.style.display = "block";
             $("#flexi-card-give-points-div").hide();
             return;
         }
 
+        if (!useNumber && (addr.value == "")) {
+            alert2.setAttribute("class", "alert alert-danger col-md-6");
+            alert2.innerHTML = "Please give the addres of the customer/ RationCard";
+            alert2.style.display = "block";
+            $("#flexi-card-give-points-div").hide();
+            return;
+        }
+
+        var flexiRationCustomerTable = document.getElementById("flexi-ration-customer-table");
+        var flexiRationPointsCustomerTable = document.getElementById("flexi-ration-points-customer-table");
+        flexiRationCustomerTable.innerHTML = "";
+        flexiRationPointsCustomerTable.innerHTML = "";
+        var tr1 = document.createElement("tr");
+        var tr2 = document.createElement("tr");
+        var tr3 = document.createElement("tr");
+        var tr4 = document.createElement("tr");
+        var tr5 = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
+        var td5 = document.createElement("td");
+        var td6 = document.createElement("td");
+        var td7 = document.createElement("td");
+        var td8 = document.createElement("td");
+        var td9 = document.createElement("td");
+        var td10 = document.createElement("td");
+
         RationCard.deployed().then(function(instance){
             rationCardGlobal = instance;
-            return rationCardGlobal.getFlexiRationCardInfo.call(number.value, '');
+            if (useNumber)
+                return rationCardGlobal.getFlexiRationCardInfo.call(number.value, '');
+            else
+                return rationCardGlobal.getFlexiRationCardInfo.call(0, addr.value);
         }).then(function(info){
             console.log(info);
             if (!info[0]) {
@@ -218,17 +360,57 @@ window.RationCardsApp = {
             // alert2.style.display = "block";
             alert2.style.display = "none";
             var details = document.getElementById("flexi-card-details-div");
-            document.getElementById("flexi-card-number").innerHTML = info[1].valueOf();
-            document.getElementById("flexi-card-custname").innerHTML = info[2];
-            document.getElementById("flexi-card-street").innerHTML = info[3];
-            document.getElementById("flexi-card-fps").innerHTML = info[5];
+            // document.getElementById("flexi-card-number").innerHTML = info[1].valueOf();
+            // document.getElementById("flexi-card-custname").innerHTML = info[2];
+            // document.getElementById("flexi-card-street").innerHTML = info[3];
+            // document.getElementById("flexi-card-fps").innerHTML = info[5];
             details.style.display = "block";
+
+            td3.appendChild(document.createTextNode("RationCard Number"));
+            td4.appendChild(document.createTextNode(info[1].valueOf()));
+            tr2.appendChild(td3);
+            tr2.appendChild(td4);
+            td5.appendChild(document.createTextNode("Customer Name"));
+            td6.appendChild(document.createTextNode(info[2]));
+            tr3.appendChild(td5);
+            tr3.appendChild(td6);
+            td7.appendChild(document.createTextNode("Street address"));
+            td8.appendChild(document.createTextNode(info[3]));
+            tr4.appendChild(td7);
+            tr4.appendChild(td8);
+            td9.appendChild(document.createTextNode("FPS Address(Id)"));
+            td10.appendChild(document.createTextNode(info[5]));
+            tr5.appendChild(td9);
+            tr5.appendChild(td10);
+
             return rationCardGlobal.getFlexiRationCardPoints.call(info[1], '');
         }).then(function(points){
             if (points[0]) {
-                $("#flexi-card-points").html(points[1].valueOf());
-                $("#flexi-card-custaddr").html(points[2]);
-                $("#flexi-card-give-points-div").show();
+                // $("#flexi-card-points").html(points[1].valueOf());
+                // $("#flexi-card-custaddr").html(points[2]);
+                // $("#flexi-card-give-points-div").show();
+
+                var tr6 = document.createElement("tr");
+                var td11 = document.createElement("td");
+                var td12 = document.createElement("td");
+
+                td11.appendChild(document.createTextNode("Points"));
+                td12.appendChild(document.createTextNode(points[1].valueOf()));
+                tr6.appendChild(td11);
+                tr6.appendChild(td12);
+
+                flexiRationPointsCustomerTable.appendChild(tr6);
+
+                td1.appendChild(document.createTextNode("Customer Address(Id)"));
+                td2.appendChild(document.createTextNode(points[2]));
+                tr1.appendChild(td1);
+                tr1.appendChild(td2);
+
+                flexiRationCustomerTable.appendChild(tr1);
+                flexiRationCustomerTable.appendChild(tr2);
+                flexiRationCustomerTable.appendChild(tr3);
+                flexiRationCustomerTable.appendChild(tr4);
+                flexiRationCustomerTable.appendChild(tr5);
                 return;
             }
         }).catch(function(e){
@@ -356,6 +538,18 @@ window.RationCardsApp = {
             $("#ration-home-div").hide();
             $("#fixed-card-give-points-div").hide();
             $("#flexi-card-give-points-div").hide();
+            $("#fixed-number-div").show();
+            $("#fixed-addr-div").hide();
+            $("#flexi-number-div").show();
+            $("#flexi-addr-div").hide();
+            var number = document.getElementById("fixed-ration-card-number");
+            var addr = document.getElementById("fixed-ration-card-addr");
+            number.value = "";
+            addr.value = "";
+            var fixedRationCustomerTable = document.getElementById("fixed-ration-customer-table");
+            var fixedRationPointsCustomerTable = document.getElementById("fixed-ration-points-customer-table");
+            fixedRationCustomerTable.innerHTML = "";
+            fixedRationPointsCustomerTable.innerHTML = "";
         }
     },
 
@@ -368,6 +562,18 @@ window.RationCardsApp = {
             $("#ration-home-div").hide();
             $("#fixed-card-give-points-div").hide();
             $("#flexi-card-give-points-div").hide();
+            $("#fixed-number-div").show();
+            $("#fixed-addr-div").hide();
+            $("#flexi-number-div").show();
+            $("#flexi-addr-div").hide();
+            var number = document.getElementById("flexi-ration-card-number");
+            var addr = document.getElementById("flexi-ration-card-addr");
+            number.value = "";
+            addr.value = "";
+            var flexiRationCustomerTable = document.getElementById("flexi-ration-customer-table");
+            var flexiRationPointsCustomerTable = document.getElementById("flexi-ration-points-customer-table");
+            flexiRationCustomerTable.innerHTML = "";
+            flexiRationPointsCustomerTable.innerHTML = "";
         }
     },
 

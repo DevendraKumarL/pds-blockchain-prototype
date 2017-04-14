@@ -87,7 +87,7 @@ window.fpsApp = {
             if (cookieAddr) {
                 User.deployed().then(function(instance) {
                     userGlobal = instance;
-                    return userGlobal.getUserDetails.call(cookieAddr, {from: centralGovernmentAddress});
+                    return userGlobal.getUserDetails.call(cookieAddr);
                 }).then(function(userinfo) {
                     if (userinfo[0] == cookieAddr) {
                         $("#register-link").remove();
@@ -266,7 +266,7 @@ window.fpsApp = {
                 alert("address and password cannot empty");
                 return;
             }
-            userGlobal.authenticateUserWithAddress.call(addr.value, pass.value, {from: centralGovernmentAddress})
+            userGlobal.authenticateUserWithAddress.call(addr.value, pass.value)
             .then(function(res) {
                 if (res) {
                     // alert("FPS Authenticated using address");
@@ -284,7 +284,7 @@ window.fpsApp = {
                 alert("email and password cannot empty");
                 return;
             }
-            userGlobal.authenticateUserWithEmail.call(email.value, pass.value, {from: centralGovernmentAddress})
+            userGlobal.authenticateUserWithEmail.call(email.value, pass.value)
             .then(function(res) {
                 if (res) {
                     // alert("centralGovernment Authenticated using email");
@@ -302,13 +302,13 @@ window.fpsApp = {
         var self = this;
         console.log("type : " + type + " userId : " + userId);
         if (type == 0) {
-            userGlobal.getUserDetails.call(userId, {from: centralGovernmentAddress, gas: 150000})
+            userGlobal.getUserDetails.call(userId)
             .then(function(userinfo){
                 console.log(userinfo);
                 self.storeLoginSessionCookie(userId, expDays, userinfo);
             });
         } else if (type == 1) {
-            userGlobal.getUserDetailsUsingEmail.call(userId, {from: centralGovernmentAddress, gas: 150000})
+            userGlobal.getUserDetailsUsingEmail.call(userId)
             .then(function(userinfo){
                 console.log(userinfo);
                 self.storeLoginSessionCookie(userId, expDays, userinfo);

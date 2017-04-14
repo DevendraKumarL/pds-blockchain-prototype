@@ -78,13 +78,23 @@
                             <div class="clearfix"></div>
                             <div class="col-md-8 card">
                                 <h5>Enter Fixed Scheme Ration Card Number</h5>
-                                <div class="input-group">
+                                <label class="custom-control custom-radio">
+                                    <input id="radio1" name="radio" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">RationCard Number</span>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input id="radio2" name="radio" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">RationCard Address</span>
+                                </label>
+                                <br>
+                                <div class="input-group" id="fixed-number-div">
                                     <input type="number" id="fixed-ration-card-number" class="form-inline">
                                     <span class="input-group-addon">RationCard Number</span>
                                 </div>
-                                <div class="clearfix"><br></div>
-                                <div class="input-group">
-                                    <input type="number" id="fixed-ration-card-addr" class="form-inline">
+                                <div class="input-group" id="fixed-addr-div">
+                                    <input type="text" id="fixed-ration-card-addr" class="form-control">
                                     <span class="input-group-addon">RationCard Address</span>
                                 </div>
                                 <div class="clearfix"><br></div>
@@ -96,16 +106,34 @@
                             <div class="col-md-8 card card-1" id="fixed-card-details-div">
                                 <h5>Fixed Scheme RationCard Details</h5>
                                 <hr size="2">
-                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Ration Card Number</label>&nbsp;: <b><span id="fixed-card-number"></span></b></p>
+                                <div class="table-responsive">
+                                    <table class="table table-hover" style="border:1px solid black;">
+                                        <thead class="thead-inverse">
+                                            <th style="width:30%;">RationCard Details</th>
+                                            <th style="width:70%;">RationCard Info</th>
+                                        </thead>
+                                        <tbody id="fixed-ration-customer-table"></tbody>
+                                    </table>
+                                </div>
+                                <!-- <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Ration Card Number</label>&nbsp;: <b><span id="fixed-card-number"></span></b></p>
                                 <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Address</label>&nbsp;: <b><span id="fixed-card-custaddr"></span></b></p>
                                 <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Name</label>&nbsp;: <b><span id="fixed-card-custname"></span></b></p>
                                 <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Street address</label>&nbsp;: <b><span id="fixed-card-street"></span></b></p>
-                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; FPS Address</label>&nbsp;: <b><span id="fixed-card-fps"></span></b></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; FPS Address</label>&nbsp;: <b><span id="fixed-card-fps"></span></b></p> -->
                                 <h5>Fixed Scheme RationCard Points</h5>
                                 <hr size="2">
-                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Rice Points</label>&nbsp;: <b><span id="fixed-card-item1-points"></span></b></p>
+                                <div class="table-responsive">
+                                    <table class="table table-hover" style="border:1px solid black;">
+                                        <thead class="thead-inverse">
+                                            <th style="width:50%;">...</th>
+                                            <th style="width:50%;">Total Balance Points</th>
+                                        </thead>
+                                        <tbody id="fixed-ration-points-customer-table"></tbody>
+                                    </table>
+                                </div>
+                                <!-- <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Rice Points</label>&nbsp;: <b><span id="fixed-card-item1-points"></span></b></p>
                                 <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Wheat Points</label>&nbsp;: <b><span id="fixed-card-item2-points"></span></b></p>
-                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Sugar Points</label>&nbsp;: <b><span id="fixed-card-item3-points"></span></b></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Sugar Points</label>&nbsp;: <b><span id="fixed-card-item3-points"></span></b></p> -->
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-md-8 card card-1" id="fixed-card-give-points-div">
@@ -136,13 +164,23 @@
                             <div class="clearfix"></div>
                             <div class="col-md-8 card">
                                 <h5>Enter Flexi Scheme Ration Card Number</h5>
-                                <div class="input-group">
+                                <label class="custom-control custom-radio">
+                                    <input id="radio3" name="radio" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Flexi RationCard Number</span>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input id="radio4" name="radio" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Flexi RationCard Address</span>
+                                </label>
+                                <br>
+                                <div class="input-group" id="flexi-number-div">
                                     <input type="number" id="flexi-ration-card-number" class="form-inline">
                                     <span class="input-group-addon">Flexi RationCard Number</span>
                                 </div>
-                                <div class="clearfix"><br></div>
-                                <div class="input-group">
-                                    <input type="number" id="flexi-ration-card-addr" class="form-inline">
+                                <div class="input-group" id="flexi-addr-div">
+                                    <input type="text" id="flexi-ration-card-addr" class="form-control">
                                     <span class="input-group-addon">Flexi RationCard Address</span>
                                 </div>
                                 <div class="clearfix"><br></div>
@@ -154,14 +192,32 @@
                             <div class="col-md-8 card card-1" id="flexi-card-details-div">
                                 <h5>Flexi Scheme RationCard Details</h5>
                                 <hr size="2">
-                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Ration Card Number</label>&nbsp;: <b><span id="flexi-card-number"></span></b></p>
+                                <div class="table-responsive">
+                                    <table class="table table-hover" style="border:1px solid black;">
+                                        <thead class="thead-inverse">
+                                            <th style="width:30%;">RationCard Details</th>
+                                            <th style="width:70%;">RationCard Info</th>
+                                        </thead>
+                                        <tbody id="flexi-ration-customer-table"></tbody>
+                                    </table>
+                                </div>
+                                <!-- <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Ration Card Number</label>&nbsp;: <b><span id="flexi-card-number"></span></b></p>
                                 <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Address</label>&nbsp;: <b><span id="flexi-card-custaddr"></span></b></p>
                                 <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Customer Name</label>&nbsp;: <b><span id="flexi-card-custname"></span></b></p>
                                 <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Street address</label>&nbsp;: <b><span id="flexi-card-street"></span></b></p>
-                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; FPS Address</label>&nbsp;: <b><span id="flexi-card-fps"></span></b></p>
+                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; FPS Address</label>&nbsp;: <b><span id="flexi-card-fps"></span></b></p> -->
                                 <h5>Flexi Scheme RationCard Points</h5>
                                 <hr size="2">
-                                <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Total Points</label>&nbsp;: <b><span id="flexi-card-points"></span></b></p>
+                                <div class="table-responsive">
+                                    <table class="table table-hover" style="border:1px solid black;">
+                                        <thead class="thead-inverse">
+                                            <th style="width:50%;">...</th>
+                                            <th style="width:50%;">Total Balance Points</th>
+                                        </thead>
+                                        <tbody id="flexi-ration-points-customer-table"></tbody>
+                                    </table>
+                                </div>
+                                <!-- <p><label><i class="fa fa-dot-circle-o"></i>&nbsp; Total Points</label>&nbsp;: <b><span id="flexi-card-points"></span></b></p> -->
                             </div>
                             <div class="clearfix"></div>
                             <div class="col-md-8 card card-1" id="flexi-card-give-points-div">
@@ -248,6 +304,30 @@
         $("#give-flexi-points-btn").click(function(){
             $("#confirm-flexi-card-addr").html($("#flexi-card-custaddr").html());
             $("#confirm-flexi-card-item-points").html($("#give-flexi-point").val());
+        });
+        $("#fixed-number-div").show();
+        $("#fixed-addr-div").hide();
+        $("#flexi-number-div").show();
+        $("#flexi-addr-div").hide();
+        $('input:radio[name="radio"]').change(function() {
+            if ($('input:radio[id="radio1"]').is(':checked')) {
+                $("#fixed-number-div").show();
+                $("#fixed-addr-div").hide();
+            }
+            else if($('input:radio[id="radio2"]').is(':checked')) {
+                $("#fixed-addr-div").show();
+                $("#fixed-number-div").hide();
+            }
+        });
+        $('input:radio[name="radio"]').change(function() {
+            if ($('input:radio[id="radio3"]').is(':checked')) {
+                $("#flexi-number-div").show();
+                $("#flexi-addr-div").hide();
+            }
+            else if($('input:radio[id="radio4"]').is(':checked')) {
+                $("#flexi-addr-div").show();
+                $("#flexi-number-div").hide();
+            }
         });
         </script>
     </body>

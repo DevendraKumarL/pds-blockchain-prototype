@@ -2,37 +2,24 @@ if possible =>
     -> add authentication layer (modal) for any new transaction execution (food and money transfer)
     -> show balance of food stock and rupee of a user somewhere in food and rupee transfer webpages
     -> show all events in reverse order
-    -> cancel order and deduct points feature
     -> food and rupee contract events for stateGovernment, centralGovernment, customer
-    -> add #loadingOverlay on all transaction execution by users
+    -> deduct points feature **Tick** and cancel order feature
     -> notification panel/alert modal after successfully executing a transaction
     -> notification panel/alert modal after failure of transaction call
-    -> remove {from: ...} in .call() method calls
-    -> **** change {from: centralGovernmentAddress} of all the transactions to use the address of the actual sender ****
+    -> change {from: centralGovernmentAddress} of all the transactions to use the address of the actual sender
+
+    -> retrieve ration card details using customer/rationcard address in rationcards.html **Tick**
+    -> remove {from: ...} in .call() method calls **Tick**
     -> provide placeholders for all <input> tags  **Tick**
+    -> use bootstrap tables to show ration card details ?? **Tick**
     -> increase width of input field **Tick**
     -> add home for all webpages **Tick**
-    -> write tests for creating central, state government, 2 customers, 3 fps
-        -> approve customers and fps
-        -> then create fixed & flexi ration cards
-        -> central government to provide points for each card
     -> store a global user address for customer **Tick** and fps when only logged-in **Tick**
     -> ** Optimize approvals.js **Tick**
     -> home div for approvals.html **Tick**
-    -> check validations from user input in ui ??
-    -> government buys a kg a rice for 26/- and sells it to customer at 1/-
-        -> so the contract has to keep tract the foodflow and money from customers
-        -> thus track the **BENEFIT FLOW**
-        -> make analysis/graph depicting flow of food/benegfit versus amount spent
-        -> i.e., is/visualization the amount spent benefitting the customers ??
-    -> How to check if
-        *SellToCustomer_HashLog
-        *SupplyCentralToStateGovernment_HashLog
-        confirmed or not ??
-        -> Should it be added to the final transfer log analytics/graph/stats ??
     -> UI
-        -> ** Rename paths **
-        -> **COLORS**
+        -> Rename paths **Tick**
+        -> COLORS **Tick**
         -> registration:
             ->customer **Tick**
             ->fps **Tick**
@@ -58,29 +45,40 @@ if possible =>
             -> give ration card points **Tick**
         -> separate webpage to show testrpc avaiable accounts **Tick**
         -> separate webpage to get info of registered users on pds blockchain using accounts address **Tick**
-        -> a modal to authenticate user for making any transaction
+        -> food and rupee transaction:
+            ->customer **Tick**
+            ->fps **Tick**
+            ->centralGovernment **Tick**
+            ->stateGovernment **Tick**
+        -> loading overlay when loading any webpage so that all the background loading tasks
+            from testrpc are finished before any user action is taken **Tick**
+        -> How to check if confirmed or not ??
+            *SellToCustomer_HashLog **Tick**
+            *SupplyCentralToStateGovernment_HashLog **Tick**
+            *SupplyStateToFpsGovernment_HashLog **Tick**
+            -> How should it be added to the final transfer log analytics/graph/stats ??
+        -> government buys a kg a rice for 26/- and sells it to customer at 1/-
+            -> so the contract has to keep track of the foodflow and money from customers
+            -> thus track the **BENEFIT FLOW**
+            -> make analysis/graph depicting flow of food/benegfit versus amount spent
+            -> i.e., is/visualization the amount spent benefitting the customers ??
         -> dashboard1:
             ->centralGovernment to see registrations, approvals, ration cards creations and
                 to see ration card points and flexi ration card points given (based on budget ??)
-        -> food and rupee transaction:
-            ->customer
-            ->fps
-            ->centralGovernment, stateGovernment
-            -> DETAILS:
-                ...
-        -> use bootstrap tables ??
-        -> loading overlay when loading any webpage so that all the background loading tasks
-        from testrpc are finished before any user action is taken **Tick**
         -> blockchain information
             -> all transactions, block count
             -> web3. ...
             -> web3.eth. ..
             ... ... ... ... ... ... ...
+        -> write tests for creating central, state government, 2 customers, 3 fps
+            -> approve customers and fps
+            -> then create fixed & flexi ration cards
+            -> central government to provide points for each card
         -> use MetaMask, show individual functionalities of each contract, ideal way of using blockchain
         -> Everything into one page, Generic, possible but leave for now.
         -> how to reload other windows of fps or customer after registration, leave for now
         -> add Aadhaar number for customers ??, leave for now
         -> customers and fps can register only if they have aadhaar number and government
-        will approve seeing the aadhaar details, leave for now
-        -> optimize js code and remove unwanted code
+            will approve seeing the aadhaar details, leave for now
+        -> optimize js code and remove unwanted code, later
         -> remove consol logs, later

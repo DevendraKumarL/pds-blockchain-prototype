@@ -132,7 +132,7 @@ window.fpsFoodApp = {
             if (cookieAddr) {
                 User.deployed().then(function(instance) {
                     userGlobal = instance;
-                    return userGlobal.getUserDetails.call(cookieAddr, {from: centralGovernmentAddress});
+                    return userGlobal.getUserDetails.call(cookieAddr);
                 }).then(function(userinfo) {
                     if (userinfo[0] == cookieAddr) {
                         $("#register-link").remove();
@@ -334,7 +334,7 @@ window.fpsFoodApp = {
                                     document.getElementById("supply-to-customer-item-qty").value = "";
                                 }).catch(function(e){
                                     console.log(e);
-                                    alert("Food supply not confirmed, either fps has not confirmed the food supplied from state or customer as not confirmed food supplied to it");
+                                    alert("Food supply not confirmed, either fps has not confirmed the food supplied from state or customer as not confirmed food supplied to it, or fps doesn't enough supply");
                                 });
                             }
                         }).catch(function(e){
@@ -365,7 +365,7 @@ window.fpsFoodApp = {
                                     document.getElementById("supply-to-customer-item-qty").value = "";
                                 }).catch(function(e){
                                     console.log(e);
-                                    alert("Food supply not confirmed, either fps has not confirmed the food supplied from state or customer as not confirmed food supplied to it");
+                                    alert("Food supply not confirmed, either fps has not confirmed the food supplied from state or customer as not confirmed food supplied to it, or fps doesn't enough supply");
                                 });
                             }
                         }).catch(function(e){
@@ -416,40 +416,43 @@ window.fpsFoodApp = {
             foodGlobal = instance;
             return foodGlobal.getFoodStockHashOf.call(fpsData[0], foodStockToFpsEvents[k].args._foodIndex);
         }).then(function(res){
-            var tr = document.createElement("tr");
-            var td1 = document.createElement("td");
-            var td2 = document.createElement("td");
-            var td3 = document.createElement("td");
-            td1.appendChild(document.createTextNode(foodItems[foodStockToFpsEvents[k].args._foodIndex][0]));
-            td2.appendChild(document.createTextNode(foodStockToFpsEvents[k].args._quantity));
-            var b;
-            if (res.valueOf() == "0x0000000000000000000000000000000000000000000000000000000000000000" || foodStoredMap[foodStockToFpsEvents[k].args._foodIndex]) {
-                b = document.createElement("input");
-                b.type = "button";
-                b.setAttribute("class", "btn btn-success btn-sm");
-                b.value = "Confirmed";
-            } else if (res.valueOf() != "0x0000000000000000000000000000000000000000000000000000000000000000") {
-                foodStoredMap[foodStockToFpsEvents[k].args._foodIndex] = true;
-                b = document.createElement("input");
-                b.type = "button";
-                b.setAttribute("class", "btn btn-primary btn-sm");
-                b.setAttribute("data-toggle", "modal");
-                b.setAttribute("data-target", "#myModal1");
-                b.setAttribute("data-foodname", foodItems[foodStockToFpsEvents[k].args._foodIndex][0]);
-                b.setAttribute("data-fooditem", foodStockToFpsEvents[k].args._foodIndex);
-                b.value = "Confirm Now";
-                b.onclick = function(e) {
-                    $("#fps-confirm-pay-btn").click(function(){
-                        window.fpsFoodApp.confirmFpsFoodSupplied();
-                        $("#fps-confirm-pay-btn").off();
-                    });
+            // filter events of only current loggedIn fps only
+            if (foodStockToFpsEvents[k].args._fpsAddress == fpsData[0]) {
+                var tr = document.createElement("tr");
+                var td1 = document.createElement("td");
+                var td2 = document.createElement("td");
+                var td3 = document.createElement("td");
+                td1.appendChild(document.createTextNode(foodItems[foodStockToFpsEvents[k].args._foodIndex][0]));
+                td2.appendChild(document.createTextNode(foodStockToFpsEvents[k].args._quantity));
+                var b;
+                if (res.valueOf() == "0x0000000000000000000000000000000000000000000000000000000000000000" || foodStoredMap[foodStockToFpsEvents[k].args._foodIndex]) {
+                    b = document.createElement("input");
+                    b.type = "button";
+                    b.setAttribute("class", "btn btn-success btn-sm");
+                    b.value = "Confirmed";
+                } else if (res.valueOf() != "0x0000000000000000000000000000000000000000000000000000000000000000") {
+                    foodStoredMap[foodStockToFpsEvents[k].args._foodIndex] = true;
+                    b = document.createElement("input");
+                    b.type = "button";
+                    b.setAttribute("class", "btn btn-primary btn-sm");
+                    b.setAttribute("data-toggle", "modal");
+                    b.setAttribute("data-target", "#myModal1");
+                    b.setAttribute("data-foodname", foodItems[foodStockToFpsEvents[k].args._foodIndex][0]);
+                    b.setAttribute("data-fooditem", foodStockToFpsEvents[k].args._foodIndex);
+                    b.value = "Confirm Now";
+                    b.onclick = function(e) {
+                        $("#fps-confirm-pay-btn").click(function(){
+                            window.fpsFoodApp.confirmFpsFoodSupplied();
+                            $("#fps-confirm-pay-btn").off();
+                        });
+                    }
                 }
+                td3.appendChild(b);
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                foodSuppliedToFpsEventsTable.appendChild(tr);
             }
-            td3.appendChild(b);
-            tr.appendChild(td1);
-            tr.appendChild(td2);
-            tr.appendChild(td3);
-            foodSuppliedToFpsEventsTable.appendChild(tr);
             k--;
             if (k < 0) {
                 k = 0;
