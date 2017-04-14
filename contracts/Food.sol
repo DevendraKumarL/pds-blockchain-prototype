@@ -44,8 +44,9 @@ contract Food {
     event SupplyToFPSLog(address indexed _stateGovernmentAddress, address indexed _fpsAddress, uint _foodIndex, uint _quantity);
     event SupplyToFPS_HashLog(address indexed _stateGovernmentAddress, address indexed _fpsAddress, uint _foodIndex, uint _quantity);
 
+    // add another parameter to store which ration card was used ??
     event SellToCustomerLog(address indexed _fpsAddress, address indexed _customerAddress, uint _foodIndex, uint _quantity, uint _totalCost);
-    event SellToCustomer_HashLog(address indexed _fpsAddress, address indexed _customerAddress, uint _foodIndex, uint _quantity, uint _totalCost);
+    event SellToCustomer_HashLog(address indexed _fpsAddress, address indexed _customerAddress, uint _foodIndex, uint _quantity, uint _totalCost, uint _rationCard);
 
     function Food() {
         centralGovernment = tx.origin;
@@ -283,7 +284,9 @@ contract Food {
 
     // -> Accept a secret key and finds its sha3, then compare with the transferHash of this
     //    fooditem of this customer's foodStock to confirm the transfer
-    function fpsSupplyToCustomer_Hash(address _fps, address _customer, uint _foodIndex, uint _quantity, bytes32 _hash) {
+
+    // add another parameter to store which ration card was used ??
+    function fpsSupplyToCustomer_Hash(address _fps, address _customer, uint _foodIndex, uint _quantity, bytes32 _hash, uint _ration) {
         if (_foodIndex >= numberOFFoodItems) throw;
         // Previous transfer not completed by fps
         if (foodStocksOf[_fps][_foodIndex].transferHash != bytes32(0)) throw;
@@ -304,14 +307,14 @@ contract Food {
             stock.transferHash = _hash;
             foodStocksOf[_customer][_foodIndex] = stock;
             foodStocksOf[_fps][_foodIndex].balanceSupply -= _fixed;
-            SellToCustomer_HashLog(_fps, _customer, _foodIndex, _fixed, amount);
+            SellToCustomer_HashLog(_fps, _customer, _foodIndex, _fixed, amount, _ration);
         } else {
             foodStock stk = foodStocksOf[_customer][_foodIndex];
             if (stk.balanceSupply + _quantity < stk.balanceSupply) throw;
             stk.balanceSupply += _fixed;
             stk.transferHash = _hash;
             foodStocksOf[_fps][_foodIndex].balanceSupply -= _fixed;
-            SellToCustomer_HashLog(_fps, _customer, _foodIndex, _fixed, amount);
+            SellToCustomer_HashLog(_fps, _customer, _foodIndex, _fixed, amount, _ration);
         }
         // The next function must reset the transferHash after confirmed or cancelled
     }

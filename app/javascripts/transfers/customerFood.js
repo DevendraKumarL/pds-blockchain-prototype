@@ -1,7 +1,7 @@
 // Import the page's CSS. Webpack will know what to do with it.
 import "../../stylesheets/app.css";
 import "../../stylesheets/sidebar.css";
-import "../../stylesheets/fps.css";
+import "../../stylesheets/customer.css";
 
 // Import libraries we need.
 import { default as Web3} from 'web3';
@@ -29,6 +29,13 @@ var i, loadUserInterval;
 var foodItems = {};
 var j, foodItemInterval;
 var loggedIn = false, customerData, customerApproved = false;
+var k, foodStockToCustomerInterval;
+
+var foodStockToCustomerEvents;
+var foodStoredMap = {};
+foodStoredMap[0] = false;
+foodStoredMap[1] = false;
+foodStoredMap[2] = false;
 
 window.customerFoodApp = {
     start: function() {
@@ -200,9 +207,228 @@ window.customerFoodApp = {
             clearInterval(foodItemInterval);
             console.log("Finished getting food items");
             console.log(foodItems);
-            window.customerFoodApp.hideOverlay();
+            // window.customerFoodApp.hideOverlay();
             // window.customerFoodApp.populateFoodItems();
+            window.customerFoodApp.loadFoodSuppliedToCustomerEvents();
         });
+    },
+
+    loadFoodSuppliedToCustomerEvents: function() {
+        var self = this;
+        $("#loading-content-text").html("Loading food stock supplied to customer events ...");
+
+        var events;
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            events = foodGlobal.SellToCustomer_HashLog({}, {fromBlock: 0, toBlock: 'latest'});
+            events.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    $("#loadingOverlay").hide();
+                    return;
+                }
+                foodStockToCustomerEvents = result;
+                k = foodStockToCustomerEvents.length-1;
+                $("#loading-content-text").html("Loading events status details ...");
+                foodStockToCustomerInterval = setInterval(window.customerFoodApp.loadFoodStockToCustomerEventsStatus, 300);
+            });
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
+    },
+
+    loadFoodStockToCustomerEventsStatus: function() {
+        var self = this;
+
+        var foodSuppliedToCustomerEventsTable = document.getElementById("food-supplied-to-customer-events-table");
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            return foodGlobal.getFoodStockHashOf.call(customerData[0], foodStockToCustomerEvents[k].args._foodIndex);
+        }).then(function(res){
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("td");
+            var td2 = document.createElement("td");
+            var td3 = document.createElement("td");
+            var td4 = document.createElement("td");
+            var td5 = document.createElement("td");
+            var td6 = document.createElement("td");
+            td1.appendChild(document.createTextNode(foodItems[foodStockToCustomerEvents[k].args._foodIndex][0]));
+            td2.appendChild(document.createTextNode(foodStockToCustomerEvents[k].args._fpsAddress));
+            td3.appendChild(document.createTextNode(foodStockToCustomerEvents[k].args._quantity));
+            td4.appendChild(document.createTextNode(foodStockToCustomerEvents[k].args._totalCost));
+            if (foodStockToCustomerEvents[k].args._rationCard == 0)
+                td5.appendChild(document.createTextNode("Fixed Scheme"));
+            else
+                td5.appendChild(document.createTextNode("Flexi Scheme"));
+            var b;
+            if (res.valueOf() == "0x0000000000000000000000000000000000000000000000000000000000000000" || foodStoredMap[foodStockToCustomerEvents[k].args._foodIndex]) {
+                b = document.createElement("input");
+                b.type = "button";
+                b.setAttribute("class", "btn btn-success btn-sm");
+                b.value = "Paid";
+            } else if (res.valueOf() != "0x0000000000000000000000000000000000000000000000000000000000000000") {
+                foodStoredMap[foodStockToCustomerEvents[k].args._foodIndex] = true;
+                b = document.createElement("input");
+                b.type = "button";
+                b.setAttribute("class", "btn btn-primary btn-sm");
+                b.setAttribute("data-toggle", "modal");
+                b.setAttribute("data-target", "#myModal1");
+                b.setAttribute("data-foodname", foodItems[foodStockToCustomerEvents[k].args._foodIndex][0]);
+                b.setAttribute("data-fooditem", foodStockToCustomerEvents[k].args._foodIndex);
+                b.setAttribute("data-foodcost", foodStockToCustomerEvents[k].args._totalCost);
+                b.setAttribute("data-foodfps", foodStockToCustomerEvents[k].args._fpsAddress);
+                b.setAttribute("data-foodration", foodStockToCustomerEvents[k].args._rationCard);
+                b.setAttribute("data-foodqty", foodStockToCustomerEvents[k].args._quantity);
+                b.value = "Confirm Now";
+                b.onclick = function(e) {
+                    $("#customer-confirm-pay-btn").click(function(){
+                        window.customerFoodApp.confirmCustomerFoodSuppliedandPay();
+                        $("#customer-confirm-pay-btn").off();
+                    });
+                }
+            }
+            td6.appendChild(b);
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tr.appendChild(td5);
+            tr.appendChild(td6);
+            foodSuppliedToCustomerEventsTable.appendChild(tr);
+            k--;
+            if (k < 0) {
+                k = 0;
+                clearInterval(foodStockToCustomerInterval);
+                console.log("Finished loading food supplied to fps events");
+                $("#loadingOverlay").hide();
+            }
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
+    },
+
+    confirmCustomerFoodSuppliedandPay: function() {
+        var self = this;
+
+        var fooditem = document.getElementById("customer-pay-food-item");
+        var secret = document.getElementById("customer-pay-secret");
+        var password = document.getElementById("customer-pay-password");
+        var fpsaddr = document.getElementById("customer-pay-fps-addr");
+        var cost = document.getElementById("customer-pay-expense");
+        var ration = document.getElementById("customer-pay-ration-number");
+        ration = parseInt(ration.value);
+        var qty = document.getElementById("customer-pay-quantity");
+        qty = parseInt(qty.value);
+        // console.log(fooditem.value + " - " + fpsaddr.value + " - " + cost.value + " - " + secret.value + " - " + password.value);
+        if (secret.value == "" || password.value == "") {
+            return;
+        }
+
+        // how will you know from which ration card points to deduct from ??
+        // change backend ??
+
+        // first authenticate
+        User.deployed().then(function(instance){
+            userGlobal = instance;
+            return userGlobal.authenticateUserWithAddress.call(customerData[0], password.value);
+        }).then(function(res){
+            if (!res) {
+                alert("Authentication failed, password is incorrect, please try again");
+                secret.value = "";
+                password.value = "";
+                return;
+            }
+            // second check if customer has ennough money to pay for cost
+            Rupee.deployed().then(function(instance){
+                rupeeGlobal = instance;
+                return rupeeGlobal.getBalance.call(customerData[0]);
+            }).then(function(balance){
+                console.log(balance.valueOf());
+                if (parseInt(balance.valueOf()) < parseInt(cost.value)) {
+                    alert("Customer doesn't have enough money to pay for this food item");
+                    secret.value = "";
+                    password.value = "";
+                    return;
+                }
+                if (parseInt(balance.valueOf()) >= parseInt(cost.value)) {
+                    console.log("customer has enough balance");
+                    // third confirm the food supply
+                    Food.deployed().then(function(instance){
+                        foodGlobal = instance;
+                        return foodGlobal.confirm_fpsSupplyToCustomer_Hash.call(customerData[0], fooditem.value, secret.value, {from: centralGovernmentAddress, gas: 200000});
+                    }).then(function(res){
+                        console.log(res);
+                        if (!res) {
+                            alert("secretKey is invalid, please try again");
+                            secret.value = "";
+                            password.value = "";
+                            return;
+                        }
+                        Food.deployed().then(function(instance){
+                            foodGlobal = instance;
+                            return foodGlobal.confirm_fpsSupplyToCustomer_Hash(customerData[0], fooditem.value, secret.value, {from: centralGovernmentAddress, gas: 200000})
+                        }).then(function(res){
+                            console.log(res);
+                            alert("Food supply confirmed");
+                            // fourth customer pay to stateGovernment
+                            Rupee.deployed().then(function(instance){
+                                rupeeGlobal = instance;
+                                return rupeeGlobal.customerTransferToState(customerData[0], cost.value, fooditem.value, fpsaddr.value, {from: centralGovernmentAddress, gas: 200000});
+                            }).then(function(res){
+                                console.log(res);
+                                alert("Customer paid money to stateGovernment successfully");
+                                // now deduct points from rationcard, which ??
+                                if (ration == 0) {
+                                    RationCard.deployed().then(function(instance){
+                                        rationCardGlobal = instance;
+                                        if (parseInt(fooditem.value) == 0)
+                                            return rationCardGlobal.deductRationCardPoints(customerData[0], qty, 0, 0, {from: centralGovernmentAddress, gas: 200000});
+                                        else if (parseInt(fooditem.value) == 1)
+                                            return rationCardGlobal.deductRationCardPoints(customerData[0], 0, qty, 0, {from: centralGovernmentAddress, gas: 200000});
+                                        else if (parseInt(fooditem.value) == 2)
+                                            return rationCardGlobal.deductRationCardPoints(customerData[0], 0, 0, qty, {from: centralGovernmentAddress, gas: 200000});
+                                        console.log("something is wrong here");
+                                    }).then(function(res){
+                                        console.log(res);
+                                        alert("Fixed scheme ration card points deducted : " + qty + " for food item : " + foodItems[parseInt(fooditem.value)][0]);
+                                        location.reload();
+                                    }).catch(function(e){
+                                        console.log(e);
+                                    })
+                                    return;
+                                }
+                                if (ration == 1) {
+                                    RationCard.deployed().then(function(instance){
+                                        rationCardGlobal = instance;
+                                        return rationCardGlobal.deductFlexiRationCardPoints(customerData[0], qty, {from: centralGovernmentAddress, gas: 200000});
+                                    }).then(function(res){
+                                        console.log(res);
+                                        alert("Flexi scheme ration card points deducted : " + qty + " for food item : " + foodItems[parseInt(fooditem.value)][0]);
+                                        location.reload();
+                                    }).catch(function(e){
+                                        console.log(e);
+                                    })
+                                    return;
+                                }
+                                // location.reload();
+                            }).catch(function(e){
+                                console.log(e);
+                            })
+                        }).catch(function(e){
+                            console.log(e);
+                        })
+                    }).catch(function(e){
+                        console.log(e);
+                    })
+                }
+            }).catch(function(e){
+                console.log(e);
+            })
+        }).catch(function(e){
+            console.log(e);
+        })
     },
 
     hideOverlay: function() {
@@ -230,6 +456,14 @@ window.customerFoodApp = {
         // console.log(nodes);
         for (var i = 1; i < nodes.length; i+=2) {
             nodes[i].style.display = "none";
+        }
+    },
+
+    showFoodSuppliedtoCustomerEventsdiv: function() {
+        var self = this;
+        if (loggedIn && customerApproved) {
+            self.hideAll();
+            $("#food-supplied-to-customer-events-div").show();
         }
     },
 

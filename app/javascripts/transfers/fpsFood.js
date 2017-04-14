@@ -29,6 +29,13 @@ var i, loadUserInterval;
 var foodItems = {};
 var j, foodItemInterval;
 var loggedIn = false, fpsData, fpsApproved = false;
+var k, foodStockToFpsInterval;
+
+var foodStockToFpsEvents;
+var foodStoredMap = {};
+foodStoredMap[0] = false;
+foodStoredMap[1] = false;
+foodStoredMap[2] = false;
 
 window.fpsFoodApp = {
     start: function() {
@@ -235,11 +242,13 @@ window.fpsFoodApp = {
                 // selectLiStockBalance.appendChild(opt4);
             }
         }
-        setTimeout(self.hideOverlay, 1000);
+        // setTimeout(self.hideOverlay, 1000);
+        setTimeout(self.loadFoodSuppliedToFpsEvents, 1000);
     },
 
     supplyToCustomer: function() {
         var self = this;
+        // first authenticate fps
         var fooditem = document.getElementById("food-item-list-supply-customer");
         var custaddr = document.getElementById("supply-to-customer-item-address");
         var itemhash = document.getElementById("supply-to-customer-item-hash");
@@ -293,7 +302,7 @@ window.fpsFoodApp = {
                             alert("Customer: " + custaddr.value + " has no fixed scheme ration card");
                         }
                         else {
-                            alert("Customer: " + custaddr.value + " has no flexxi scheme ration card");
+                            alert("Customer: " + custaddr.value + " has no flexi scheme ration card");
                         }
                         return;
                     }
@@ -314,7 +323,8 @@ window.fpsFoodApp = {
                             if ( points[0] && parseInt(points[parseInt(foodindex) + 1].valueOf()) >= parseInt(foodItems[parseInt(foodindex)][1].valueOf()) ) {
                                 Food.deployed().then(function(instance) {
                                     foodGlobal = instance;
-                                    return foodGlobal.fpsSupplyToCustomer_Hash(fpsData[0], custaddr.value, parseInt(foodindex), 0, itemhash.value, {from: centralGovernmentAddress, gas: 200000});
+                                    // add another parameter to store which ration card was used ??
+                                    return foodGlobal.fpsSupplyToCustomer_Hash(fpsData[0], custaddr.value, parseInt(foodindex), 0, itemhash.value, 0, {from: centralGovernmentAddress, gas: 200000});
                                 }).then(function(res){
                                     console.log(res);
                                     alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " sent to customer: " + custaddr.value);
@@ -324,6 +334,7 @@ window.fpsFoodApp = {
                                     document.getElementById("supply-to-customer-item-qty").value = "";
                                 }).catch(function(e){
                                     console.log(e);
+                                    alert("Food supply not confirmed, either fps has not confirmed the food supplied from state or customer as not confirmed food supplied to it");
                                 });
                             }
                         }).catch(function(e){
@@ -344,7 +355,7 @@ window.fpsFoodApp = {
                             if (points[0] && parseInt(points[1].valueOf()) >= parseInt(qty.value)) {
                                 Food.deployed().then(function(instance) {
                                     foodGlobal = instance;
-                                    return foodGlobal.fpsSupplyToCustomer_Hash(fpsData[0], custaddr.value, parseInt(foodindex), qty.value, itemhash.value, {from: centralGovernmentAddress, gas: 200000});
+                                    return foodGlobal.fpsSupplyToCustomer_Hash(fpsData[0], custaddr.value, parseInt(foodindex), qty.value, itemhash.value, 1, {from: centralGovernmentAddress, gas: 200000});
                                 }).then(function(res){
                                     console.log(res);
                                     alert("FoodItem: " + fooditem.options[fooditem.selectedIndex].text + " sent to customer: " + custaddr.value);
@@ -354,6 +365,7 @@ window.fpsFoodApp = {
                                     document.getElementById("supply-to-customer-item-qty").value = "";
                                 }).catch(function(e){
                                     console.log(e);
+                                    alert("Food supply not confirmed, either fps has not confirmed the food supplied from state or customer as not confirmed food supplied to it");
                                 });
                             }
                         }).catch(function(e){
@@ -369,6 +381,148 @@ window.fpsFoodApp = {
         }).catch(function(e){
             console.log(e);
         });
+    },
+
+    loadFoodSuppliedToFpsEvents: function() {
+        var self = this;
+        $("#loading-content-text").html("Loading food stock supplied to fps events ...");
+
+        var events;
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            events = foodGlobal.SupplyToFPS_HashLog({}, {fromBlock: 0, toBlock: 'latest'});
+            events.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    $("#loadingOverlay").hide();
+                    return;
+                }
+                foodStockToFpsEvents = result;
+                k = foodStockToFpsEvents.length-1;
+                $("#loading-content-text").html("Loading events status details ...");
+                foodStockToFpsInterval = setInterval(window.fpsFoodApp.loadFoodStockToFpsEventsStatus, 300);
+            });
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
+    },
+
+    loadFoodStockToFpsEventsStatus: function() {
+        var self = this;
+
+        var foodSuppliedToFpsEventsTable = document.getElementById("food-supplied-to-fps-events-table");
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            return foodGlobal.getFoodStockHashOf.call(fpsData[0], foodStockToFpsEvents[k].args._foodIndex);
+        }).then(function(res){
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("td");
+            var td2 = document.createElement("td");
+            var td3 = document.createElement("td");
+            td1.appendChild(document.createTextNode(foodItems[foodStockToFpsEvents[k].args._foodIndex][0]));
+            td2.appendChild(document.createTextNode(foodStockToFpsEvents[k].args._quantity));
+            var b;
+            if (res.valueOf() == "0x0000000000000000000000000000000000000000000000000000000000000000" || foodStoredMap[foodStockToFpsEvents[k].args._foodIndex]) {
+                b = document.createElement("input");
+                b.type = "button";
+                b.setAttribute("class", "btn btn-success btn-sm");
+                b.value = "Confirmed";
+            } else if (res.valueOf() != "0x0000000000000000000000000000000000000000000000000000000000000000") {
+                foodStoredMap[foodStockToFpsEvents[k].args._foodIndex] = true;
+                b = document.createElement("input");
+                b.type = "button";
+                b.setAttribute("class", "btn btn-primary btn-sm");
+                b.setAttribute("data-toggle", "modal");
+                b.setAttribute("data-target", "#myModal1");
+                b.setAttribute("data-foodname", foodItems[foodStockToFpsEvents[k].args._foodIndex][0]);
+                b.setAttribute("data-fooditem", foodStockToFpsEvents[k].args._foodIndex);
+                b.value = "Confirm Now";
+                b.onclick = function(e) {
+                    $("#fps-confirm-pay-btn").click(function(){
+                        window.fpsFoodApp.confirmFpsFoodSupplied();
+                        $("#fps-confirm-pay-btn").off();
+                    });
+                }
+            }
+            td3.appendChild(b);
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            foodSuppliedToFpsEventsTable.appendChild(tr);
+            k--;
+            if (k < 0) {
+                k = 0;
+                clearInterval(foodStockToFpsInterval);
+                console.log("Finished loading food supplied to fps events");
+                $("#loadingOverlay").hide();
+            }
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
+    },
+
+    confirmFpsFoodSupplied: function() {
+        var self = this;
+
+        var fooditem = document.getElementById("fps-pay-food-item");
+        var secret = document.getElementById("fps-pay-secret");
+        var password = document.getElementById("fps-pay-password");
+        // console.log(fooditem.value + " - " + " - " + secret.value + " - " + password.value);
+        if (secret.value == "" || password.value == "") {
+            return;
+        }
+        // first authenticate
+        User.deployed().then(function(instance){
+            userGlobal = instance;
+            return userGlobal.authenticateUserWithAddress.call(fpsData[0], password.value);
+        }).then(function(res){
+            if (!res) {
+                alert("Authentication failed, password is incorrect, please try again")
+                secret.value = "";
+                password.value = "";
+                return;
+            }
+            Food.deployed().then(function(instance){
+                foodGlobal = instance;
+                return foodGlobal.confirm_supplyToFPS_Hash.call(fpsData[0], fooditem.value, secret.value, {from: centralGovernmentAddress, gas: 200000});
+            }).then(function(res){
+                console.log(res);
+                if (res) {
+                    Food.deployed().then(function(instance){
+                        foodGlobal = instance;
+                        return foodGlobal.confirm_supplyToFPS_Hash(fpsData[0], fooditem.value, secret.value, {from: centralGovernmentAddress, gas: 200000});
+                    }).then(function(res){
+                        console.log(res);
+                        alert("Food supplied to fps confirmed");
+                        location.reload();
+                    }).catch(function(e){
+                        console.log(e);
+                        secret.value = "";
+                        password.value = "";
+                        return;
+                    })
+                } else {
+                    alert("secretKey is incorrect, please try again");
+                    secret.value = "";
+                    password.value = "";
+                    return;
+                }
+            }).catch(function(e){
+                console.log(e);
+                alert("Food supply not confirmed, aborting transaction now");
+                secret.value = "";
+                password.value = "";
+                return;
+            });
+        }).catch(function(e){
+            console.log(e);
+            secret.value = "";
+            password.value = "";
+            return;
+        });
+
     },
 
     hideOverlay: function() {
@@ -408,6 +562,14 @@ window.fpsFoodApp = {
         if (!fpsApproved) {
             self.hideAll();
             $("#not-approved-div-card").show();
+        }
+    },
+
+    showFoodSuppliedtoFpsEventsdiv: function() {
+        var self = this;
+        if (loggedIn && fpsApproved) {
+            self.hideAll();
+            $("#food-supplied-to-fps-events-div").show();
         }
     },
 

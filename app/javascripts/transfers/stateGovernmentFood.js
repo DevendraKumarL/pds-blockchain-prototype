@@ -336,7 +336,7 @@ window.stateFoodApp = {
         var cost = document.getElementById("state-government-pay-expense");
         var secret = document.getElementById("state-government-pay-secret");
         var password = document.getElementById("state-government-pay-password");
-        console.log(fooditem.value + " - " + cost.value + " - " + secret.value + " - " + password.value);
+        // console.log(fooditem.value + " - " + cost.value + " - " + secret.value + " - " + password.value);
         if (secret.value == "" || password.value == "") {
             return;
         }
@@ -364,23 +364,36 @@ window.stateFoodApp = {
                     // second confirm food supply
                     Food.deployed().then(function(instance){
                         foodGlobal = instance;
-                        return foodGlobal.confirm_supplyCentralToStateGovernment_Hash(fooditem.value, secret.value, {from: centralGovernmentAddress, gas: 200000});
+                        return foodGlobal.confirm_supplyCentralToStateGovernment_Hash.call(fooditem.value, secret.value, {from: centralGovernmentAddress, gas: 200000});
                     }).then(function(res){
                         console.log(res);
-                        console.log("food supply confirmed");
-                        // third transfer money
-                        Rupee.deployed().then(function(instance){
-                            rupeeGlobal = instance;
-                            return rupeeGlobal.stateTransferToCentral(cost.value, fooditem.value, {from: centralGovernmentAddress, gas: 150000});
-                        }).then(function(res){
-                            console.log(res);
-                            alert("Food Supplied to state confirmed and state paid successfully");
-                            location.reload();
-                        }).catch(function(e){
-                            console.log(e);
-                            alert("Couldn't transfer money");
+                        if (res) {
+                            Food.deployed().then(function(instance){
+                                foodGlobal = instance;
+                                return foodGlobal.confirm_supplyCentralToStateGovernment_Hash(fooditem.value, secret.value, {from: centralGovernmentAddress, gas: 200000});
+                            }).then(function(res){
+                                console.log(res);
+                                console.log("food supply confirmed");
+                                // third transfer money
+                                Rupee.deployed().then(function(instance){
+                                    rupeeGlobal = instance;
+                                    return rupeeGlobal.stateTransferToCentral(cost.value, fooditem.value, {from: centralGovernmentAddress, gas: 150000});
+                                }).then(function(res){
+                                    console.log(res);
+                                    alert("Food Supplied to state confirmed and state paid successfully");
+                                    location.reload();
+                                }).catch(function(e){
+                                    console.log(e);
+                                    alert("Couldn't transfer money");
+                                    return;
+                                });
+                            })
+                        } else {
+                            alert("secretKey is incorrect, please try again");
+                            secret.value = "";
+                            password.value = "";
                             return;
-                        });
+                        }
                     }).catch(function(e){
                         console.log(e);
                         alert("food supply not confirmed, aborting transaction now");

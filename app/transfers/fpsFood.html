@@ -50,7 +50,7 @@
                         <a href="#" onclick="fpsFoodApp.showSupplyToCustomerDiv()"><i class="fa fa-bullseye"></i> Supply To Customer</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-calendar-o"></i> Events</a>
+                        <a href="#" onclick="fpsFoodApp.showFoodSuppliedtoFpsEventsdiv()"><i class="fa fa-calendar-o"></i> Events</a>
                     </li>
                 </ul>
             </div>
@@ -75,6 +75,20 @@
                         </div>
                         <div class="col-md-10 alert alert-danger" id="not-approved-div-card">
                             FPS is not approved
+                        </div>
+                        <div class="list-group col-md-10" id="food-supplied-to-fps-events-div">
+                            <a href="#" class="list-group-item">Food Stock received from stateGovernment</a>
+                            <br>
+                            <div class="table-responsive">
+                                <table class="table table-hover" style="border:1px solid black;">
+                                    <thead class="thead-inverse">
+                                        <th style="width:35%;">FoodItem</th>
+                                        <th style="width:35%;">Quantity</th>
+                                        <th style="width:30%;">Confirmation Status</th>
+                                    </thead>
+                                    <tbody id="food-supplied-to-fps-events-table"></tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="card card-1 col-md-8" id="supply-to-customer-div">
                             <h4>Supply FoodItem to Customer</h4>
@@ -119,6 +133,38 @@
         </div>
         <!-- /#wrapper -->
 
+        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to proceed ?&nbsp;</h5>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Confirm the food stock received from stateGovernment</h4>
+                        <div class="input-group center-block">
+                            <input type="text" id="fps-pay-food-name" class="form-control" disabled>
+                            <span class="input-group-addon">FoodItem</span>
+                        </div>
+                        <input type="hidden" id="fps-pay-food-item" disabled>
+                        <br>
+                        <div class="input-group center-block">
+                            <input type="password" id="fps-pay-secret" class="form-control">
+                            <span class="input-group-addon">Secret Key</span>
+                        </div>
+                        <br>
+                        <div class="input-group center-block">
+                            <input type="password" id="fps-pay-password" class="form-control">
+                            <span class="input-group-addon">Password</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" class="close" data-dismiss="modal" aria-label="Close">No</button>
+                        <button type="button" class="btn btn-primary" id="fps-confirm-pay-btn" class="close" data-dismiss="modal" aria-label="Close">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Scripts -->
         <script>
         $("#pds-home").click(function(e){
@@ -134,6 +180,19 @@
                 $("#supply-to-customer-item-qty-div").show();
             }
         });
+        $('#myModal1').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var food = button.data('foodname');
+            var fooditem = button.data('fooditem');
+            // var recipient = button.data('whatever') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            // var modal = $(this)
+            // modal.find('.modal-title').text('New message to ' + recipient)
+            // modal.find('.modal-body input').val(recipient)
+            $("#fps-pay-food-name").val(food);
+            $("#fps-pay-food-item").val(fooditem);
+        })
         </script>
     </body>
 </html>
