@@ -71,7 +71,40 @@
                         </div>
                         <div id="landing" class="col-md-10">
                             <h1>State Government Food and Rupee Transfers</h1>
-                            Some image and text here
+                            <button type="button" id="food-stock-balance-btn" class="btn btn-primary btn-md">FoodStockBalance</button>
+
+                            <div class="col-md-4 card card-1" id="food-stock-balance-div">
+                                <h5>Check Food Stock Balance</h5>
+                                <select class="custom-select col-md-12" id="food-stock-balance-select">
+                                    <option value="-1">Select Food Item</option>
+                                </select>
+                                <div class="clearfix"><br></div>
+                                <div class="input-group center-block">
+                                    <button type="button" id="food-stock-btn" onclick="stateFoodApp.checkFoodStock()" class="btn btn-primary btn-md">Check</button>
+                                </div>
+                                <br>
+                                <li class="list-group-item col-md-12" id="balance-result" style="display: none;"></li>
+                            </div>
+                            <button type="button" id="rupee-balance-btn" class="btn btn-secondary btn-md">RupeeBalance</button>
+
+                            <div class="col-md-4 card card-1" id="rupee-balance-div">
+                                <h5>Check Rupee Balance</h5>
+                                <label class="custom-control custom-radio">
+                                    <input id="radio1" name="radio" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Budget Balance</span>
+                                </label>
+                                <label class="custom-control custom-radio">
+                                    <input id="radio2" name="radio" type="radio" class="custom-control-input">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Wallet Balance</span>
+                                </label>
+                                <div class="input-group center-block">
+                                    <button type="button" id="food-stock-btn" onclick="stateFoodApp.checkRupeeBalance()" class="btn btn-primary btn-md">Check</button>
+                                </div>
+                                <br>
+                                <li class="list-group-item col-md-12" id="rupee-balance-result" style="display: none;"></li>
+                            </div>
                         </div>
                         <div class="list-group col-md-10" id="food-supplied-to-state-events-div">
                             <a href="#" class="list-group-item">Food Stock received from centralGovernment</a>
@@ -193,6 +226,24 @@
             $("#state-government-pay-food-item").val(fooditem);
             $("#state-government-pay-expense").val(parseInt(cost));
         })
+        $('#food-stock-balance-btn').click(function(){
+            if ($('#food-stock-balance-div').is(':hidden')) {
+                $('#food-stock-balance-div').show(1000);
+                $('#rupee-balance-div').hide(1000);
+            } else {
+                $('#food-stock-balance-div').hide(1000);
+                $('#rupee-balance-div').hide(1000);
+            }
+        });
+        $('#rupee-balance-btn').click(function(){
+            if ($('#rupee-balance-div').is(':hidden')) {
+                $('#rupee-balance-div').show(1000);
+                $('#food-stock-balance-div').hide(1000);
+            } else {
+                $('#rupee-balance-div').hide(1000);
+                $('#food-stock-balance-div').hide(1000);
+            }
+        });
         </script>
     </body>
 </html>

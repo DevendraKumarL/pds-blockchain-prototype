@@ -83,7 +83,30 @@
                     </div>
                     <div id="landing" class="col-md-10">
                         <h1>Central Government Food and Rupee Transfers</h1>
-                        Some image and text here
+                        <button type="button" id="food-stock-balance-btn" class="btn btn-primary btn-md">FoodStockBalance</button>
+
+                        <div class="col-md-4 card card-1" id="food-stock-balance-div">
+                            <h5>Check Food Stock Balance</h5>
+                            <select class="custom-select col-md-12" id="food-stock-balance-select">
+                                <option value="-1">Select Food Item</option>
+                            </select>
+                            <div class="clearfix"><br></div>
+                            <div class="input-group center-block">
+                                <button type="button" id="food-stock-btn" onclick="centralFoodApp.checkFoodStock()" class="btn btn-primary btn-md">Check</button>
+                            </div>
+                            <br>
+                            <li class="list-group-item col-md-12" id="balance-result" style="display: none;"></li>
+                        </div>
+                        <button type="button" id="rupee-balance-btn" class="btn btn-secondary btn-md">RupeeBalance</button>
+
+                        <div class="col-md-4 card card-1" id="rupee-balance-div">
+                            <h5>Check Rupee Balance in your Wallet</h5>
+                            <div class="input-group center-block">
+                                <button type="button" id="food-stock-btn" onclick="centralFoodApp.checkRupeeBalance()" class="btn btn-primary btn-md">Check</button>
+                            </div>
+                            <br>
+                            <li class="list-group-item col-md-12" id="rupee-balance-result" style="display: none;"></li>
+                        </div>
                     </div>
                     <div class="card card-1 col-md-5" id="create-food-item-div">
                         <h4>Create Food Item</h4>
@@ -275,6 +298,24 @@
     $("#pds-home").click(function(e){
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
+    });
+    $('#food-stock-balance-btn').click(function(){
+        if ($('#food-stock-balance-div').is(':hidden')) {
+            $('#food-stock-balance-div').show(1000);
+            $('#rupee-balance-div').hide(1000);
+        } else {
+            $('#food-stock-balance-div').hide(1000);
+            $('#rupee-balance-div').hide(1000);
+        }
+    });
+    $('#rupee-balance-btn').click(function(){
+        if ($('#rupee-balance-div').is(':hidden')) {
+            $('#rupee-balance-div').show(1000);
+            $('#food-stock-balance-div').hide(1000);
+        } else {
+            $('#rupee-balance-div').hide(1000);
+            $('#food-stock-balance-div').hide(1000);
+        }
     });
     </script>
 </body>

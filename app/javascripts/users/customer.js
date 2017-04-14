@@ -152,7 +152,7 @@ window.customerApp = {
             console.log(accounts[i] + " => " + res);
             userDb[accounts[i]] = res;
             i++;
-            if (i == 10) { // fix this, use accounts.length
+            if (i == accounts.length) { // fix this, use accounts.length
                 i = 0;
                 clearInterval(loadUserInterval);
                 window.customerApp.checkCookies();

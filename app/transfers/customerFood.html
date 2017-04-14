@@ -68,7 +68,30 @@
                         </div>
                         <div id="landing" class="col-md-10">
                             <h1>Customer Food and Rupee Transfers</h1>
-                            Some image and text here
+                            <button type="button" id="food-stock-balance-btn" class="btn btn-primary btn-md">FoodStockBalance</button>
+
+                            <div class="col-md-4 card card-1" id="food-stock-balance-div">
+                                <h5>Check Food Stock Balance</h5>
+                                <select class="custom-select col-md-12" id="food-stock-balance-select">
+                                    <option value="-1">Select Food Item</option>
+                                </select>
+                                <div class="clearfix"><br></div>
+                                <div class="input-group center-block">
+                                    <button type="button" id="food-stock-btn" onclick="customerFoodApp.checkFoodStock()" class="btn btn-primary btn-md">Check</button>
+                                </div>
+                                <br>
+                                <li class="list-group-item col-md-12" id="balance-result" style="display: none;"></li>
+                            </div>
+                            <button type="button" id="rupee-balance-btn" class="btn btn-secondary btn-md">RupeeBalance</button>
+
+                            <div class="col-md-4 card card-1" id="rupee-balance-div">
+                                <h5>Check Rupee Balance in your Wallet</h5>
+                                <div class="input-group center-block">
+                                    <button type="button" id="food-stock-btn" onclick="customerFoodApp.checkRupeeBalance()" class="btn btn-primary btn-md">Check</button>
+                                </div>
+                                <br>
+                                <li class="list-group-item col-md-12" id="rupee-balance-result" style="display: none;"></li>
+                            </div>
                         </div>
                         <div class="col-md-10 alert alert-danger" id="not-approved-div-card">
                             Customer is not approved
@@ -129,12 +152,12 @@
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <input type="password" id="customer-pay-secret" class="form-control">
+                            <input type="password" id="customer-pay-secret" class="form-control" placeholder="Secret Key">
                             <span class="input-group-addon">Secret Key</span>
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <input type="password" id="customer-pay-password" class="form-control">
+                            <input type="password" id="customer-pay-password" class="form-control" placeholder="Password">
                             <span class="input-group-addon">Password</span>
                         </div>
                     </div>
@@ -177,6 +200,24 @@
             $("#customer-pay-expense").val(cost);
             $("#customer-pay-quantity").val(quantity);
         })
+        $('#food-stock-balance-btn').click(function(){
+            if ($('#food-stock-balance-div').is(':hidden')) {
+                $('#food-stock-balance-div').show(1000);
+                $('#rupee-balance-div').hide(1000);
+            } else {
+                $('#food-stock-balance-div').hide(1000);
+                $('#rupee-balance-div').hide(1000);
+            }
+        });
+        $('#rupee-balance-btn').click(function(){
+            if ($('#rupee-balance-div').is(':hidden')) {
+                $('#rupee-balance-div').show(1000);
+                $('#food-stock-balance-div').hide(1000);
+            } else {
+                $('#rupee-balance-div').hide(1000);
+                $('#food-stock-balance-div').hide(1000);
+            }
+        });
         </script>
     </body>
 </html>

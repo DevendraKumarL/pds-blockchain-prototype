@@ -152,7 +152,7 @@ window.fpsApp = {
             console.log(accounts[i] + " => " + res);
             userDb[accounts[i]] = res;
             i++;
-            if (i == 10) {
+            if (i == accounts.length) {
                 i = 0;
                 clearInterval(loadUserInterval);
                 // loadAcctsEle.style.display = "none";

@@ -71,7 +71,20 @@
                         </div>
                         <div id="landing" class="col-md-10">
                             <h1>FPS Food and Rupee Transfers</h1>
-                            Some image and text here
+                            <button type="button" id="food-stock-balance-btn" class="btn btn-primary btn-md">FoodStockBalance</button>
+
+                            <div class="col-md-4 card card-1" id="food-stock-balance-div">
+                                <h5>Check Food Stock Balance</h5>
+                                <select class="custom-select col-md-12" id="food-stock-balance-select">
+                                    <option value="-1">Select Food Item</option>
+                                </select>
+                                <div class="clearfix"><br></div>
+                                <div class="input-group center-block">
+                                    <button type="button" id="food-stock-btn" onclick="fpsFoodApp.checkFoodStock()" class="btn btn-primary btn-md">Check</button>
+                                </div>
+                                <br>
+                                <li class="list-group-item col-md-12" id="balance-result" style="display: none;"></li>
+                            </div>
                         </div>
                         <div class="col-md-10 alert alert-danger" id="not-approved-div-card">
                             FPS is not approved
@@ -148,12 +161,12 @@
                         <input type="hidden" id="fps-pay-food-item" disabled>
                         <br>
                         <div class="input-group center-block">
-                            <input type="password" id="fps-pay-secret" class="form-control">
+                            <input type="password" id="fps-pay-secret" class="form-control" placeholder="Secret Key">
                             <span class="input-group-addon">Secret Key</span>
                         </div>
                         <br>
                         <div class="input-group center-block">
-                            <input type="password" id="fps-pay-password" class="form-control">
+                            <input type="password" id="fps-pay-password" class="form-control" placeholder="Password">
                             <span class="input-group-addon">Password</span>
                         </div>
                     </div>
@@ -213,6 +226,13 @@
             $("#fps-pay-food-name").val(food);
             $("#fps-pay-food-item").val(fooditem);
         })
+        $('#food-stock-balance-btn').click(function(){
+            if ($('#food-stock-balance-div').is(':hidden')) {
+                $('#food-stock-balance-div').show('slide',{direction:'left'}, 1000);
+            } else {
+                $('#food-stock-balance-div').hide('slide',{direction:'left'}, 1000);
+            }
+        });
         </script>
     </body>
 </html>

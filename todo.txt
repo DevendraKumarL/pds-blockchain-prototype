@@ -1,12 +1,31 @@
 if possible =>
-    -> show balance of food stock and rupee of a user somewhere in food and rupee transfer webpages
-    -> deduct points feature **Tick** and cancel order feature
-    -> notification panel/alert modal after successfully executing a transaction
-    -> notification panel/alert modal after failure of transaction call
+    -> How to check if confirmed or not ??
+        *SellToCustomer_HashLog **Tick**
+        *SupplyCentralToStateGovernment_HashLog **Tick**
+        *SupplyStateToFpsGovernment_HashLog **Tick**
+        -> How should it be added to the final transfer log analytics/graph/stats ??
+    -> government buys a kg a rice for 26/- and sells it to customer at 1/-
+        -> so the contract has to keep track of the foodflow and money from customers
+        -> thus track the **BENEFIT FLOW**
+        -> make analysis/graph depicting flow of food/benegfit versus amount spent
+        -> i.e., is/visualization the amount spent benefitting the customers ??
+    -> dashboard1:
+        ->centralGovernment to see registrations, approvals, ration cards creations and
+            to see ration card points and flexi ration card points given (based on budget ??)
+    -> blockchain information
+        -> all transactions, block count
+        -> web3. ...
+        -> web3.eth. ..
+        ... ... ... ... ... ... ...
+    -> cancel order feature
     -> change {from: centralGovernmentAddress} of all the transactions to use the address of the actual sender
     -> events related fps, state, and customer only
     -> a floating div showing current address in use on all the webpages
+    -> notification panel/alert modal after successfully executing a transaction
+    -> notification panel/alert modal after failure of transaction call
 
+    -> deduct points feature **Tick**
+    -> show balance of food stock **Tick** and rupee of a user somewhere in food and rupee transfer webpages **Tick**
     -> add authentication layer (modal) for any new transaction execution (food and money transfer) **Tick**
     -> all food and rupee contract events of stateGovernment, centralGovernment, customer **Tick**
     -> show all events in reverse order **Tick**
@@ -54,24 +73,6 @@ if possible =>
             ->stateGovernment **Tick**
         -> loading overlay when loading any webpage so that all the background loading tasks
             from testrpc are finished before any user action is taken **Tick**
-        -> How to check if confirmed or not ??
-            *SellToCustomer_HashLog **Tick**
-            *SupplyCentralToStateGovernment_HashLog **Tick**
-            *SupplyStateToFpsGovernment_HashLog **Tick**
-            -> How should it be added to the final transfer log analytics/graph/stats ??
-        -> government buys a kg a rice for 26/- and sells it to customer at 1/-
-            -> so the contract has to keep track of the foodflow and money from customers
-            -> thus track the **BENEFIT FLOW**
-            -> make analysis/graph depicting flow of food/benegfit versus amount spent
-            -> i.e., is/visualization the amount spent benefitting the customers ??
-        -> dashboard1:
-            ->centralGovernment to see registrations, approvals, ration cards creations and
-                to see ration card points and flexi ration card points given (based on budget ??)
-        -> blockchain information
-            -> all transactions, block count
-            -> web3. ...
-            -> web3.eth. ..
-            ... ... ... ... ... ... ...
         -> write tests for creating central, state government, 2 customers, 3 fps
             -> approve customers and fps
             -> then create fixed & flexi ration cards

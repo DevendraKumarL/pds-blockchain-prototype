@@ -10,3 +10,25 @@
 #food-supplied-to-state-events-div {
     display: none;
 }
+#food-stock-balance-btn {
+    top: 10%;
+    right: 2%;
+    position: fixed;
+}
+#food-stock-balance-div {
+    display: none;
+    top: 17%;
+    right: 1%;
+    position: fixed;
+}
+#rupee-balance-btn {
+    top: 10%;
+    right: 13%;
+    position: fixed;
+}
+#rupee-balance-div {
+    display: none;
+    top: 17%;
+    right: 1%;
+    position: fixed;
+}

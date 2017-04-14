@@ -218,6 +218,7 @@ window.fpsFoodApp = {
         // var selectLiSupply = document.getElementById("food-item-list-supply-state");
         // var selectLiSupply = document.getElementById("food-item-list-supply-fps");
         var selectLiSell = document.getElementById("food-item-list-supply-customer");
+        var stockSelectLi = document.getElementById("food-stock-balance-select");
         // var selectLiStockBalance = document.getElementById("food-item-list-for-stock-balance");
         for (var index in foodItems) {
             if (foodItems.hasOwnProperty(index)) {
@@ -225,6 +226,11 @@ window.fpsFoodApp = {
                 opt1.value = index;
                 opt1.innerHTML = foodItems[index][0];
                 selectLiSell.appendChild(opt1);
+
+                var opt3  = document.createElement("option");
+                opt3.value = index;
+                opt3.innerHTML = foodItems[index][0];
+                stockSelectLi.appendChild(opt3);
 
                 // var opt2  = document.createElement("option");
                 // opt2.value = index;
@@ -432,6 +438,13 @@ window.fpsFoodApp = {
     loadFoodStockToFpsEventsStatus: function() {
         var self = this;
 
+        if (foodStockToFpsEvents.length == 0) {
+            k = 0;
+            clearInterval(foodStockToFpsInterval);
+            console.log("Finished loading food supplied to fps events");
+            $("#loadingOverlay").hide();
+            return;
+        }
         var foodSuppliedToFpsEventsTable = document.getElementById("food-supplied-to-fps-events-table");
         Food.deployed().then(function(instance){
             foodGlobal = instance;
@@ -611,6 +624,30 @@ window.fpsFoodApp = {
         // document.cookie = "usertype=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         // document.cookie = "place=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         location.reload();
+    },
+
+    checkFoodStock: function() {
+        var self = this;
+
+        if (loggedIn && fpsApproved) {
+            var stockSelectLi = document.getElementById("food-stock-balance-select");
+            if (stockSelectLi.selectedIndex == 0) {
+                return;
+            }
+            console.log("checkFoodStock here");
+            var fooditem = stockSelectLi.options[stockSelectLi.selectedIndex].value;
+            Food.deployed().then(function(instance){
+                foodGlobal = instance;
+                return foodGlobal.getFoodStock.call(fpsData[0], fooditem);
+            }).then(function(res){
+                console.log(res.valueOf());
+                $("#balance-result").show();
+                $("#balance-result").html("FoodStock Balance: " + res.valueOf());
+            }).catch(function(e){
+                console.log(e);
+                return;
+            })
+        }
     },
 };
 

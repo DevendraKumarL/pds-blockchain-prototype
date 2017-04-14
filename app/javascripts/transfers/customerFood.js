@@ -208,9 +208,24 @@ window.customerFoodApp = {
             console.log("Finished getting food items");
             console.log(foodItems);
             // window.customerFoodApp.hideOverlay();
-            // window.customerFoodApp.populateFoodItems();
-            window.customerFoodApp.loadFoodSuppliedToCustomerEvents();
+            window.customerFoodApp.populateFoodItems();
         });
+    },
+
+    populateFoodItems: function() {
+        var self = this;
+        $("#loading-content-text").html("Populating food items to DOM elements ...");
+
+        var stockSelectLi = document.getElementById("food-stock-balance-select");
+        for (var index in foodItems) {
+            if (foodItems.hasOwnProperty(index)) {
+                var opt3  = document.createElement("option");
+                opt3.value = index;
+                opt3.innerHTML = foodItems[index][0];
+                stockSelectLi.appendChild(opt3);
+            }
+        }
+        setTimeout(self.loadFoodSuppliedToCustomerEvents, 1000);
     },
 
     loadFoodSuppliedToCustomerEvents: function() {
@@ -241,6 +256,13 @@ window.customerFoodApp = {
     loadFoodStockToCustomerEventsStatus: function() {
         var self = this;
 
+        if (foodStockToCustomerEvents.length == 0) {
+            k = 0;
+            clearInterval(foodStockToCustomerInterval);
+            console.log("Finished loading food supplied to fps events");
+            $("#loadingOverlay").hide();
+            return;
+        }
         var foodSuppliedToCustomerEventsTable = document.getElementById("food-supplied-to-customer-events-table");
         Food.deployed().then(function(instance){
             foodGlobal = instance;
@@ -483,6 +505,48 @@ window.customerFoodApp = {
         // document.cookie = "usertype=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         // document.cookie = "place=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         location.reload();
+    },
+
+    checkFoodStock: function() {
+        var self = this;
+
+        if (loggedIn && customerApproved) {
+            var stockSelectLi = document.getElementById("food-stock-balance-select");
+            if (stockSelectLi.selectedIndex == 0) {
+                return;
+            }
+            console.log("checkFoodStock here");
+            var fooditem = stockSelectLi.options[stockSelectLi.selectedIndex].value;
+            Food.deployed().then(function(instance){
+                foodGlobal = instance;
+                return foodGlobal.getFoodStock.call(customerData[0], fooditem);
+            }).then(function(res){
+                console.log(res.valueOf());
+                $("#balance-result").show();
+                $("#balance-result").html("FoodStock Balance: " + res.valueOf());
+            }).catch(function(e){
+                console.log(e);
+                return;
+            })
+        }
+    },
+
+    checkRupeeBalance: function() {
+        var self = this;
+
+        if (loggedIn && customerApproved) {
+            Rupee.deployed().then(function(instance){
+                rupeeGlobal = instance;
+                return rupeeGlobal.getBalance.call(customerData[0]);
+            }).then(function(res){
+                console.log(res.valueOf());
+                $("#rupee-balance-result").show();
+                $("#rupee-balance-result").html("Wallet Balance: " + res.valueOf());
+            }).catch(function(e){
+                console.log(e);
+                return;
+            })
+        }
     },
 };
 

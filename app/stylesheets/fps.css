@@ -16,3 +16,14 @@
 #food-supplied-to-fps-events-div {
     display: none;
 }
+#food-stock-balance-btn {
+    top: 10%;
+    right: 2%;
+    position: fixed;
+}
+#food-stock-balance-div {
+    display: none;
+    top: 15%;
+    right: 1%;
+    position: fixed;
+}

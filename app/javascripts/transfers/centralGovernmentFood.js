@@ -210,6 +210,7 @@ window.centralFoodApp = {
 
         var selectLi = document.getElementById("food-item-list");
         var selectLiSupply = document.getElementById("food-item-list-supply-state");
+        var stockSelectLi = document.getElementById("food-stock-balance-select");
         // var selectLiSell = document.getElementById("food-item-list-sell");
         // var selectLiStockBalance = document.getElementById("food-item-list-for-stock-balance");
         for (var index in foodItems) {
@@ -223,6 +224,11 @@ window.centralFoodApp = {
                 opt2.value = index;
                 opt2.innerHTML = foodItems[index][0];
                 selectLiSupply.appendChild(opt2);
+
+                var opt3  = document.createElement("option");
+                opt3.value = index;
+                opt3.innerHTML = foodItems[index][0];
+                stockSelectLi.appendChild(opt3);
 
                 // var opt3  = document.createElement("option");
                 // opt3.value = index;
@@ -324,6 +330,7 @@ window.centralFoodApp = {
                 // notify.style.display = "block";
                 alert("FoodItem: " + li.options[li.selectedIndex].text + " Qty: " + qty.value + "\n" + "Added to centralGovernment food stock");
                 qty.value = "";
+                password.value = "";
                 li.selectedIndex = 0;
                 // location.reload();
             }).catch(function(e){
@@ -529,6 +536,48 @@ window.centralFoodApp = {
         // document.cookie = "usertype=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         // document.cookie = "place=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         location.reload();
+    },
+
+    checkFoodStock: function() {
+        var self = this;
+
+        if (loggedIn) {
+            var stockSelectLi = document.getElementById("food-stock-balance-select");
+            if (stockSelectLi.selectedIndex == 0) {
+                return;
+            }
+            console.log("checkFoodStock here");
+            var fooditem = stockSelectLi.options[stockSelectLi.selectedIndex].value;
+            Food.deployed().then(function(instance){
+                foodGlobal = instance;
+                return foodGlobal.getFoodStock.call(centralGovernmentAddress, fooditem);
+            }).then(function(res){
+                console.log(res.valueOf());
+                $("#balance-result").show();
+                $("#balance-result").html("FoodStock Balance: " + res.valueOf());
+            }).catch(function(e){
+                console.log(e);
+                return;
+            })
+        }
+    },
+
+    checkRupeeBalance: function() {
+        var self = this;
+
+        if (loggedIn) {
+            Rupee.deployed().then(function(instance){
+                rupeeGlobal = instance;
+                return rupeeGlobal.getBalance.call(centralGovernmentAddress);
+            }).then(function(res){
+                console.log(res.valueOf());
+                $("#rupee-balance-result").show();
+                $("#rupee-balance-result").html("Wallet Balance: " + res.valueOf());
+            }).catch(function(e){
+                console.log(e);
+                return;
+            })
+        }
     },
 
 };

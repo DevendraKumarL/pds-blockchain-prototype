@@ -193,6 +193,7 @@ window.stateFoodApp = {
         // var selectLi = document.getElementById("food-item-list");
         // var selectLiSupply = document.getElementById("food-item-list-supply-state");
         var selectLiSupply = document.getElementById("food-item-list-supply-fps");
+        var stockSelectLi = document.getElementById("food-stock-balance-select");
         // var selectLiSell = document.getElementById("food-item-list-sell");
         // var selectLiStockBalance = document.getElementById("food-item-list-for-stock-balance");
         for (var index in foodItems) {
@@ -201,6 +202,11 @@ window.stateFoodApp = {
                 opt1.value = index;
                 opt1.innerHTML = foodItems[index][0];
                 selectLiSupply.appendChild(opt1);
+
+                var opt3  = document.createElement("option");
+                opt3.value = index;
+                opt3.innerHTML = foodItems[index][0];
+                stockSelectLi.appendChild(opt3);
 
                 // var opt2  = document.createElement("option");
                 // opt2.value = index;
@@ -284,6 +290,13 @@ window.stateFoodApp = {
     loadFoodStockToStateEventsStatus: function() {
         var self = this;
 
+        if (foodStockToStateEvents.length == 0) {
+            k = 0;
+            clearInterval(foodStockToStateInterval);
+            console.log("Finished loading food supplied to fps events");
+            $("#loadingOverlay").hide();
+            return;
+        }
         var foodSuppliedToStateEventsTable = document.getElementById("food-supplied-to-state-events-table");
         Food.deployed().then(function(instance){
             foodGlobal = instance;
@@ -492,6 +505,53 @@ window.stateFoodApp = {
         // document.cookie = "usertype=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         // document.cookie = "place=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         location.reload();
+    },
+
+    checkFoodStock: function() {
+        var self = this;
+
+        if (loggedIn) {
+            var stockSelectLi = document.getElementById("food-stock-balance-select");
+            if (stockSelectLi.selectedIndex == 0) {
+                return;
+            }
+            console.log("checkFoodStock here");
+            var fooditem = stockSelectLi.options[stockSelectLi.selectedIndex].value;
+            Food.deployed().then(function(instance){
+                foodGlobal = instance;
+                return foodGlobal.getFoodStock.call(stateGovernmentAddress, fooditem);
+            }).then(function(res){
+                console.log(res.valueOf());
+                $("#balance-result").show();
+                $("#balance-result").html("FoodStock Balance: " + res.valueOf());
+            }).catch(function(e){
+                console.log(e);
+                return;
+            })
+        }
+    },
+
+    checkRupeeBalance: function() {
+        var self = this;
+
+        if (loggedIn) {
+            Rupee.deployed().then(function(instance){
+                rupeeGlobal = instance;
+                if ($('input:radio[id="radio1"]').is(':checked')) {
+                    return rupeeGlobal.getBudgetBalance.call(stateGovernmentAddress);
+                }
+                if ($('input:radio[id="radio2"]').is(':checked')) {
+                    return rupeeGlobal.getBalance.call(stateGovernmentAddress);
+                }
+            }).then(function(res){
+                console.log(res.valueOf());
+                $("#rupee-balance-result").show();
+                $("#rupee-balance-result").html("Wallet Balance: " + res.valueOf());
+            }).catch(function(e){
+                console.log(e);
+                return;
+            })
+        }
     },
 };
 
