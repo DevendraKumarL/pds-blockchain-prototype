@@ -50,7 +50,10 @@
                         <a href="#" onclick="stateFoodApp.showSupplyToFpsDiv()"><i class="fa fa-bullseye"></i> Supply To FPS</a>
                     </li>
                     <li>
-                        <a href="#" onclick="stateFoodApp.showFoodSuppliedtoStateEventsdiv()"><i class="fa fa-calendar-o"></i> Events</a>
+                        <a href="#" onclick="stateFoodApp.showFoodSuppliedtoStateEventsdiv()"><i class="fa fa-calendar-o"></i> Events 1</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="stateFoodApp.showFoodSuppliedtoFpsEventsdiv()"><i class="fa fa-calendar-o"></i> Events 2</a>
                     </li>
                 </ul>
             </div>
@@ -139,6 +142,21 @@
                             <br>
                             <div class="input-group center-block">
                                 <button type="button" class="btn btn-primary btn-md" id="supply-food-item-to-fps-btn" data-toggle="modal" data-target="#myModal2">Supply</button>
+                            </div>
+                        </div>
+                        <div class="list-group col-md-10" id="food-supplied-to-fps-events-div">
+                            <a href="#" class="list-group-item">Food Stock sent to FPS</a>
+                            <br>
+                            <div class="table-responsive">
+                                <table class="table table-hover" style="border:1px solid black;">
+                                    <thead class="thead-inverse">
+                                        <th style="width:35%;">FPS Address(Id)</th>
+                                        <th style="width:20%;">FoodItem</th>
+                                        <th style="width:20%;">Quantity</th>
+                                        <th style="width:25%;">Confirmation Status</th>
+                                    </thead>
+                                    <tbody id="food-supplied-to-fps-events-table"></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

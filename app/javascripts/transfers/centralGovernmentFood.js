@@ -29,6 +29,12 @@ var i, loadUserInterval;
 var foodItems = {};
 var j, foodItemInterval;
 var loggedIn = false;
+var k, foodStockToStateInterval, foodStockToStateEvents;
+
+var foodStoredMap = {};
+foodStoredMap[0] = false;
+foodStoredMap[1] = false;
+foodStoredMap[2] = false;
 
 window.centralFoodApp = {
     start: function() {
@@ -241,7 +247,113 @@ window.centralFoodApp = {
                 // selectLiStockBalance.appendChild(opt4);
             }
         }
-        setTimeout(self.hideOverlay, 1000);
+
+        var foodDiv = document.getElementById("food-item-details-div");
+        for (var foodindex in foodItems) {
+            var h4 = document.createElement("h4");
+            var hr = document.createElement("hr");
+            var q1 = document.createElement("p");
+            var q2 = document.createElement("p");
+            var unit = document.createElement("p");
+            var cp = document.createElement("p");
+            var sp = document.createElement("p");
+            h4.innerHTML = foodItems[foodindex][0];
+            q1.innerHTML = "fixedQuantityToSellToCustomer: <b>" + foodItems[foodindex][1].valueOf() + "</b>";
+            q2.innerHTML = "fixedQuantityToSupplyToFPS: <b>" + foodItems[foodindex][2].valueOf() + "</b>";
+            unit.innerHTML = "unitOfMeasurement: <b>" + foodItems[foodindex][3] + "</b>";
+            cp.innerHTML = "costPrice: <b>" + foodItems[foodindex][4] + "</b>";
+            sp.innerHTML = "sellingPrice: <b>" + foodItems[foodindex][5] + "</b>";
+            foodDiv.appendChild(h4);
+            foodDiv.appendChild(hr);
+            foodDiv.appendChild(q1);
+            foodDiv.appendChild(q1);
+            foodDiv.appendChild(unit);
+            foodDiv.appendChild(cp);
+            foodDiv.appendChild(sp);
+        }
+
+        // setTimeout(self.hideOverlay, 1200);
+        setTimeout(self.loadFoodSuppliedToStateEvents, 1200);
+    },
+
+    loadFoodSuppliedToStateEvents: function() {
+        var self = this;
+        $("#loading-content-text").html("Loading food stock supplied to state events ...");
+
+        var events;
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            events = foodGlobal.SupplyCentralToStateGovernment_HashLog({}, {fromBlock: 0, toBlock: 'latest'});
+            events.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    $("#loadingOverlay").hide();
+                    return;
+                }
+                foodStockToStateEvents = result;
+                k = foodStockToStateEvents.length-1;
+                $("#loading-content-text").html("Loading events status details ...");
+                foodStockToStateInterval = setInterval(window.centralFoodApp.loadFoodStockToStateEventsStatus, 300);
+            });
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
+    },
+
+    loadFoodStockToStateEventsStatus: function() {
+        var self = this;
+
+        if (foodStockToStateEvents.length == 0) {
+            k = 0;
+            clearInterval(foodStockToStateInterval);
+            console.log("Finished loading food supplied to fps events");
+            $("#loadingOverlay").hide();
+            return;
+        }
+        var foodSuppliedToStateEventsTable = document.getElementById("food-supplied-to-state-events-table");
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            return foodGlobal.getFoodStockHashOf.call(stateGovernmentAddress, foodStockToStateEvents[k].args._foodIndex);
+        }).then(function(res){
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("td");
+            var td2 = document.createElement("td");
+            var td3 = document.createElement("td");
+            var td4 = document.createElement("td");
+            td1.appendChild(document.createTextNode(foodItems[foodStockToStateEvents[k].args._foodIndex][0]));
+            td2.appendChild(document.createTextNode(foodStockToStateEvents[k].args._quantity));
+            td3.appendChild(document.createTextNode(foodStockToStateEvents[k].args._expense));
+            var b;
+            if (res.valueOf() == "0x0000000000000000000000000000000000000000000000000000000000000000" || foodStoredMap[foodStockToStateEvents[k].args._foodIndex]) {
+                b = document.createElement("input");
+                b.type = "button";
+                b.setAttribute("class", "btn btn-success btn-sm");
+                b.value = "Confirmed";
+            } else if (res.valueOf() != "0x0000000000000000000000000000000000000000000000000000000000000000"){
+                foodStoredMap[foodStockToStateEvents[k].args._foodIndex] = true;
+                b = document.createElement("input");
+                b.type = "button";
+                b.setAttribute("class", "btn btn-danger btn-sm");
+                b.value = "Not confirmed";
+            }
+            td4.appendChild(b);
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            foodSuppliedToStateEventsTable.appendChild(tr);
+            k--;
+            if (k < 0) {
+                k = 0;
+                clearInterval(foodStockToStateInterval);
+                console.log("Finished loading food supplied to state events");
+                $("#loadingOverlay").hide();
+            }
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
     },
 
     hideOverlay: function() {
@@ -519,6 +631,22 @@ window.centralFoodApp = {
         if (loggedIn) {
             self.hideAll();
             $("#add-money-to-customer-div").show();
+        }
+    },
+
+    showFoodItemDetails: function() {
+        var self = this;
+        if (loggedIn) {
+            self.hideAll();
+            $("#food-item-details-div").show();
+        }
+    },
+
+    showSupplyToStateEventsDiv: function() {
+        var self = this;
+        if (loggedIn) {
+            self.hideAll();
+            $("#food-supplied-to-state-events-div").show();
         }
     },
 

@@ -37,6 +37,10 @@ foodStoredMap[0] = false;
 foodStoredMap[1] = false;
 foodStoredMap[2] = false;
 
+var l, foodStockToCustomerInterval;
+var foodStockToCustomerEvents, customersList = [];
+var foodStoredMap2 = {};
+
 window.fpsFoodApp = {
     start: function() {
         var self = this;
@@ -442,7 +446,8 @@ window.fpsFoodApp = {
             k = 0;
             clearInterval(foodStockToFpsInterval);
             console.log("Finished loading food supplied to fps events");
-            $("#loadingOverlay").hide();
+            // $("#loadingOverlay").hide();
+            self.loadFoodSuppliedToCustomerEvents();
             return;
         }
         var foodSuppliedToFpsEventsTable = document.getElementById("food-supplied-to-fps-events-table");
@@ -491,6 +496,111 @@ window.fpsFoodApp = {
             if (k < 0) {
                 k = 0;
                 clearInterval(foodStockToFpsInterval);
+                console.log("Finished loading food supplied to fps events");
+                // $("#loadingOverlay").hide();
+                window.fpsFoodApp.loadFoodSuppliedToCustomerEvents();
+            }
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
+    },
+
+    loadFoodSuppliedToCustomerEvents: function() {
+        var self = this;
+        $("#loading-content-text").html("Loading food stock supplied to customer events ...");
+
+        var events;
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            events = foodGlobal.SellToCustomer_HashLog({}, {fromBlock: 0, toBlock: 'latest'});
+            events.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    $("#loadingOverlay").hide();
+                    return;
+                }
+                foodStockToCustomerEvents = result;
+                l = foodStockToCustomerEvents.length-1;
+                for (var i = 0; i < result.length; i++) {
+                    if (result[i].args._fpsAddress == fpsData[0])
+                        customersList.push(result[i].args._customerAddress);
+                }
+                console.log(customersList);
+                for (var i = 0; i < customersList.length; i++) {
+                    foodStoredMap2[customersList[i]] = {};
+                    foodStoredMap2[customersList[i]][0] = false;
+                    foodStoredMap2[customersList[i]][1] = false;
+                    foodStoredMap2[customersList[i]][2] = false;
+                }
+                console.log(foodStoredMap2);
+
+                $("#loading-content-text").html("Loading events status details ...");
+                foodStockToCustomerInterval = setInterval(window.fpsFoodApp.loadFoodStockToCustomerEventsStatus, 300);
+            });
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
+    },
+
+    loadFoodStockToCustomerEventsStatus: function() {
+        var self = this;
+
+        if (foodStockToCustomerEvents.length == 0) {
+            l = 0;
+            clearInterval(foodStockToCustomerInterval);
+            console.log("Finished loading food supplied to fps events");
+            $("#loadingOverlay").hide();
+            return;
+        }
+        var foodSuppliedToCustomerEventsTable = document.getElementById("food-supplied-to-customer-events-table");
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            return foodGlobal.getFoodStockHashOf.call(foodStockToCustomerEvents[l].args._customerAddress, foodStockToCustomerEvents[l].args._foodIndex);
+        }).then(function(res){
+            if (foodStockToCustomerEvents[l].args._fpsAddress == fpsData[0]) {
+                var tr = document.createElement("tr");
+                var td1 = document.createElement("td");
+                var td2 = document.createElement("td");
+                var td3 = document.createElement("td");
+                var td4 = document.createElement("td");
+                var td5 = document.createElement("td");
+                var td6 = document.createElement("td");
+                td1.appendChild(document.createTextNode(foodStockToCustomerEvents[l].args._customerAddress));
+                td2.appendChild(document.createTextNode(foodItems[foodStockToCustomerEvents[l].args._foodIndex][0]));
+                td3.appendChild(document.createTextNode(foodStockToCustomerEvents[l].args._quantity));
+                td4.appendChild(document.createTextNode(foodStockToCustomerEvents[l].args._totalCost));
+                if (foodStockToCustomerEvents[l].args._rationCard == 0)
+                    td5.appendChild(document.createTextNode("Fixed Scheme"));
+                else
+                    td5.appendChild(document.createTextNode("Flexi Scheme"));
+                var b;
+                if (res.valueOf() == "0x0000000000000000000000000000000000000000000000000000000000000000" || foodStoredMap2[foodStockToCustomerEvents[l].args._customerAddress][foodStockToCustomerEvents[l].args._foodIndex]) {
+                    b = document.createElement("input");
+                    b.type = "button";
+                    b.setAttribute("class", "btn btn-success btn-sm");
+                    b.value = "Confirmed";
+                } else if (res.valueOf() != "0x0000000000000000000000000000000000000000000000000000000000000000") {
+                    foodStoredMap2[foodStockToCustomerEvents[l].args._customerAddress][foodStockToCustomerEvents[l].args._foodIndex] = true;
+                    b = document.createElement("input");
+                    b.type = "button";
+                    b.setAttribute("class", "btn btn-danger btn-sm");
+                    b.value = "Not confirmed";
+                }
+                td6.appendChild(b);
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+                tr.appendChild(td5);
+                tr.appendChild(td6);
+                foodSuppliedToCustomerEventsTable.appendChild(tr);
+            }
+            l--;
+            if (l < 0) {
+                l = 0;
+                clearInterval(foodStockToCustomerInterval);
                 console.log("Finished loading food supplied to fps events");
                 $("#loadingOverlay").hide();
             }
@@ -607,6 +717,14 @@ window.fpsFoodApp = {
         if (loggedIn && fpsApproved) {
             self.hideAll();
             $("#food-supplied-to-fps-events-div").show();
+        }
+    },
+
+    showFoodSuppliedtoCustomerEventsdiv: function() {
+        var self = this;
+        if (loggedIn && fpsApproved) {
+            self.hideAll();
+            $("#food-supplied-to-customer-events-div").show();
         }
     },
 

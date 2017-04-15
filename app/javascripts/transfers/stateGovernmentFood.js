@@ -37,6 +37,11 @@ foodStoredMap[0] = false;
 foodStoredMap[1] = false;
 foodStoredMap[2] = false;
 
+var l, foodStockToFpsInterval;
+
+var foodStockToFpsEvents, fpsList = [];
+var foodStoredMap2 = {};
+
 window.stateFoodApp = {
     start: function() {
         var self = this;
@@ -294,7 +299,8 @@ window.stateFoodApp = {
             k = 0;
             clearInterval(foodStockToStateInterval);
             console.log("Finished loading food supplied to fps events");
-            $("#loadingOverlay").hide();
+            window.stateFoodApp.loadFoodSuppliedToFpsEvents();
+            // $("#loadingOverlay").hide();
             return;
         }
         var foodSuppliedToStateEventsTable = document.getElementById("food-supplied-to-state-events-table");
@@ -345,6 +351,98 @@ window.stateFoodApp = {
                 k = 0;
                 clearInterval(foodStockToStateInterval);
                 console.log("Finished loading food supplied to state events");
+                window.stateFoodApp.loadFoodSuppliedToFpsEvents();
+                // $("#loadingOverlay").hide();
+            }
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
+    },
+
+    loadFoodSuppliedToFpsEvents: function() {
+        var self = this;
+        $("#loading-content-text").html("Loading food stock supplied to fps events ...");
+
+        var events;
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            events = foodGlobal.SupplyToFPS_HashLog({}, {fromBlock: 0, toBlock: 'latest'});
+            events.get(function(error, result){
+                if (error) {
+                    console.log(error);
+                    $("#loadingOverlay").hide();
+                    return;
+                }
+                foodStockToFpsEvents = result;
+                for (var i = 0; i < result.length; i++)
+                    fpsList.push(result[i].args._fpsAddress);
+                console.log(fpsList);
+                for (var i = 0; i < fpsList.length; i++) {
+                    foodStoredMap2[fpsList[i]] = {};
+                    foodStoredMap2[fpsList[i]][0] = false;
+                    foodStoredMap2[fpsList[i]][1] = false;
+                    foodStoredMap2[fpsList[i]][2] = false;
+                }
+                console.log(foodStoredMap2);
+                l = foodStockToFpsEvents.length-1;
+
+                $("#loading-content-text").html("Loading events status details ...");
+                foodStockToFpsInterval = setInterval(window.stateFoodApp.loadFoodStockToFpsEventsStatus, 300);
+            });
+        }).catch(function(e){
+            console.log(e);
+            $("#loadingOverlay").hide();
+        })
+    },
+
+    loadFoodStockToFpsEventsStatus: function() {
+        var self = this;
+
+        if (foodStockToFpsEvents.length == 0) {
+            l = 0;
+            clearInterval(foodStockToFpsInterval);
+            console.log("Finished loading food supplied to fps events");
+            $("#loadingOverlay").hide();
+            return;
+        }
+        var foodSuppliedToFpsEventsTable = document.getElementById("food-supplied-to-fps-events-table");
+        Food.deployed().then(function(instance){
+            foodGlobal = instance;
+            return foodGlobal.getFoodStockHashOf.call(foodStockToFpsEvents[l].args._fpsAddress, foodStockToFpsEvents[l].args._foodIndex);
+        }).then(function(res){
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("td");
+            var td2 = document.createElement("td");
+            var td3 = document.createElement("td");
+            var td4 = document.createElement("td");
+            td1.appendChild(document.createTextNode(foodStockToFpsEvents[l].args._fpsAddress));
+            td2.appendChild(document.createTextNode(foodItems[foodStockToFpsEvents[l].args._foodIndex][0]));
+            td3.appendChild(document.createTextNode(foodStockToFpsEvents[l].args._quantity));
+            var b;
+            if (res.valueOf() == "0x0000000000000000000000000000000000000000000000000000000000000000" || foodStoredMap2[foodStockToFpsEvents[l].args._fpsAddress][foodStockToFpsEvents[l].args._foodIndex]) {
+                b = document.createElement("input");
+                b.type = "button";
+                b.setAttribute("class", "btn btn-success btn-sm");
+                b.value = "Confirmed";
+            } else if (res.valueOf() != "0x0000000000000000000000000000000000000000000000000000000000000000") {
+                foodStoredMap2[foodStockToFpsEvents[l].args._fpsAddress][foodStockToFpsEvents[l].args._foodIndex] = true;
+                b = document.createElement("input");
+                b.type = "button";
+                b.setAttribute("class", "btn btn-danger btn-sm");
+                b.value = "Not confirmed";
+            }
+            td4.appendChild(b);
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            foodSuppliedToFpsEventsTable.appendChild(tr);
+            l--;
+            if (l < 0) {
+                l = 0;
+                clearInterval(foodStockToFpsInterval);
+                console.log("Finished loading food supplied to fps events");
                 $("#loadingOverlay").hide();
             }
         }).catch(function(e){
@@ -488,6 +586,14 @@ window.stateFoodApp = {
         if (loggedIn) {
             self.hideAll();
             $("#food-supplied-to-state-events-div").show();
+        }
+    },
+
+    showFoodSuppliedtoFpsEventsdiv: function() {
+        var self = this;
+        if (loggedIn) {
+            self.hideAll();
+            $("#food-supplied-to-fps-events-div").show();
         }
     },
 

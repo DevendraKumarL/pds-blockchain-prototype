@@ -98,6 +98,7 @@ window.fpsApp = {
                         fpsData = userinfo;
                         console.log(loggedFps + " - " + fpsData);
                         $("#loadingOverlay").hide();
+                        $("#user-address").html(fpsData[0]);
                         return;
                     } else {
                         $("#loadingOverlay").hide();
@@ -347,6 +348,14 @@ window.fpsApp = {
         // document.cookie = "usertype=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         // document.cookie = "place=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         location.reload();
+    },
+
+    copyToClipboard: function() {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($("#user-address").html()).select();
+        document.execCommand("copy");
+        $temp.remove();
     },
 
 };

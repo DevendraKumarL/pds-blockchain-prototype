@@ -92,6 +92,7 @@ window.centralApp = {
                         $("#profile-link").show();
                         document.getElementById('profile-name').innerHTML = userinfo[1];
                         $("#loadingOverlay").hide();
+                        $("#user-address").html(centralGovernmentAddress);
                         return;
                     } else {
                         $("#loadingOverlay").hide();
@@ -310,6 +311,14 @@ window.centralApp = {
         // document.cookie = "usertype=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         // document.cookie = "place=" + ";expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         location.reload();
+    },
+
+    copyToClipboard: function() {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($("#user-address").html()).select();
+        document.execCommand("copy");
+        $temp.remove();
     },
 
 };

@@ -55,13 +55,13 @@
                     <a href="#" onclick="centralApp.showHome()"><i class="fa fa-home"></i> Home</a>
                 </li>
                 <li>
-                    <a href="http://localhost:8080/central-governmentEvents.html"><i class="fa fa-calendar-o"></i> Events</a>
-                </li>
-                <li>
                     <a href="http://localhost:8080/approvals.html"><i class="fa fa-check-circle-o"></i> Approvals</a>
                 </li>
                 <li>
                     <a href="http://localhost:8080/rationcards.html"><i class="fa fa-address-card"></i> Ration Cards</a>
+                </li>
+                <li>
+                    <a href="http://localhost:8080/central-governmentEvents.html"><i class="fa fa-calendar-o"></i> Events</a>
                 </li>
             </ul>
         </div>
@@ -79,7 +79,11 @@
                     </div>
                     <div id="landing">
                         <h1>Central Government</h1>
-                        Some image and text here
+                        <div class="card" id="user-address-div">
+                            <h6>Your Address</h6>
+                            <h4 id="user-address"></h4>
+                            <button type="button" class="btn btn-info btn-sm" onclick="centralApp.copyToClipboard()">Copy!</button>
+                        </div>
                     </div>
                     <div class="card card-2 col-md-5" id="central-goverment-register">
                         <h4>Central Government Registration</h4>

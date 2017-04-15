@@ -98,6 +98,7 @@ window.customerApp = {
                         loggedCustomer = userinfo[0];
                         customerData = userinfo;
                         console.log(loggedCustomer + " - " + customerData);
+                        $("#user-address").html(customerData[0]);
                         self.loadApprovedFps();
                         return;
                     } else {
@@ -845,6 +846,14 @@ window.customerApp = {
 
     showOverlay: function() {
         $("#loadingOverlay").show();
+    },
+
+    copyToClipboard: function() {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($("#user-address").html()).select();
+        document.execCommand("copy");
+        $temp.remove();
     },
 
 };

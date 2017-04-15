@@ -62,7 +62,10 @@
                     <a href="#" onclick="centralFoodApp.showSupplyToStateDiv()"><i class="fa fa-bullseye"></i> Supply To StateGovern</a>
                 </li>
                 <li>
-                    <a href="http://localhost:8080/central-governmentEvents.html"><i class="fa fa-calendar-o"></i> Events</a>
+                    <a href="#" onclick="centralFoodApp.showSupplyToStateEventsDiv()"><i class="fa fa-calendar-o"></i> Events</a>
+                </li>
+                <li>
+                    <a href="#" onclick="centralFoodApp.showFoodItemDetails()"><i class="fa fa-circle-o"></i> FoodItem Details</a>
                 </li>
             </ul>
         </div>
@@ -204,6 +207,23 @@
                         <br>
                         <div class="input-group center-block">
                             <button type="button" id="add-money-btn" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal2">Add</button>
+                        </div>
+                    </div>
+                    <div class="card col-md-6" id="food-item-details-div">
+                    </div>
+                    <div class="list-group col-md-10" id="food-supplied-to-state-events-div">
+                        <a href="#" class="list-group-item">Food Stock sent to stateGovernment</a>
+                        <br>
+                        <div class="table-responsive">
+                            <table class="table table-hover" style="border:1px solid black;">
+                                <thead class="thead-inverse">
+                                    <th style="width:30%;">FoodItem</th>
+                                    <th style="width:25%;">Quantity</th>
+                                    <th style="width:25%;">Cost</th>
+                                    <th style="width:20%;">Confirmed?</th>
+                                </thead>
+                                <tbody id="food-supplied-to-state-events-table"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

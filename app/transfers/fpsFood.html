@@ -50,7 +50,10 @@
                         <a href="#" onclick="fpsFoodApp.showSupplyToCustomerDiv()"><i class="fa fa-bullseye"></i> Supply To Customer</a>
                     </li>
                     <li>
-                        <a href="#" onclick="fpsFoodApp.showFoodSuppliedtoFpsEventsdiv()"><i class="fa fa-calendar-o"></i> Events</a>
+                        <a href="#" onclick="fpsFoodApp.showFoodSuppliedtoFpsEventsdiv()"><i class="fa fa-calendar-o"></i> Events 1</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="fpsFoodApp.showFoodSuppliedtoCustomerEventsdiv()"><i class="fa fa-calendar-o"></i> Events 2</a>
                     </li>
                 </ul>
             </div>
@@ -137,6 +140,23 @@
                             <br>
                             <div class="input-group center-block">
                                 <button type="button" class="btn btn-primary btn-md" id="supply-food-item-to-customer-btn" data-toggle="modal" data-target="#myModal2">Supply</button>
+                            </div>
+                        </div>
+                        <div class="list-group col-md-12" id="food-supplied-to-customer-events-div">
+                            <a href="#" class="list-group-item">Food Stock sent to Customers</a>
+                            <br>
+                            <div class="table-responsive">
+                                <table class="table table-hover" style="border:1px solid black;">
+                                    <thead class="thead-inverse">
+                                        <th style="width:40%;">Customer Address(Id)</th>
+                                        <th style="width:15%;">FoodItem</th>
+                                        <th style="width:10%;">Quantity</th>
+                                        <th style="width:15%;">Cost</th>
+                                        <th style="width:10%;">RationCard</th>
+                                        <th style="width:10%;">Confirmed?</th>
+                                    </thead>
+                                    <tbody id="food-supplied-to-customer-events-table"></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

@@ -62,3 +62,8 @@
     right: 1%;
     position: fixed;
 }
+#user-address-div {
+    position: fixed;;
+    right: 1%;
+    bottom: 5%;
+}
