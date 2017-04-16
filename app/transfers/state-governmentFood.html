@@ -50,10 +50,10 @@
                         <a href="#" onclick="stateFoodApp.showSupplyToFpsDiv()"><i class="fa fa-bullseye"></i> Supply To FPS</a>
                     </li>
                     <li>
-                        <a href="#" onclick="stateFoodApp.showFoodSuppliedtoStateEventsdiv()"><i class="fa fa-calendar-o"></i> Events 1</a>
+                        <a href="#" onclick="stateFoodApp.showFoodSuppliedtoStateEventsdiv()"><i class="fa fa-calendar-o"></i> Received FoodTxs</a>
                     </li>
                     <li>
-                        <a href="#" onclick="stateFoodApp.showFoodSuppliedtoFpsEventsdiv()"><i class="fa fa-calendar-o"></i> Events 2</a>
+                        <a href="#" onclick="stateFoodApp.showFoodSuppliedtoFpsEventsdiv()"><i class="fa fa-calendar-o"></i> Txs Executed</a>
                     </li>
                 </ul>
             </div>
@@ -107,6 +107,11 @@
                                 </div>
                                 <br>
                                 <li class="list-group-item col-md-12" id="rupee-balance-result" style="display: none;"></li>
+                            </div>
+                            <div class="card" id="user-address-div">
+                                <h6>Your Address</h6>
+                                <h4 id="user-address"></h4>
+                                <button type="button" class="btn btn-info btn-sm" onclick="stateFoodApp.copyToClipboard()">Copy!</button>
                             </div>
                         </div>
                         <div class="list-group col-md-10" id="food-supplied-to-state-events-div">

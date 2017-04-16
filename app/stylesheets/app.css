@@ -168,3 +168,22 @@ body, input, button, p, span, div {
     font-size: 22px;
     height: 50%;
 }
+
+/*table {
+    counter-reset: rowNumber;
+}
+
+table tr > td:first-child {
+    counter-increment: rowNumber;
+}
+
+table tr td:first-child::before {
+    content: counter(rowNumber);
+    min-width: 1em;
+    margin-right: 1em;
+    font-size: 16px;
+    color: white;
+    background: black;
+    padding-left: 2px;
+    padding-right: 2px;
+}*/

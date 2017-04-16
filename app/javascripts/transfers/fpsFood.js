@@ -147,7 +147,8 @@ window.fpsFoodApp = {
                         loggedIn = true;
                         fpsData = userinfo;
                         console.log("fps => " + fpsData[0]);
-                        window.fpsFoodApp.getFpsApprovalStatus()
+                        window.fpsFoodApp.getFpsApprovalStatus();
+                        $("#user-address").html(fpsData[0]);
                         // window.fpsFoodApp.getFoodItems();
                         // $("#loadingOverlay").hide();
                         return;
@@ -766,6 +767,14 @@ window.fpsFoodApp = {
                 return;
             })
         }
+    },
+
+    copyToClipboard: function() {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($("#user-address").html()).select();
+        document.execCommand("copy");
+        $temp.remove();
     },
 };
 

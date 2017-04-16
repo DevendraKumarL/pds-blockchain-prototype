@@ -50,10 +50,10 @@
                         <a href="#" onclick="fpsFoodApp.showSupplyToCustomerDiv()"><i class="fa fa-bullseye"></i> Supply To Customer</a>
                     </li>
                     <li>
-                        <a href="#" onclick="fpsFoodApp.showFoodSuppliedtoFpsEventsdiv()"><i class="fa fa-calendar-o"></i> Events 1</a>
+                        <a href="#" onclick="fpsFoodApp.showFoodSuppliedtoFpsEventsdiv()"><i class="fa fa-calendar-o"></i> Received FoodTxs</a>
                     </li>
                     <li>
-                        <a href="#" onclick="fpsFoodApp.showFoodSuppliedtoCustomerEventsdiv()"><i class="fa fa-calendar-o"></i> Events 2</a>
+                        <a href="#" onclick="fpsFoodApp.showFoodSuppliedtoCustomerEventsdiv()"><i class="fa fa-calendar-o"></i> Txs Executed</a>
                     </li>
                 </ul>
             </div>
@@ -87,6 +87,11 @@
                                 </div>
                                 <br>
                                 <li class="list-group-item col-md-12" id="balance-result" style="display: none;"></li>
+                            </div>
+                            <div class="card" id="user-address-div">
+                                <h6>Your Address</h6>
+                                <h4 id="user-address"></h4>
+                                <button type="button" class="btn btn-info btn-sm" onclick="fpsFoodApp.copyToClipboard()">Copy!</button>
                             </div>
                         </div>
                         <div class="col-md-10 alert alert-danger" id="not-approved-div-card">

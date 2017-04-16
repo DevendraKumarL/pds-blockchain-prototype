@@ -166,6 +166,7 @@ window.centralFoodApp = {
                         $("#not-logged-div-card").hide();
                         loggedIn = true;
                         window.centralFoodApp.getFoodItems();
+                        $("#user-address").html(centralGovernmentAddress);
                         // $("#loadingOverlay").hide();
                         return;
                     } else {
@@ -706,6 +707,14 @@ window.centralFoodApp = {
                 return;
             })
         }
+    },
+
+    copyToClipboard: function() {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($("#user-address").html()).select();
+        document.execCommand("copy");
+        $temp.remove();
     },
 
 };

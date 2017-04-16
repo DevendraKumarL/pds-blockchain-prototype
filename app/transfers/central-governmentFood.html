@@ -62,7 +62,7 @@
                     <a href="#" onclick="centralFoodApp.showSupplyToStateDiv()"><i class="fa fa-bullseye"></i> Supply To StateGovern</a>
                 </li>
                 <li>
-                    <a href="#" onclick="centralFoodApp.showSupplyToStateEventsDiv()"><i class="fa fa-calendar-o"></i> Events</a>
+                    <a href="#" onclick="centralFoodApp.showSupplyToStateEventsDiv()"><i class="fa fa-calendar-o"></i> Txs Executed</a>
                 </li>
                 <li>
                     <a href="#" onclick="centralFoodApp.showFoodItemDetails()"><i class="fa fa-circle-o"></i> FoodItem Details</a>
@@ -109,6 +109,11 @@
                             </div>
                             <br>
                             <li class="list-group-item col-md-12" id="rupee-balance-result" style="display: none;"></li>
+                        </div>
+                        <div class="card" id="user-address-div">
+                            <h6>Your Address</h6>
+                            <h4 id="user-address"></h4>
+                            <button type="button" class="btn btn-info btn-sm" onclick="centralFoodApp.copyToClipboard()">Copy!</button>
                         </div>
                     </div>
                     <div class="card card-1 col-md-5" id="create-food-item-div">

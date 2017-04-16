@@ -144,6 +144,7 @@ window.customerFoodApp = {
                         customerData = userinfo;
                         console.log("customerData => " + customerData[0]);
                         window.customerFoodApp.getCustomerApprovalStatus()
+                        $("#user-address").html(customerData[0]);
                         // window.customerFoodApp.getFoodItems();
                         // $("#loadingOverlay").hide();
                         return;
@@ -547,6 +548,14 @@ window.customerFoodApp = {
                 return;
             })
         }
+    },
+
+    copyToClipboard: function() {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($("#user-address").html()).select();
+        document.execCommand("copy");
+        $temp.remove();
     },
 };
 

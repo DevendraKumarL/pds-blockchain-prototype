@@ -47,7 +47,7 @@
                         <a href="#" onclick="customerFoodApp.showHome()"><i class="fa fa-home"></i> Home</a>
                     </li>
                     <li>
-                        <a href="#" onclick="customerFoodApp.showFoodSuppliedtoCustomerEventsdiv()"><i class="fa fa-calendar-o"></i> Events</a>
+                        <a href="#" onclick="customerFoodApp.showFoodSuppliedtoCustomerEventsdiv()"><i class="fa fa-calendar-o"></i> Txs Executed</a>
                     </li>
                 </ul>
             </div>
@@ -91,6 +91,11 @@
                                 </div>
                                 <br>
                                 <li class="list-group-item col-md-12" id="rupee-balance-result" style="display: none;"></li>
+                            </div>
+                            <div class="card" id="user-address-div">
+                                <h6>Your Address</h6>
+                                <h4 id="user-address"></h4>
+                                <button type="button" class="btn btn-info btn-sm" onclick="customerFoodApp.copyToClipboard()">Copy!</button>
                             </div>
                         </div>
                         <div class="col-md-10 alert alert-danger" id="not-approved-div-card">

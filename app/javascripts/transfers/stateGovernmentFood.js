@@ -147,6 +147,7 @@ window.stateFoodApp = {
                         $("#not-logged-div-card").hide();
                         loggedIn = true;
                         window.stateFoodApp.getFoodItems();
+                        $("#user-address").html(stateGovernmentAddress);
                         // $("#loadingOverlay").hide();
                         return;
                     } else {
@@ -658,6 +659,14 @@ window.stateFoodApp = {
                 return;
             })
         }
+    },
+
+    copyToClipboard: function() {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($("#user-address").html()).select();
+        document.execCommand("copy");
+        $temp.remove();
     },
 };
 
