@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>PDS | Central Government</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Droid+Sans|Merriweather|PT+Sans" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Lato|Questrial|Signika" rel="stylesheet">
+        <script src="./centralDashboard.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse bg-inverse fixed-top navbar-toggleable-sm">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#" id="pds-home"><i class="fa fa-bars"></i> &nbsp; PDS | Central Government Dashboard</a>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+                <ul class="navbar-nav my-2 my-lg-0">
+                    <li class="nav-item btn-group" id="profile-link">
+                        <a class="dropdown-toggle nav-link" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user"></i> &nbsp;<span id="profile-name">Profile</span> <b class="caret"></b>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <a class="dropdown-item" href="#" onclick="centralDashboardApp.logout()"><i class="fa fa-power-off"></i> Log Out</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                            <a href="http://localhost:8080/central-government.html" class="nav-link"><i class="fa fa-home"></i> Home</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="clearfix"></div>
+        <div id="wrapper" class="toggled">
+            <!-- Sidebar -->
+            <div id="sidebar-wrapper">
+                <ul class="sidebar-nav">
+                    <li>
+                        <a href="#" onclick="centralDashboardApp.showHome()"><i class="fa fa-home"></i> Home</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="centralDashboardApp.showDashboardStatsdiv()"><i class="fa fa-eercast"></i> Total TXs</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="centralDashboardApp.showDashboard2Statsdiv()"><i class="fa fa-bar-chart"></i> FoodStock Stats</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="centralDashboardApp.showDashboard3Statsdiv()"><i class="fa fa-credit-card"></i> Rupee Wallet Stats</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="centralDashboardApp.showDashboard4Statsdiv()"><i class="fa fa-pie-chart"></i> Total Rupee Stats</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /#sidebar-wrapper -->
+
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid">
+                    <div class="row" id="main">
+                        <div id="loadingOverlay" class="loader-overlay">
+                            <div class="loader-content loader-center">
+                                <img src="http://www.aveva.com/Images/ajax-loader.gif" class="loader-center" alt=""/>
+                                <div class="loader-center loader-text" id="loading-content-text">Loading, please wait...</div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 alert alert-danger" id="not-logged-div-card">
+                            Must Login
+                        </div>
+                        <div id="landing" class="col-md-12">
+                            <div class="col-md-12">
+                                <h1>PDS Blockchain Stats</h1>
+                            </div>
+                        </div>
+                        <div id="dashboard-stats-div" class="col-md-12">
+                            <div class="" id="user-approval-ration-contract-div">
+                                <a href="#" class="list-group-item">User Approval & RationCard Smart Contract Stats</a>
+                                <br>
+                                <div class="table-responsive col-md-10">
+                                    <table class="table table-hover table-bordered" style="border:0.2px solid #333;">
+                                        <thead class="thead-inverse">
+                                            <th style="width:70%;">Stats</th>
+                                            <th style="width:30%;">Total Result</th>
+                                        </thead>
+                                        <tbody id="user-approval-ration-contract-table"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="" id="food-contract-div">
+                                <a href="#" class="list-group-item">Food Smart Contract Stats</a>
+                                <br>
+                                <div class="table-responsive col-md-10">
+                                    <table class="table table-hover table-bordered" style="border:0.2px solid #333;">
+                                        <thead class="thead-inverse">
+                                            <th style="width:70%;">Stats</th>
+                                            <th style="width:30%;">Total Result</th>
+                                        </thead>
+                                        <tbody id="food-contract-table"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="" id="rupee-contract-div">
+                                <a href="#" class="list-group-item">Rupee Smart Contract Stats</a>
+                                <br>
+                                <div class="table-responsive col-md-10">
+                                    <table class="table table-hover table-bordered" style="border:0.2px solid #333;">
+                                        <thead class="thead-inverse">
+                                            <th style="width:70%;">Stats</th>
+                                            <th style="width:30%;">Total Result</th>
+                                        </thead>
+                                        <tbody id="rupee-contract-table"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" id="dashboard2-stats-div">
+                            <div class="" id="food2-contract-div">
+                                <a href="#" class="list-group-item">Food Stock Balances for each FoodItem</a>
+                                <br>
+                                <div class="table-responsive col-md-10">
+                                    <table class="table table-hover table-bordered" style="border:0.2px solid #333;">
+                                        <thead class="thead-inverse">
+                                            <th style="width:70%;">Address(Id)</th>
+                                            <th style="width:10%;">Rice</th>
+                                            <th style="width:10%;">Wheat</th>
+                                            <th style="width:10%;">Sugar</th>
+                                        </thead>
+                                        <tbody id="food2-contract-table"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" id="dashboard3-stats-div">
+                            <div class="" id="rupee2-contract-div">
+                                <a href="#" class="list-group-item">Food Stock Balances for each FoodItem</a>
+                                <br>
+                                <div class="table-responsive col-md-8">
+                                    <table class="table table-hover table-bordered" style="border:0.2px solid #333;">
+                                        <thead class="thead-inverse">
+                                            <th style="width:70%;">Address(Id)</th>
+                                            <th style="width:10%;">Wallet Balance</th>
+                                        </thead>
+                                        <tbody id="rupee2-contract-table"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" id="dashboard4-stats-div">
+                            <div class="" id="rupee3-contract-div">
+                                <a href="#" class="list-group-item">TOTAL Rupee Stats</a>
+                                <br>
+                                <div class="table-responsive col-md-6">
+                                    <table class="table table-hover table-bordered" style="border:0.2px solid #333;">
+                                        <thead class="thead-inverse">
+                                            <th style="width:60%;">Spent/Received</th>
+                                            <th style="width:40%;">Total</th>
+                                        </thead>
+                                        <tbody id="rupee3-contract-table"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /#page-content-wrapper -->
+        </div>
+        <!-- /#wrapper -->
+
+        <!-- Scripts -->
+        <script>
+        $("#pds-home").click(function(e){
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+        </script>
+    </body>
+</html>

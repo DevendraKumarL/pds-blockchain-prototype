@@ -1,34 +1,31 @@
 if possible =>
-    -> a floating div showing current address in use on all the webpages
-    -> few ui fixes
+    -> flow of visualization
+    -> government buys a kg a rice for 26/- and sells it to customer at 1/-
+        -> so the contract has to keep track of the foodflow and money from customers
+        -> thus track the **BENEFIT FLOW**
+        -> make analysis/graph depicting flow of food/benefit versus amount spent
+        -> i.e., is/visualization the amount spent benefitting the customers ??
+
+    -> central government
+        -> total number of fps, customers **Tick**
+        -> total number approved and unapproved of fps, customers **Tick**
+        -> total number of fixed and flexi ration cards **Tick**
+
+        -> total number of food transfers **Tick** and rupee transfers **Tick**
+        -> total money received from customers to state government **Tick**
+            -> also separately for 3 food items **Tick**
+            -> see the current food stock of central government, state government, fps and customer **Tick**
+        -> total budget spent on state government, received etc **Tick**
+    -> dashboard1/all events: **Tick**
+        ->centralGovernment to see registrations, approvals, ration cards creations and
+        to see ration card points and flexi ration card points given (based on budget ??) **Tick**
+        -> all the food and rupee transfers **Tick**
+    -> events related fps, state, and customer only **Tick**
     -> How to check if confirmed or not ??
         *SellToCustomer_HashLog **Tick**
         *SupplyCentralToStateGovernment_HashLog **Tick**
         *SupplyStateToFpsGovernment_HashLog **Tick**
-        -> How should it be added to the final transfer log analytics/graph/stats ??
-    -> government buys a kg a rice for 26/- and sells it to customer at 1/-
-        -> so the contract has to keep track of the foodflow and money from customers
-        -> thus track the **BENEFIT FLOW**
-        -> make analysis/graph depicting flow of food/benegfit versus amount spent
-        -> i.e., is/visualization the amount spent benefitting the customers ??
-    -> dashboard1:
-        ->centralGovernment to see registrations, approvals, ration cards creations and
-            to see ration card points and flexi ration card points given (based on budget ??)
-    -> write tests for creating central, state government, 2 customers, 3 fps
-        -> approve customers and fps
-        -> then create fixed & flexi ration cards
-        -> central government to provide points for each card
-    -> blockchain information
-        -> all transactions, block count
-        -> web3. ...
-        -> web3.eth. ..
-        ... ... ... ... ... ... ...
-    -> cancel order feature
-    -> change {from: centralGovernmentAddress} of all the transactions to use the address of the actual sender
-    -> events related fps, state, and customer only
-    -> notification panel/alert modal after successfully executing a transaction
-    -> notification panel/alert modal after failure of transaction call
-
+    -> a floating div showing current address in use on all the webpages **Tick**
     -> deduct points feature **Tick**
     -> show balance of food stock **Tick** and rupee of a user somewhere in food and rupee transfer webpages **Tick**
     -> add authentication layer (modal) for any new transaction execution (food and money transfer) **Tick**
@@ -43,41 +40,42 @@ if possible =>
     -> store a global user address for customer **Tick** and fps when only logged-in **Tick**
     -> ** Optimize approvals.js **Tick**
     -> home div for approvals.html **Tick**
-    -> UI
+    -> UI **Tick**
         -> Rename paths **Tick**
         -> COLORS **Tick**
-        -> registration:
+        -> registration: **Tick**
             ->customer **Tick**
             ->fps **Tick**
             ->centralGovernment **Tick**
             ->stateGovernment **Tick**
-        -> login: **COOKIES**
+        -> login: **COOKIES** **Tick**
             ->customer **Tick**
             ->fps **Tick**
             ->centralGovernment **Tick**
             ->stateGovernment **Tick**
-        -> approval:
+        -> approval: **Tick**
             ->customer and fps (by government) **Tick**
-        -> ration card and flexi ration card:
+        -> ration card and flexi ration card: **Tick**
             -> customer after approval **Tick**
             <!-- first check if user is approved if not, then nothing to do --> **Tick**
             <!-- if approved choose between fixed and flexi RationCard --> **Tick**
             <!-- then check for the above choosen card if ration card exists --> **Tick**
             <!-- if exists show details upon *Authentication* --> **Tick**
             <!-- if not exists then take details from customer and create a new one upon *Authentication* --> **Tick**
-        -> view ration card points and details: customer (by government)
+        -> view ration card points and details: customer (by government) **Tick**
             -> view fixed scheme ration card points **Tick**
             -> view flexi scheme ration card points **Tick**
             -> give ration card points **Tick**
         -> separate webpage to show testrpc avaiable accounts **Tick**
         -> separate webpage to get info of registered users on pds blockchain using accounts address **Tick**
-        -> food and rupee transaction:
+        -> food and rupee transaction: **Tick**
             ->customer **Tick**
             ->fps **Tick**
             ->centralGovernment **Tick**
             ->stateGovernment **Tick**
         -> loading overlay when loading any webpage so that all the background loading tasks
             from testrpc are finished before any user action is taken **Tick**
+
         -> use MetaMask, show individual functionalities of each contract, ideal way of using blockchain
         -> Everything into one page, Generic, possible but leave for now.
         -> how to reload other windows of fps or customer after registration, leave for now
@@ -86,3 +84,7 @@ if possible =>
             will approve seeing the aadhaar details, leave for now
         -> optimize js code and remove unwanted code, later
         -> remove consol logs, later
+        -> cancel order feature
+            -> change {from: centralGovernmentAddress} of all the transactions to use the address of the actual sender
+            -> notification panel/alert modal after successfully executing a transaction
+            -> notification panel/alert modal after failure of transaction call

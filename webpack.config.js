@@ -28,6 +28,11 @@ module.exports = {
     'stateGovernmentEvents': './app/javascripts/events/stateGovernmentEvents.js',
     'fpsEvents': './app/javascripts/events/fpsEvents.js',
     'customerEvents': './app/javascripts/events/customerEvents.js',
+
+    'centralDashboard': './app/javascripts/dashboards/centralDashboard.js',
+    // 'stateDashboard': './app/javascripts/dashboards/stateDashboard.js',
+    // 'fpsDashboard': './app/javascripts/dashboards/fpsDashboard.js',
+    // 'customerDashboard': './app/javascripts/dashboards/customerDashboard.js',
   },
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -102,6 +107,19 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './app/events/customerEvents.html', to: "customerEvents.html" }
     ]),
+
+    new CopyWebpackPlugin([
+      { from: './app/dashboards/central-governmentDashboard.html', to: "central-governmentDashboard.html" }
+    ]),
+    // new CopyWebpackPlugin([
+    //   { from: './app/dashboards/state-governmentDashboard.html', to: "state-governmentDashboard.html" }
+    // ]),
+    // new CopyWebpackPlugin([
+    //   { from: './app/dashboards/fpsDashboard.html', to: "fpsDashboard.html" }
+    // ]),
+    // new CopyWebpackPlugin([
+    //   { from: './app/dashboards/customerDashboard.html', to: "customerDashboard.html" }
+    // ]),
   ],
   module: {
     rules: [
