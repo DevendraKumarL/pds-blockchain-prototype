@@ -448,7 +448,7 @@ window.fpsFoodApp = {
             clearInterval(foodStockToFpsInterval);
             console.log("Finished loading food supplied to fps events");
             // $("#loadingOverlay").hide();
-            self.loadFoodSuppliedToCustomerEvents();
+            window.fpsFoodApp.loadFoodSuppliedToCustomerEvents();
             return;
         }
         var foodSuppliedToFpsEventsTable = document.getElementById("food-supplied-to-fps-events-table");
